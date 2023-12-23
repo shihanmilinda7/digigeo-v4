@@ -16,6 +16,9 @@ import {
   setPropertiesZoomLevel,
   setPropertiesInitialCenter,
   setPropertiesLyrs,
+  setCompanyZoomLevel,
+  setCompanyInitialCenter,
+  setCompanyLyrs,
 } from "../../../store/map-selector/map-selector-slice";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
@@ -31,6 +34,7 @@ import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import PropertiesSideNavbar from "../side-navbar-second/properties-sidenavbar";
+import CompanySideNavbar from "../side-navbar-second/company-sidenavbar";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -83,7 +87,7 @@ const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   context.restore();
 };
 
-export const PropertiesMap = () => {
+export const CompanyMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
@@ -103,17 +107,17 @@ export const PropertiesMap = () => {
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
 
-  const isPropertiesSideNavOpen = useSelector(
-    (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
+  const isCompanySideNavOpen = useSelector(
+    (state) => state.companyMapReducer.isCompanySideNavOpen
   );
-  const propertiesLyrs = useSelector(
-    (state) => state.mapSelectorReducer.propertiesLyrs
+  const companyLyrs = useSelector(
+    (state) => state.mapSelectorReducer.companyLyrs
   );
-  const propertiesZoomLevel = useSelector(
-    (state) => state.mapSelectorReducer.propertiesZoomLevel
+  const companyZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.companyZoomLevel
   );
-  const propertiesInitialCenter = useSelector(
-    (state) => state.mapSelectorReducer.propertiesInitialCenter
+  const companyInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.companyInitialCenter
   );
 
   useEffect(() => {
@@ -122,7 +126,7 @@ export const PropertiesMap = () => {
 
   useEffect(() => {
     let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${zoom}&c=${center}`;
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${zoom}&c=${center}`;
 
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
@@ -135,8 +139,8 @@ export const PropertiesMap = () => {
       // console.log("map", map);
       const tmpZoomLevel = map.getView().getZoom();
       const tmpinitialCenter = map.getView().getCenter();
-      dispatch(setPropertiesZoomLevel(tmpZoomLevel));
-      dispatch(setPropertiesInitialCenter(tmpinitialCenter));
+      dispatch(setCompanyZoomLevel(tmpZoomLevel));
+      dispatch(setCompanyInitialCenter(tmpinitialCenter));
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
       // router.push(
@@ -160,21 +164,21 @@ export const PropertiesMap = () => {
     let newUrl;
     newUrl = `${
       window.location.pathname
-    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
   };
 
   const setLyrs = (lyrs) => {
-    dispatch(setPropertiesLyrs(lyrs));
+    dispatch(setCompanyLyrs(lyrs));
     let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${lyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${lyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
   };
 
   return (
     <div className="flex">
-      <PropertiesSideNavbar />
+      <CompanySideNavbar />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
@@ -210,7 +214,7 @@ export const PropertiesMap = () => {
           <Button
             onClick={() => setLyrs("m")}
             className={`${
-              propertiesLyrs == "m"
+              companyLyrs == "m"
                 ? "bg-blue-700 text-white"
                 : "bg-blue-500 text-white"
             } `}
@@ -220,7 +224,7 @@ export const PropertiesMap = () => {
           <Button
             onClick={() => setLyrs("s")}
             className={`${
-              propertiesLyrs == "s"
+              companyLyrs == "s"
                 ? "bg-blue-700 text-white"
                 : "bg-blue-500 text-white"
             } `}
@@ -230,7 +234,7 @@ export const PropertiesMap = () => {
           <Button
             onClick={() => setLyrs("p")}
             className={`${
-              propertiesLyrs == "p"
+              companyLyrs == "p"
                 ? "bg-blue-700 text-white"
                 : "bg-blue-500 text-white"
             } `}
@@ -249,15 +253,15 @@ export const PropertiesMap = () => {
           <olView
             // ref={mapRef}
             initialCenter={[0, 0]}
-            center={propertiesInitialCenter}
+            center={companyInitialCenter}
             initialZoom={2}
-            zoom={propertiesZoomLevel}
+            zoom={companyZoomLevel}
           />
           <olLayerTile preload={Infinity}>
             {/* <olSourceOSM /> */}
             <olSourceXYZ
               args={{
-                url: `https://mt0.google.com/vt/lyrs=${propertiesLyrs}&hl=en&x={x}&y={y}&z={z}`,
+                url: `https://mt0.google.com/vt/lyrs=${companyLyrs}&hl=en&x={x}&y={y}&z={z}`,
                 // url: `https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}`,
               }}
             ></olSourceXYZ>

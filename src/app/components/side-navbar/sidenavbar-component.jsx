@@ -23,6 +23,9 @@ import AreaBottomSideComp from "./bottom-components/area-bottom-side-component";
 import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import AreaMapButton from "./map-button-component/area-map-button";
 import PropertiesMapButton from "./map-button-component/properties-map-button";
+import PropertiesBottomSideComp from "./bottom-components/properties-bottom-side-component";
+import CompanyMapButton from "./map-button-component/company-map-button";
+import CompanyBottomSideComp from "./bottom-components/company-bottom-side-component";
 
 const SideNavbar = () => {
   let pathname = "";
@@ -56,17 +59,36 @@ const SideNavbar = () => {
   );
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
   const areaState = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  
+
   //properties map redux variables
   const isPropertiesSideNavOpen = useSelector(
     (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
   );
-  const propertiesLyrs = useSelector((state) => state.mapSelectorReducer.propertiesLyrs);
+  const propertiesLyrs = useSelector(
+    (state) => state.mapSelectorReducer.propertiesLyrs
+  );
   const propertiesZoomLevel = useSelector(
     (state) => state.mapSelectorReducer.propertiesZoomLevel
   );
   const propertiesInitialCenter = useSelector(
     (state) => state.mapSelectorReducer.propertiesInitialCenter
+  );
+  const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
+
+  //company map redux variables
+  const isCompanySideNavOpen = useSelector(
+    (state) => state.companyMapReducer.isCompanySideNavOpen
+  );
+  const companyLyrs = useSelector(
+    (state) => state.mapSelectorReducer.companyLyrs
+  );
+  const companyZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.companyZoomLevel
+  );
+  const companyInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.companyInitialCenter
   );
 
   const selectMapHandler = (selectedValue) => {
@@ -80,6 +102,8 @@ const SideNavbar = () => {
       }
     } else if (selectedValue == "properties") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    } else if (selectedValue == "company") {
+      newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     }
     window.history.replaceState({}, "", newUrl);
   };
@@ -132,8 +156,34 @@ const SideNavbar = () => {
               <PropertiesMapButton
                 onClick={() => selectMapHandler("properties")}
               />
+              <CompanyMapButton onClick={() => selectMapHandler("company")} />
             </div>
-
+            <div className="mt-4 mb-1 flex items-center justify-center">
+              <div
+                style={{
+                  display: selectedMap === "area" ? "block" : "none",
+                }}
+                className="w-full"
+              >
+                <AreaBottomSideComp />
+              </div>
+              <div
+                style={{
+                  display: selectedMap === "properties" ? "block" : "none",
+                }}
+                className="w-full"
+              >
+                <PropertiesBottomSideComp />
+              </div>
+              <div
+                style={{
+                  display: selectedMap === "company" ? "block" : "none",
+                }}
+                className="w-full"
+              >
+                <CompanyBottomSideComp />
+              </div>
+            </div>
             <div className="w-full pb-2 pl-2 pr-2 pt-2">
               <div className="flex justify-center">
                 <button className="relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none bg-blue-600 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">

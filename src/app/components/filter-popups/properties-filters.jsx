@@ -17,32 +17,36 @@ import {
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
+import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
+import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
+  
   const [country, setCountry] = useState("");
-  const [selectedColors, setSelectedColors] = useState([]);
   const [countryList, setCountryList] = useState([]);
-  // const [country, setCountry] = useState("Canada");
-  // const [areaList, setAreaList] = useState([]);
-  // // const [miningArea, setMiningArea] = useState("");
-  // const [miningArea, setMiningArea] = useState("Timmins");
 
-  // const selectedMap = useSelector(
-  //   (state) => state.mapSelectorReducer.selectedMap
-  // );
-  // const areaLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
-  // const areaZoomLevel = useSelector(
-  //   (state) => state.mapSelectorReducer.areaZoomLevel
-  // );
-  // const areaInitialCenter = useSelector(
-  //   (state) => state.mapSelectorReducer.areaInitialCenter
-  // );
-  // const isSideNavOpen = useSelector(
-  //   (state) => state.mapSelectorReducer.isSideNavOpen
-  // );
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedCommodity, setSelectedCommodity] = useState([]);
+
+  const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
+  const isSideNavOpen = useSelector(
+    (state) => state.mapSelectorReducer.isSideNavOpen
+  );
+
+  const propertiesLyrs = useSelector(
+    (state) => state.mapSelectorReducer.propertiesLyrs
+  );
+  const propertiesZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.propertiesZoomLevel
+  );
+  const propertiesInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.propertiesInitialCenter
+  );
 
   const customStyles = {
     overlay: {
@@ -65,16 +69,26 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
 
-  const colorOptions = [
+  const filterByTypeOptions = [
     "Operating Mines",
     "Deposits",
     "Zones",
     "Historical Mines",
     "Occurrences",
   ];
+  const filterByCommodityOptions = [
+    "Gold",
+    "Silver",
+    "Copper",
+    "Zinc",
+    "Nickel",
+  ];
 
-  const handleColorChange = (selectedOptions) => {
-    setSelectedColors(selectedOptions);
+  const handleFilterByTypeChange = (selectedOptions) => {
+    setSelectedTypes(selectedOptions);
+  };
+  const handleFilterByCommodityChange = (selectedOptions) => {
+    setSelectedCommodity(selectedOptions);
   };
   // useEffect(() => {
   //   setCountry(areaCountry);
@@ -96,6 +110,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   // }, [country]);
 
   const searchAction = async () => {
+    const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    window.history.replaceState({}, "", newUrl);
+    dispatch(setIsPropertiesSideNavOpen(true));
     closePopup();
   };
 
@@ -174,15 +191,15 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       ))}
                     </Autocomplete>
                   </div>
-                  <div className="border-b-2 flex w-full">
+                  <div className="border-b-2 flex w-full max-h-[250px]">
                     <div className="flex flex-col gap-2 w-1/2">
                       <span className="text-sm font-semibold">
                         Filter By Type
                       </span>
                       <div className="mb-4">
                         <CheckboxGroup
-                          options={colorOptions}
-                          onChange={handleColorChange}
+                          options={filterByTypeOptions}
+                          onChange={handleFilterByTypeChange}
                         />
                       </div>
 
@@ -199,10 +216,10 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       <span className="text-sm font-semibold">
                         Filter By Commodity
                       </span>
-                      <div className="mb-4">
-                        <CheckboxGroup
-                          options={colorOptions}
-                          onChange={handleColorChange}
+                      <div className="mb-4 max-h-[210px] overflow-y-auto">
+                        <CheckboxGroupWithFilter
+                          options={filterByCommodityOptions}
+                          onChange={handleFilterByCommodityChange}
                         />
                       </div>
 

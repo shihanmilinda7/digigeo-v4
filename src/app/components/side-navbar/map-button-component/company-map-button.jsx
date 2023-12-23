@@ -2,7 +2,11 @@
 
 // import { Accordion, AccordionItem, Button } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
+import {
+  AiFillMinusSquare,
+  AiFillPlusSquare,
+  AiTwotoneGold,
+} from "react-icons/ai";
 import { BsFillArrowLeftSquareFill, BsFillBuildingsFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 
@@ -20,8 +24,10 @@ import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
 import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
+import CompanyFilter from "../../filter-popups/company-filters";
+import { setIsCompanySideNavOpen } from "../../../../store/company-map/company-map-slice";
 
-const PropertiesMapButton = ({ onClick }) => {
+const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
   const dispatch = useDispatch();
   const router = useRouter();
@@ -43,29 +49,30 @@ const PropertiesMapButton = ({ onClick }) => {
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
 
-  const propertiesLyrs = useSelector(
-    (state) => state.mapSelectorReducer.propertiesLyrs
+  const companyLyrs = useSelector(
+    (state) => state.mapSelectorReducer.companyLyrs
   );
-  const propertiesZoomLevel = useSelector(
-    (state) => state.mapSelectorReducer.propertiesZoomLevel
+  const companyZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.companyZoomLevel
   );
-  const propertiesInitialCenter = useSelector(
-    (state) => state.mapSelectorReducer.propertiesInitialCenter
+  const companyInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.companyInitialCenter
   );
-  const isPropertiesSideNavOpen = useSelector(
-    (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
+  const isCompanySideNavOpen = useSelector(
+    (state) => state.companyMapReducer.isCompanySideNavOpen
   );
+
   const [isOpenIn, setIsOpenIn] = useState();
 
   const closePopup = () => {
     setIsOpenIn(false);
   };
 
-  const openPropertiesNav = () => {
+  const openCompanyNav = () => {
     let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
-    dispatch(setIsPropertiesSideNavOpen(true));
+    dispatch(setIsCompanySideNavOpen(true));
   };
 
   return (
@@ -74,21 +81,21 @@ const PropertiesMapButton = ({ onClick }) => {
         <button
           onClick={onClick}
           className={`relative flex items-center border rounded-lg border-blue-500 focus:outline-none ${
-            selectedMap === "properties"
+            selectedMap === "company"
               ? " text-white bg-blue-600 w-10/12"
               : " text-blue-600 bg-white w-full"
           } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
         >
-          <BsFillBuildingsFill className="h-6 w-6 ml-2" />
-          <span className="uppercase ml-2 font-semibold">Properties</span>
+          <AiTwotoneGold className="h-6 w-6 ml-2" />
+          <span className="uppercase ml-2 font-semibold">Companies</span>
         </button>
         {isOpenIn ? (
-          <PropertiesFilter isOpenIn={isOpenIn} closePopup={closePopup} />
+          <CompanyFilter isOpenIn={isOpenIn} closePopup={closePopup} />
         ) : null}
         <button
           onClick={() => setIsOpenIn(true)}
           className={`relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none ${
-            selectedMap === "properties"
+            selectedMap === "company"
               ? " text-white bg-blue-600 w-2/12"
               : " hidden"
           } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
@@ -98,12 +105,11 @@ const PropertiesMapButton = ({ onClick }) => {
       </div>
       <div
         className={`${
-          selectedMap === "properties" &&
-          !isPropertiesSideNavOpen 
-          // &&
-          // areaCountry != "" &&
-          // areaState != ""
-            ? "flex justify-between"
+          selectedMap === "company" && !isCompanySideNavOpen
+            ? // &&
+              // areaCountry != "" &&
+              // areaState != ""
+              "flex justify-between"
             : "hidden"
         } `}
       >
@@ -120,7 +126,7 @@ const PropertiesMapButton = ({ onClick }) => {
           variant="bordered"
           className="cursor-pointer hover:bg-gray-200"
           size="sm"
-          onClick={openPropertiesNav}
+          onClick={openCompanyNav}
         >
           View List
         </Chip>
@@ -128,4 +134,4 @@ const PropertiesMapButton = ({ onClick }) => {
     </div>
   );
 };
-export default PropertiesMapButton;
+export default CompanyMapButton;

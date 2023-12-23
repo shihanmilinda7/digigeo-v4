@@ -25,6 +25,7 @@ import {
   setIsAreaSideNavOpen,
 } from "../../../store/area-map/area-map-slice";
 import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
+import { setIsCompanySideNavOpen } from "@/store/company-map/company-map-slice";
 
 export const LandingPage = () => {
   let pathname = "";
@@ -77,9 +78,15 @@ export const LandingPage = () => {
           dispatch(
             setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
           );
+          dispatch(
+            setIsCompanySideNavOpen(
+              String(isSecondNavOpen).toLowerCase() === "true"
+            )
+          );
           dispatch(setCompanyLyrs(mapLyrs));
           dispatch(setCompanyZoomLevel(mapZoom));
-          dispatch(setCompanyInitialCenter(mapCenter));
+          const tmpMapCenter3 = mapCenter.split(",").map(Number);
+          dispatch(setCompanyInitialCenter(tmpMapCenter3));
 
           break;
         case "properties":

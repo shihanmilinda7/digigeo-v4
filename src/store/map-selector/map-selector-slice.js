@@ -26,7 +26,7 @@ const mapSelectorSlice = createSlice({
     },
     setAreaLyrs: (state, action) => {
       state.areaLyrs = action.payload;
-      state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${action.payload}&z=${state.areaZoomLevel}&c=${state.areaInitialCenter}`;
+      // state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${action.payload}&z=${state.areaZoomLevel}&c=${state.areaInitialCenter}`;
     },
     setCompanyLyrs: (state, action) => {
       state.companyLyrs = action.payload;
@@ -36,7 +36,7 @@ const mapSelectorSlice = createSlice({
     },
     setAreaZoomLevel: (state, action) => {
       state.areaZoomLevel = action.payload;
-      state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${state.areaLyrs}&z=${action.payload}&c=${state.areaInitialCenter}`;
+      // state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${state.areaLyrs}&z=${action.payload}&c=${state.areaInitialCenter}`;
     },
     setCompanyZoomLevel: (state, action) => {
       state.companyZoomLevel = action.payload;
@@ -46,7 +46,7 @@ const mapSelectorSlice = createSlice({
     },
     setAreaInitialCenter: (state, action) => {
       state.areaInitialCenter = action.payload;
-      state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${state.areaLyrs}&z=${state.areaZoomLevel}&c=${action.payload}`;
+      // state.currentSearchString = `?t=${state.selectedMap}&sn=${state.isSideNavOpen}&lyrs=${state.areaLyrs}&z=${state.areaZoomLevel}&c=${action.payload}`;
     },
     setCompanyInitialCenter: (state, action) => {
       state.companyInitialCenter = action.payload;
