@@ -623,12 +623,104 @@ const collapsibleBtnHandler = () => {
 
     //asset type visibility useEffects
   useEffect(() => {
-    console.log("assetSourceRef?.current?.features",assetSourceRef?.current?.features)
-
-
-
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (areaAssetOpMineVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Operating Mine") {
+           f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Operating Mine") {
+           
+              f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
   }, [areaAssetOpMineVisible]);
 
+    useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (areaAssetDepositsVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Deposit") {
+           f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Deposit") {
+            
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [areaAssetDepositsVisible]);
+
+      useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (areaAssetZoneVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Zone") {
+             f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Zone") {
+           f.setStyle(new Style({}))
+            
+          }
+        })
+      }
+    }
+  }, [areaAssetZoneVisible]);
+
+        useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (areaAssetHistoricalVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Historical Mine") {
+            f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Historical Mine") {
+           
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [areaAssetHistoricalVisible]);
+
+    useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (areaAssetOccurrenceVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Occurrence") {
+            f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Occurrence") {
+           
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [areaAssetOccurrenceVisible]);
 
   return (
     <div className="flex">

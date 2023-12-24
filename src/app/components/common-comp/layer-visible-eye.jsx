@@ -17,8 +17,8 @@ const LayerVisibleDiv = ({ title, children, onClick,eyeState }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           <span className="">
-          {eyeState && <VscEyeClosed className="cursor-pointer" onClick={onClick} />}
-            {!eyeState && <VscEye className="cursor-pointer" onClick={onClick}/>}
+          {eyeState && <VscEye className="cursor-pointer" onClick={onClick} />}
+            {!eyeState && <VscEyeClosed className="cursor-pointer" onClick={onClick}/>}
  
           </span>
         </div>

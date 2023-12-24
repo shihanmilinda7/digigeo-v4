@@ -26,8 +26,8 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState  }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
           <span className="">
-            {eyeState && <VscEyeClosed className="cursor-pointer" onClick={eyeClickHandler} />}
-            {!eyeState && <VscEye className="cursor-pointer" onClick={eyeClickHandler}/>}
+            {eyeState && <VscEye className="cursor-pointer" onClick={eyeClickHandler} />}
+            {!eyeState && <VscEyeClosed className="cursor-pointer" onClick={eyeClickHandler}/>}
           </span>
         </div>
       </div>
