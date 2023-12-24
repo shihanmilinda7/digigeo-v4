@@ -26,6 +26,8 @@ import {
   setFPropertyFeatures,
   setIsAreaSideNavOpen,
   setSyncPropertyFeatures,
+   setareaFpropLayerVisible,
+  setsyncClaimLinkPropertyFeatures,
 } from "../../../store/area-map/area-map-slice";
 import TreeView from "../common-comp/treeview";
 import Accordion from "../common-comp/accordion";
@@ -78,10 +80,13 @@ const AreaSideNavbar = () => {
   const [featuredCompanies, setFeaturedCompanies] = useState([]);
   //areal load
   useEffect(() => {
-    getFeaturedCompanyDetails();
-    getSyncProperties();
-    getFeaturedCompanyGeometry();
-    getAssets();
+    if (areaName) {
+      getFeaturedCompanyDetails();
+      getSyncPropertiesGeometry();
+      getFeaturedCompanyGeometry();
+      getClaimLinkPropertiesGeometry();
+      getAssetsGeometry();
+    }
   }, [areaName]);
 
   const closeSecondNavBar = () => {
@@ -95,9 +100,9 @@ const AreaSideNavbar = () => {
     window.history.replaceState({}, "", newUrl);
     dispatch(setIsAreaSideNavOpen(false));
   };
-
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
+      console.log("areaName",areaName,)
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
         { cache: "no-store" }
@@ -105,7 +110,7 @@ const AreaSideNavbar = () => {
       const d = await res.json();
       // console.log("fps", d);
       console.log("fps", d.data);
-
+      
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
@@ -114,8 +119,31 @@ const AreaSideNavbar = () => {
 
     f().catch(console.error);
   };
+      const getClaimLinkPropertiesGeometry = async () => {
+    const f = async () => {
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
+        { cache: "no-store" }
+      );
+     const d = await res.json();
+      // console.log("fps", d);
+       
+      const gj = {
+        type: "FeatureCollection",
+        crs: {
+          type: "name",
+          properties: {
+            name: "EPSG:3857",
+          },
+        },
+        features: d.data[0].json_build_object.features,
+      };
+      dispatch(setsyncClaimLinkPropertyFeatures(gj));
+    };
 
-    const getFeaturedCompanyGeometry = async () => {
+    f().catch(console.error);
+  };
+      const getFeaturedCompanyGeometry = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
@@ -145,8 +173,7 @@ const AreaSideNavbar = () => {
 
     f().catch(console.error);
   };
-
-  const getSyncProperties = async () => {
+  const getSyncPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_area/${areaName}`,
@@ -176,7 +203,7 @@ const AreaSideNavbar = () => {
     };
     f().catch(console.error);
   };
-  const getAssets = async () => {
+  const getAssetsGeometry = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
@@ -206,6 +233,15 @@ const AreaSideNavbar = () => {
     };
     f().catch(console.error);
   };
+
+    const areaFpropLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaFpropLayerVisible
+  );
+
+    const setareaFpropLayerVisibility = (e) => {
+     console.log("setareaFpropLayerVisibility")
+      dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
+  }
 
   return (
     <section className="flex gap-6">
@@ -241,7 +277,7 @@ const AreaSideNavbar = () => {
             <div>
               <Accordion>
                 <div className="flex flex-col gap-6">
-                  <AccordionItemWithEye title="Featured Companies">
+                  <AccordionItemWithEye title="Featured Companies" onClick = {setareaFpropLayerVisibility} eyeState={areaFpropLayerVisible}>
                     <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                       {featuredCompanies.map((i) => (
                         <FeaturedCompanyDetailDiv

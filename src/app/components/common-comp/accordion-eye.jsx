@@ -1,14 +1,18 @@
 // components/Accordion.js
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { VscEyeClosed } from "react-icons/vsc";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-const AccordionItemWithEye = ({ title, children }) => {
+const AccordionItemWithEye = ({ title, children, onClick, eyeState  }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
+
+   const eyeClickHandler = () => {
+    onClick()
+  }
 
   return (
     <div>
@@ -22,7 +26,8 @@ const AccordionItemWithEye = ({ title, children }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span>
           <span className="">
-            <VscEyeClosed className="cursor-pointer"/>
+            {eyeState && <VscEyeClosed className="cursor-pointer" onClick={eyeClickHandler} />}
+            {!eyeState && <VscEye className="cursor-pointer" onClick={eyeClickHandler}/>}
           </span>
         </div>
       </div>

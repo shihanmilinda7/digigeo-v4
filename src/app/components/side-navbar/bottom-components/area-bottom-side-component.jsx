@@ -13,10 +13,15 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
+import { setareaAssetLayerVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
+
+  const [property_claimLinkVisible, setproperty_claimLinkVisible] = useState(true)
+
+
   const router = useRouter();
   try {
     pathname = window.location.href;
@@ -32,7 +37,6 @@ const AreaBottomSideComp = () => {
   const isAreaSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isAreaSideNavOpen
   );
-
   const accordionItems = [
     {
       title: "Assets",
@@ -47,6 +51,59 @@ const AreaBottomSideComp = () => {
       content: "Content for Accordion Item 3",
     },
   ];
+
+   const areaFpropLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaFpropLayerVisible
+    );
+   const areaAssetLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetLayerVisible
+    );
+   const areaSyncPropLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaSyncPropLayerVisible
+    );
+   const areaSyncClaimLinkLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
+    );
+  const setareaFpropLayerVisibility = (e) => {
+    console.log("setareaFpropLayerVisibility",e) 
+      dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
+  }
+  const setareaAssetLayerVisibility = (e) => {
+    console.log("setareaAssetLayerVisibility",e) 
+      dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
+  }
+  const setareaSyncPropLayerVisibility = (e) => {
+    console.log("setareaSyncPropLayerVisibility",e) 
+      dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
+  }
+  const setareaSyncClaimLinkLayerVisibility = (e) => {
+    console.log("setareaSyncClaimLinkLayerVisibility",e) 
+      dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
+  }
+
+  useEffect(() => {
+
+    setproperty_claimLinkVisible(areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible)
+  
+  
+  }, [areaSyncPropLayerVisible,areaSyncClaimLinkLayerVisible])
+  
+
+  //handle Properties Eye
+  const setAllPropertiesEye = () => {
+
+     if(areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible){
+
+       dispatch(setareaSyncPropLayerVisible(false));
+       dispatch(setareaSyncClaimLinkLayerVisible(false));
+    } else {
+       dispatch(setareaSyncPropLayerVisible(true));
+       dispatch(setareaSyncClaimLinkLayerVisible(true));
+    }
+    
+ 
+    
+  }
 
   return (
     <div className="flex flex-col w-full">
@@ -84,12 +141,12 @@ const AreaBottomSideComp = () => {
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Properties">
+            <AccordionItemWithEye title="Properties" onClick={setAllPropertiesEye} eyeState={property_claimLinkVisible}>
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Property Points">
+                <LayerVisibleDiv title="Property Points" onClick={setareaSyncPropLayerVisibility}   eyeState={areaSyncPropLayerVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Property Outlines">
+                <LayerVisibleDiv onClick={setareaSyncClaimLinkLayerVisibility} title="Property Outlines" eyeState={areaSyncClaimLinkLayerVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
               </div>

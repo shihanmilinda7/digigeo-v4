@@ -1,9 +1,9 @@
 // components/Accordion.js
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { VscEyeClosed } from "react-icons/vsc";
+import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-const LayerVisibleDiv = ({ title, children, onClick }) => {
+const LayerVisibleDiv = ({ title, children, onClick,eyeState }) => {
   return (
     <div>
       <div
@@ -17,11 +17,9 @@ const LayerVisibleDiv = ({ title, children, onClick }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           <span className="">
-            <VscEyeClosed
-              className="cursor-pointer"
-              onClick={onClick}
-              // onClick={() => console.log("title", title)}
-            />
+          {eyeState && <VscEyeClosed className="cursor-pointer" onClick={onClick} />}
+            {!eyeState && <VscEye className="cursor-pointer" onClick={onClick}/>}
+ 
           </span>
         </div>
       </div>

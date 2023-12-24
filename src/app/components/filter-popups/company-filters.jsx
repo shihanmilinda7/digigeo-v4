@@ -112,7 +112,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         }
       );
       const d = await res.json();
-      console.log("w2", d.data);
       setCountryList(d.data);
     };
 

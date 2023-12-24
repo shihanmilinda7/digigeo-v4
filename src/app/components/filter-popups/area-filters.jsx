@@ -80,7 +80,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         { cache: "force-cache" }
       );
       const d = await res.json();
-      console.log("areas", d.data);
       setAreaList(d.data);
     };
 
@@ -109,7 +108,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         cache: "force-cache",
       });
       const d = await res.json();
-      console.log("w2", d.data);
       setCountryList(d.data);
     };
 
