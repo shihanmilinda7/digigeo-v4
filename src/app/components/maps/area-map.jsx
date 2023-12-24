@@ -39,7 +39,7 @@ const stroke = new Stroke({
   pixelCoordinates,
   state
 ) => {
-   console.log("sssss", state);
+  //  console.log("sssss", state);
   const context = state.context;
   const geometry = state.geometry.clone();
   geometry.setCoordinates(pixelCoordinates);
@@ -48,18 +48,18 @@ const stroke = new Stroke({
      const height = getHeight(extent);
      //new code
  const svgtext2 = state.feature.get("hatch");
-    const img = new Image();
+  //  const img = new Image();
 
     // img.onload = function () {
     //   feature.set("flag", img);
     // };
     
-    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+   // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
 
      //end new code
-    //  const flag = state.feature.get("flag");
-    const flag = img
-     console.log("flag",flag)
+      const flag = state.feature.get("flag");
+    // const flag = img
+    //   console.log("flag",flag)
   if (!flag || height < 1 || width < 1) {
     return;
   }
@@ -367,10 +367,13 @@ export const AreaMap = () => {
   useEffect(() => {
       
     if (featuredPropertyFeatures) {
+      
       fPropSourceRef?.current?.clear()
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
        
       fPropSourceRef?.current?.addFeatures(e);
+
+
     }
         
      
@@ -430,7 +433,29 @@ export const AreaMap = () => {
    
   useEffect(() => {
     mouseScrollEvent();
+    // //add  console.log("popp") featured prop svg
+   
+ 
+    
   }, []);
+
+  useEffect(() => {
+     
+    fPropVectorLayerRef?.current?.getSource().on("addfeature", function (event) {
+   
+      const feature = event.feature;
+    const svgtext2 = feature.get("hatch");
+    const img = new Image();
+
+    img.onload = function () {
+      feature.set("flag", img);
+    };
+    
+    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+    });
+    
+  }, [fPropVectorLayerRef?.current]);
+
 
   useEffect(() => {
     let newUrl;
@@ -551,6 +576,7 @@ const collapsibleBtnHandler = () => {
     return s;
   };
 
+  //layer visibilty redux states
     const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
     );
@@ -563,8 +589,25 @@ const collapsibleBtnHandler = () => {
     const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
   );
+
+    //asset type visibilty redux states
+    const areaAssetOpMineVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetOpMineVisible
+    );
+    const areaAssetDepositsVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetDepositsVisible
+    );
+    const areaAssetZoneVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetZoneVisible
+    );
+    const areaAssetHistoricalVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetHistoricalVisible
+    );
+    const areaAssetOccurrenceVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetOccurrenceVisible
+    );
   
-  
+  //layer visibility useEffects
   useEffect(() => {
     fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible)
   }, [areaFpropLayerVisible]);
@@ -577,6 +620,15 @@ const collapsibleBtnHandler = () => {
   useEffect(() => {
     assetLayerRef?.current?.setVisible(areaAssetLayerVisible)
   }, [areaAssetLayerVisible]);
+
+    //asset type visibility useEffects
+  useEffect(() => {
+    console.log("assetSourceRef?.current?.features",assetSourceRef?.current?.features)
+
+
+
+  }, [areaAssetOpMineVisible]);
+
 
   return (
     <div className="flex">
@@ -680,12 +732,12 @@ const collapsibleBtnHandler = () => {
             ></olSourceXYZ>
           </olLayerTile>
              <olLayerVector ref={fPropVectorLayerRef}>
-            {featuredPropertyFeatures  && (
+             
               <olSourceVector
                 ref={fPropSourceRef}
               >
               </olSourceVector>
-            )}
+             
           </olLayerVector>
              <olLayerVector
             ref={claimLinkVectorLayerRef}

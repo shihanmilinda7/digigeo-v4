@@ -13,7 +13,7 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setareaAssetLayerVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
+import { setareaAssetDepositsVisible, setareaAssetHistoricalVisible, setareaAssetLayerVisible, setareaAssetOccurrenceVisible, setareaAssetOpMineVisible, setareaAssetZoneVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -52,6 +52,7 @@ const AreaBottomSideComp = () => {
     },
   ];
 
+  //layer visibility redux states 
    const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
     );
@@ -64,13 +65,14 @@ const AreaBottomSideComp = () => {
    const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
     );
+    //layer visibility functions
   const setareaFpropLayerVisibility = (e) => {
-    console.log("setareaFpropLayerVisibility",e) 
       dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
   }
   const setareaAssetLayerVisibility = (e) => {
     console.log("setareaAssetLayerVisibility",e) 
       dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
+   
   }
   const setareaSyncPropLayerVisibility = (e) => {
     console.log("setareaSyncPropLayerVisibility",e) 
@@ -80,6 +82,41 @@ const AreaBottomSideComp = () => {
     console.log("setareaSyncClaimLinkLayerVisibility",e) 
       dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
   }
+
+  //asset visibility redux states 
+    const areaAssetOpMineVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetOpMineVisible
+    );
+    const areaAssetDepositsVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetDepositsVisible
+    );
+    const areaAssetZoneVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetZoneVisible
+    );
+    const areaAssetHistoricalVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetHistoricalVisible
+    );
+    const areaAssetOccurrenceVisible = useSelector(
+    (state) => state.areaMapReducer.areaAssetOccurrenceVisible
+    );
+
+ //asset type visibility functions
+  const setareaAssetOpMineVisibility = (e) => {
+      dispatch(setareaAssetOpMineVisible(!areaAssetOpMineVisible));
+  }
+  const setareaAssetDepositVisibility = (e) => {
+      dispatch(setareaAssetDepositsVisible(!areaAssetDepositsVisible));
+  }
+  const setareaAssetZoneVisibility = (e) => {
+      dispatch(setareaAssetZoneVisible(!areaAssetZoneVisible));
+  }
+  const setareaAssetHistoricalVisibility = (e) => {
+      dispatch(setareaAssetHistoricalVisible(!areaAssetHistoricalVisible));
+  }
+  const setareaAssetOccurrenceVisibility = (e) => {
+      dispatch(setareaAssetOccurrenceVisible(!areaAssetOccurrenceVisible));
+  }
+
 
   useEffect(() => {
 
@@ -94,7 +131,7 @@ const AreaBottomSideComp = () => {
   }, [areaSyncPropLayerVisible,areaSyncClaimLinkLayerVisible])
   
 
-  //handle Properties Eye
+  //handle Properties Group Eye
   const setPropertiesGroupEye = () => {
 
      if(areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible){
@@ -105,10 +142,28 @@ const AreaBottomSideComp = () => {
        dispatch(setareaSyncPropLayerVisible(true));
        dispatch(setareaSyncClaimLinkLayerVisible(true));
     }
-    
- 
-    
   }
+
+  
+  //handle Asset Group Eye
+  const setAssetGroupEye = () => {
+
+     if(areaAssetOpMineVisible || areaAssetDepositsVisible || areaAssetZoneVisible ||areaAssetHistoricalVisible ||areaAssetOccurrenceVisible ){
+
+       dispatch(setareaAssetOpMineVisible(false));
+       dispatch(setareaAssetDepositsVisible(false));
+       dispatch(setareaAssetZoneVisible(false));
+       dispatch(setareaAssetHistoricalVisible(false));
+       dispatch(setareaAssetOccurrenceVisible(false));
+    } else {
+       dispatch(setareaAssetOpMineVisible(true));
+       dispatch(setareaAssetDepositsVisible(true));
+       dispatch(setareaAssetZoneVisible(true));
+       dispatch(setareaAssetHistoricalVisible(true));
+       dispatch(setareaAssetOccurrenceVisible(true));
+    }
+  }
+
 
   return (
     <div className="flex flex-col w-full">
@@ -122,26 +177,28 @@ const AreaBottomSideComp = () => {
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
-                  onClick={() => console.log("Operating Mines")}
+                  onClick={setareaAssetOpMineVisibility}   eyeState={areaAssetOpMineVisible}
                 >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Deposits"
-                  onClick={() => console.log("Deposits")}
+                 onClick={setareaAssetDepositVisibility}   eyeState={areaAssetDepositsVisible}
                 >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Zone"
-                  onClick={() => console.log("Zone")}
+                  onClick={setareaAssetZoneVisibility}   eyeState={areaAssetZoneVisible}
                 >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Historical Mines">
+                <LayerVisibleDiv title="Historical Mines"
+                onClick={setareaAssetHistoricalVisibility}   eyeState={areaAssetHistoricalVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Occurrences">
+                <LayerVisibleDiv title="Occurrences"
+                onClick={setareaAssetOccurrenceVisibility}   eyeState={areaAssetOccurrenceVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
               </div>
