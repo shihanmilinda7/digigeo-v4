@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Button, Chip } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import NextTextInputField from "../common-comp/next-text-input-fields";
+import NextTextInputField from "../../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image'
 import Link from "next/link";

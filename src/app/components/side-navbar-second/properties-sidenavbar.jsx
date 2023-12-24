@@ -30,8 +30,8 @@ import {
 import TreeView from "../common-comp/treeview";
 import Accordion from "../common-comp/accordion";
 import AccordionItemWithEye from "../common-comp/accordion-eye";
-import AreaTreeView from "./area-tree-view";
-import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
+import AreaTreeView from "./area-map/area-tree-view";
+import FeaturedCompanyDetailDiv from "./area-map/featured-company-detail-div";
 import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
 
 const PropertiesSideNavbar = () => {

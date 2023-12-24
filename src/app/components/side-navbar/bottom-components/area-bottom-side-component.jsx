@@ -19,7 +19,7 @@ const AreaBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
-  const [property_claimLinkVisible, setproperty_claimLinkVisible] = useState(true)
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
 
 
   const router = useRouter();
@@ -83,16 +83,21 @@ const AreaBottomSideComp = () => {
 
   useEffect(() => {
 
-    setproperty_claimLinkVisible(areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible)
+    if(areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible){
+      setproperty_claimLinkGroupVisible(true)
+    }else{
+      setproperty_claimLinkGroupVisible(false)
+    }
+    
   
   
   }, [areaSyncPropLayerVisible,areaSyncClaimLinkLayerVisible])
   
 
   //handle Properties Eye
-  const setAllPropertiesEye = () => {
+  const setPropertiesGroupEye = () => {
 
-     if(areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible){
+     if(areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible){
 
        dispatch(setareaSyncPropLayerVisible(false));
        dispatch(setareaSyncClaimLinkLayerVisible(false));
@@ -113,7 +118,7 @@ const AreaBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[40vh]">
         <Accordion>
           <div className="flex flex-col gap-6">
-            <AccordionItemWithEye title="Assets">
+            <AccordionItemWithEye title="Assets" onClick={setareaAssetLayerVisibility}   eyeState={areaAssetLayerVisible} >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
@@ -141,7 +146,7 @@ const AreaBottomSideComp = () => {
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Properties" onClick={setAllPropertiesEye} eyeState={property_claimLinkVisible}>
+            <AccordionItemWithEye title="Properties" onClick={setPropertiesGroupEye} eyeState={property_claimLinkGroupVisible}>
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv title="Property Points" onClick={setareaSyncPropLayerVisibility}   eyeState={areaSyncPropLayerVisible}>
                   <AiFillAppstore />

@@ -17,10 +17,10 @@ import {
   setIsSideNavOpen,
   setSelectedMap,
   setUrlUpdate,
-} from "../../../store/map-selector/map-selector-slice";
+} from "../../../../store/map-selector/map-selector-slice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MdLocationOn } from "react-icons/md";
-import AreaFilter from "../filter-popups/area-filters";
+import AreaFilter from "../../filter-popups/area-filters";
 import {
   setAssetFeatures,
   setFPropertyFeatures,
@@ -28,10 +28,10 @@ import {
   setSyncPropertyFeatures,
    setareaFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
-} from "../../../store/area-map/area-map-slice";
-import TreeView from "../common-comp/treeview";
-import Accordion from "../common-comp/accordion";
-import AccordionItemWithEye from "../common-comp/accordion-eye";
+} from "../../../../store/area-map/area-map-slice";
+import TreeView from "../../common-comp/treeview";
+import Accordion from "../../common-comp/accordion";
+import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "./area-tree-view";
 import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
 

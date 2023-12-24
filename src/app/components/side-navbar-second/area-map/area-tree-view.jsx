@@ -1,7 +1,7 @@
 
 
 import React, { useEffect, useState } from 'react'
-import TreeView from '../common-comp/treeview'
+import TreeView from '../../common-comp/treeview'
 import { AreaCompanyNode } from './area-company-treenode';
 import AreaPropertyNode from './area-peoperty-tree-node';
 

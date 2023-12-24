@@ -17,7 +17,7 @@ import {
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import AreaSideNavbar from "../side-navbar-second/area-sidenavbar";
+import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
 import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
