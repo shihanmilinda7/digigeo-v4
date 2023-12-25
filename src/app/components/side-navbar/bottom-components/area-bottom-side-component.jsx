@@ -13,7 +13,7 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setareaAssetDepositsVisible, setareaAssetHistoricalVisible, setareaAssetLayerVisible, setareaAssetOccurrenceVisible, setareaAssetOpMineVisible, setareaAssetZoneVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
+import { setareaAreaBoundaryLayerVisible, setareaAssetDepositsVisible, setareaAssetHistoricalVisible, setareaAssetLayerVisible, setareaAssetOccurrenceVisible, setareaAssetOpMineVisible, setareaAssetZoneVisible, setareaClaimLayerVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -65,22 +65,31 @@ const AreaBottomSideComp = () => {
    const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
     );
+   const areaClaimLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaClaimLayerVisible
+    );
+   const areaAreaBoundaryLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaAreaBoundaryLayerVisible
+    );
     //layer visibility functions
   const setareaFpropLayerVisibility = (e) => {
       dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
   }
   const setareaAssetLayerVisibility = (e) => {
-    console.log("setareaAssetLayerVisibility",e) 
       dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
    
   }
   const setareaSyncPropLayerVisibility = (e) => {
-    console.log("setareaSyncPropLayerVisibility",e) 
       dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
   }
   const setareaSyncClaimLinkLayerVisibility = (e) => {
-    console.log("setareaSyncClaimLinkLayerVisibility",e) 
       dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
+  }
+  const setareaClaimLayerVisibility = (e) => {
+      dispatch(setareaClaimLayerVisible(!areaClaimLayerVisible));
+  }
+  const setareaAreaBoundaryLayerVisibility = (e) => {
+      dispatch(setareaAreaBoundaryLayerVisible(!areaAreaBoundaryLayerVisible));
   }
 
   //asset visibility redux states 
@@ -213,12 +222,12 @@ const AreaBottomSideComp = () => {
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Claims">
+            <AccordionItemWithEye title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Claims">
+                <LayerVisibleDiv title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Mining Areas">
+                <LayerVisibleDiv title="Mining Areas"  onClick={setareaAreaBoundaryLayerVisibility}   eyeState={areaAreaBoundaryLayerVisible}>
                   <AiFillAppstore />
                 </LayerVisibleDiv>
               </div>
@@ -226,8 +235,8 @@ const AreaBottomSideComp = () => {
           </div>
         </Accordion>
       </div>
-      {/* <Accordion variant="splitted" className="w-full">
-        <AccordionItem
+      {/* <Accordion variant="splitted" className="w-full"> setareaClaimLayerVisibility
+        <AccordionItem  setareaAreaBoundaryLayerVisibility
         key="1"
           aria-label="Accordion 1"
           title="Accordion 1"

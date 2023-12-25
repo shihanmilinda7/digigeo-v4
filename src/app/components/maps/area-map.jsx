@@ -22,11 +22,12 @@ import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
-import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Circle, Text } from "ol/style";
 import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
+import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 
 
 const fill = new Fill();
@@ -272,11 +273,31 @@ const stroke = new Stroke({
   return st;
 };
 
+   const styleFunctionClaim = (feature) => {
+     console.log("sf");
+    const s = new Style({
+       
+      stroke: new Stroke({
+        color: "grey",
+        width: 1,
+      }),
+      fill: new Fill({
+        color: "rgba(211,211,211,0.1)",
+      }),
+    });
+
+    return s;
+  }
+
+
 export const AreaMap = () => {
+
+  
+
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) {}
+  } catch (error) { }
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -311,6 +332,10 @@ export const AreaMap = () => {
   const assetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
   const claimLinkVectorLayerRef = useRef(null);
+  const claimVectorImgSourceRef = useRef(null);
+  const claimVectorImgLayerRef = useRef(null);
+  const areaBoundaryImgSourceRef = useRef(null);
+  const areaBoundaryImgLayerRef = useRef(null);
 
   const syncPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncPropertyFeatures
@@ -332,14 +357,24 @@ export const AreaMap = () => {
     (state) => state.areaMapReducer.areaZoomMode
   );
 
-    useEffect(()=>{
-     console.log("ue2")
-      //set style
+  useEffect(() => {
+    console.log("ue2")
+    //set style
     const style = new Style({});
-  style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+    style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
     fPropVectorLayerRef.current?.setStyle(style);
-    }, [fPropVectorLayerRef.current])
+  }, [fPropVectorLayerRef.current])
+  
+
+  useEffect(() => {
+    console.log("ue2")
+    //set style
+    const style = new Style({});
+    style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+
+    claimVectorImgLayerRef.current?.setStyle(style);
+  }, [claimVectorImgLayerRef.current])
   
   
   useEffect(() => {
@@ -352,16 +387,16 @@ export const AreaMap = () => {
     }
         
      
-     if (syncPropSourceRef.current) {
-       const p1= syncPropSourceRef.current?.getExtent()[0]
-       if (p1 != Infinity) {
-         mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-           padding: [200, 200, 200, 200],
-           duration: 3000,
-         });
-       }
+    if (syncPropSourceRef.current) {
+      const p1 = syncPropSourceRef.current?.getExtent()[0]
+      if (p1 != Infinity) {
+        mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
+          padding: [200, 200, 200, 200],
+          duration: 3000,
+        });
+      }
        
-     }
+    }
   }, [syncPropertyFeatures]);
  
   useEffect(() => {
@@ -389,7 +424,7 @@ export const AreaMap = () => {
     //  }
   }, [featuredPropertyFeatures]);
 
-    useEffect(() => {
+  useEffect(() => {
       
     if (syncClaimLinkPropertyFeatures) {
       claimLinkSourceRef?.current?.clear()
@@ -397,20 +432,20 @@ export const AreaMap = () => {
        
       claimLinkSourceRef?.current?.addFeatures(e);
     }
-     if (claimLinkSourceRef.current) {
-       const p1= claimLinkSourceRef.current?.getExtent()[0]
-       if (p1 != Infinity) {
-         mapRef.current?.getView()?.fit(claimLinkSourceRef.current?.getExtent(), {
-           padding: [200, 200, 200, 200],
-           duration: 3000,
-         });
-       }
+    // if (claimLinkSourceRef.current) {
+    //   const p1 = claimLinkSourceRef.current?.getExtent()[0]
+    //   if (p1 != Infinity) {
+    //     mapRef.current?.getView()?.fit(claimLinkSourceRef.current?.getExtent(), {
+    //       padding: [200, 200, 200, 200],
+    //       duration: 3000,
+    //     });
+    //   }
        
-     }
+    // }
   }, [syncClaimLinkPropertyFeatures]);
    
   useEffect(() => {
-      console.log("assetFeatures",assetFeatures,)
+    console.log("assetFeatures", assetFeatures,)
     if (assetFeatures?.features) {
       assetSourceRef?.current?.clear()
       const e = new GeoJSON().readFeatures(assetFeatures)
@@ -419,16 +454,16 @@ export const AreaMap = () => {
     }
         
      
-     if (assetSourceRef.current) {
-       const p1= assetSourceRef.current?.getExtent()[0]
-       if (p1 != Infinity) {
-         mapRef.current?.getView()?.fit(assetSourceRef.current?.getExtent(), {
-           padding: [200, 200, 200, 200],
-           duration: 3000,
-         });
-       }
+    // if (assetSourceRef.current) {
+    //   const p1 = assetSourceRef.current?.getExtent()[0]
+    //   if (p1 != Infinity) {
+    //     mapRef.current?.getView()?.fit(assetSourceRef.current?.getExtent(), {
+    //       padding: [200, 200, 200, 200],
+    //       duration: 3000,
+    //     });
+    //   }
        
-     }
+    // }
   }, [assetFeatures]);
    
   useEffect(() => {
@@ -444,14 +479,14 @@ export const AreaMap = () => {
     fPropVectorLayerRef?.current?.getSource().on("addfeature", function (event) {
    
       const feature = event.feature;
-    const svgtext2 = feature.get("hatch");
-    const img = new Image();
+      const svgtext2 = feature.get("hatch");
+      const img = new Image();
 
-    img.onload = function () {
-      feature.set("flag", img);
-    };
+      img.onload = function () {
+        feature.set("flag", img);
+      };
     
-    img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
     });
     
   }, [fPropVectorLayerRef?.current]);
@@ -504,18 +539,16 @@ export const AreaMap = () => {
   //   // dispatch(setUrlUpdate());
   // };
 
-const collapsibleBtnHandler = () => {
+  const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
     if (areaName == "") {
-      newUrl = `${
-        window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+      newUrl = `${window.location.pathname
+        }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
     } else {
-      newUrl = `${
-        window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
+      newUrl = `${window.location.pathname
+        }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
@@ -532,7 +565,7 @@ const collapsibleBtnHandler = () => {
   // };
 
 
-    const setLyrs = (lyrs) => {
+  const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     if (areaName == "") {
@@ -561,7 +594,7 @@ const collapsibleBtnHandler = () => {
   });
 
   const styleFunctionSyncProperties = (feature) => {
-    console.log("s");
+    // console.log("s");
     const s = new Style({
       image,
       stroke: new Stroke({
@@ -576,6 +609,9 @@ const collapsibleBtnHandler = () => {
     return s;
   };
 
+
+
+
   //layer visibilty redux states
     const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
@@ -588,6 +624,12 @@ const collapsibleBtnHandler = () => {
     );
     const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
+  );
+    const areaClaimLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaClaimLayerVisible
+  );
+    const areaAreaBoundaryLayerVisible = useSelector(
+    (state) => state.areaMapReducer.areaAreaBoundaryLayerVisible
   );
 
     //asset type visibilty redux states
@@ -620,6 +662,12 @@ const collapsibleBtnHandler = () => {
   useEffect(() => {
     assetLayerRef?.current?.setVisible(areaAssetLayerVisible)
   }, [areaAssetLayerVisible]);
+  useEffect(() => {
+    claimVectorImgLayerRef?.current?.setVisible(areaClaimLayerVisible)
+  }, [areaClaimLayerVisible]);
+  useEffect(() => {
+    areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible)
+  }, [areaAreaBoundaryLayerVisible]);
 
     //asset type visibility useEffects
   useEffect(() => {
@@ -722,6 +770,179 @@ const collapsibleBtnHandler = () => {
     }
   }, [areaAssetOccurrenceVisible]);
 
+  //claim loader
+  // const claimLoaderFunc1 = (extent, resolution, projection)=> {
+  //  // console.log("hit claims",extent)
+  //   const url =
+  //     `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+  //     `/${extent.join("/")}`;
+  //  // console.log("url", url);
+  //   fetch(url, {
+  //     method: "GET", // *GET, POST, PUT, DELETE, etc.
+  //     mode: "cors", // no-cors, *cors, same-origin
+  //     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+  //     credentials: "same-origin", // include, *same-origin, omit
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //         console.log("hit claims2.0",json)
+  //       if (json.data) {
+  //            //console.log("hit claims2.1")
+  //         if (json.data[0].json_build_object.features) {
+  //           const features = new GeoJSON().readFeatures(
+  //             json.data[0].json_build_object
+  //           );
+  //             //console.log("hit claims3")
+  //           claimVectorImgSourceRef.current.addFeatures(features);
+
+  //           //console.log("bbsync uni tbl01_claims   features count", features.count);
+  //         }
+  //       }
+  //     });
+  // }
+
+    const styleFunctionAreaBoundary =   (feature) => {
+     console.log("sf");
+    const s = new Style({
+       
+      stroke: new Stroke({
+        color: "blue",
+        width: 1,
+      }),
+      
+    });
+
+    return s;
+  }
+
+  const areaLoaderFunc =  useCallback((extent, resolution, projection) =>{
+    const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin 
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data[0].json_build_object.features) {
+          const features = new GeoJSON().readFeatures(
+            json.data[0].json_build_object
+          );
+           
+          areaBoundaryImgSourceRef.current.addFeatures(features);
+
+          // console.log("mapCommodityTbl40Source", features );
+        } else {
+          console.log("else area map area boundry not loading ");
+        }
+      });
+  },[])
+
+  const styleFunctionClaim = (feature, resolution) => {
+  // console.log("sf claims")
+    const colour = "#D3D3D3"; //feature.values_.colour;
+  //console.log("colour", colour);
+  // const fill = new Fill({
+  //   color: `rgba(${r},${g},${b},1)`,
+  //   opacity:1,
+  // });
+  // const fill = new Fill({
+  //   // color: `rgba(${r},${g},${b},1)`,
+
+  //   color:colour,
+  //   opacity: 1,
+  // });
+  let fill = new Fill({
+    // color: `rgba(${r},${g},${b},1)`,
+
+    color: colour,
+    opacity: 1,
+  });
+
+  // const stroke = new Stroke({
+  //   color: "#8B4513",
+  //   width: 1.25,
+  // });
+
+  // let image;
+  // let text;
+
+  // image = new Circle({
+  //   radius: 9,
+  //   fill: new Fill({ color: colour }),
+  //   // stroke: new Stroke({ color: "#8B4513", width: 3 }),
+  // });
+
+  let textObj;
+
+  const claimno = feature.get("claimno");
+  textObj = new Text({
+    //       // textAlign: align == "" ? undefined : align,
+    //       // textBaseline: baseline,
+    font: "10px serif",
+    text: claimno,
+    // fill: new Fill({ color: fillColor }),
+    // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+    offsetX: 2,
+    offsetY: -13,
+    // placement: placement,
+    // maxAngle: maxAngle,
+    // overflow: overflow,
+    // rotation: rotation,
+  });
+
+  const style = new Style({
+    stroke: new Stroke({
+      color: "#707070",
+      width: 1,
+    }),
+
+    text: textObj,
+    fill,
+  });
+
+  return style;
+}
+
+    const claimLoaderFunc = useCallback((extent, resolution, projection) =>  {
+    console.log("hit claims",extent)
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
+      `/${extent.join("/")}`;
+   // console.log("url", url);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+          console.log("hit claims2.0",json)
+        if (json.data) {
+             console.log("hit claims2.1")
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+              //console.log("hit claims3")
+            claimVectorImgSourceRef.current.addFeatures(features);
+
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
+          }
+        }
+      });
+  }, []);
   return (
     <div className="flex">
       <AreaSideNavbar />
@@ -823,15 +1044,22 @@ const collapsibleBtnHandler = () => {
               }}
             ></olSourceXYZ>
           </olLayerTile>
-             <olLayerVector ref={fPropVectorLayerRef}>
-             
+           <olLayerVectorImage
+            ref={areaBoundaryImgLayerRef}
+            style={styleFunctionAreaBoundary}
+            
+          >
+            
               <olSourceVector
-                ref={fPropSourceRef}
+              ref={areaBoundaryImgSourceRef}
+              // format={new GeoJSON()}
+              strategy={all}
+              loader={areaLoaderFunc}
               >
               </olSourceVector>
-             
-          </olLayerVector>
-             <olLayerVector
+           
+          </olLayerVectorImage>
+              <olLayerVector
             ref={claimLinkVectorLayerRef}
             >
             {syncClaimLinkPropertyFeatures  && (
@@ -842,19 +1070,34 @@ const collapsibleBtnHandler = () => {
               
               </olSourceVector>
             )}
-            </olLayerVector>
-          <olLayerVector
-            ref={syncPropVectorLayerRef}
-            style={styleFunctionSyncProperties}
+          </olLayerVector>
+          <olLayerVectorImage
+            ref={claimVectorImgLayerRef}
+            style={styleFunctionClaim}
+            minResolution={0}
+            maxResolution={150}
           >
             
               <olSourceVector
-                ref={syncPropSourceRef}
-            
+              ref={claimVectorImgSourceRef}
+              // format={new GeoJSON()}
+              strategy={bbox}
+              loader={claimLoaderFunc}
               >
               </olSourceVector>
            
+          </olLayerVectorImage>
+
+             <olLayerVector ref={fPropVectorLayerRef}>
+             
+              <olSourceVector
+                ref={fPropSourceRef}
+              >
+              </olSourceVector>
+             
           </olLayerVector>
+         
+         
 
 
           
@@ -870,6 +1113,18 @@ const collapsibleBtnHandler = () => {
                
               </olSourceVector>
             
+          </olLayerVector>
+           <olLayerVector
+            ref={syncPropVectorLayerRef}
+            style={styleFunctionSyncProperties}
+          >
+            
+              <olSourceVector
+                ref={syncPropSourceRef}
+            
+              >
+              </olSourceVector>
+           
           </olLayerVector>
         </Map>
       </div>

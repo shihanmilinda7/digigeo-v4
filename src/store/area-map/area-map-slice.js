@@ -13,6 +13,8 @@ const initialState = {
   areaAssetLayerVisible: true,
   areaSyncPropLayerVisible: true,
   areaSyncClaimLinkLayerVisible: true,
+  areaClaimLayerVisible: true,
+  areaAreaBoundaryLayerVisible: true,
   areaAssetOpMineVisible:true,
   areaAssetDepositsVisible:true,
   areaAssetZoneVisible:true,
@@ -61,6 +63,12 @@ const areaMapSlice = createSlice({
     setareaSyncClaimLinkLayerVisible: (state, action) => {
       state.areaSyncClaimLinkLayerVisible = action.payload;
     },
+    setareaClaimLayerVisible: (state, action) => {
+      state.areaClaimLayerVisible = action.payload;
+    },
+    setareaAreaBoundaryLayerVisible: (state, action) => {
+      state.areaAreaBoundaryLayerVisible = action.payload;
+    },
     //asset types
     setareaAssetOpMineVisible: (state, action) => {
       state.areaAssetOpMineVisible = action.payload;
@@ -93,11 +101,13 @@ export const {
   setareaAssetLayerVisible,
   setareaSyncPropLayerVisible,
   setareaSyncClaimLinkLayerVisible,
+  setareaClaimLayerVisible,
   setareaAssetOpMineVisible,
   setareaAssetDepositsVisible,
   setareaAssetZoneVisible,
   setareaAssetHistoricalVisible,
   setareaAssetOccurrenceVisible,
+  setareaAreaBoundaryLayerVisible,
 
 } = areaMapSlice.actions;
 
