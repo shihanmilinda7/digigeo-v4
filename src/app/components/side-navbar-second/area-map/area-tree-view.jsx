@@ -10,7 +10,7 @@ const AreaTreeView = ({ syncPropFeatues }) => {
     const [treeViewData, setTreeViewData] = useState();
 
     useEffect(() => {
-            console.log("kkk",syncPropFeatues)
+            // console.log("kkk",syncPropFeatues)
             buildTreeViewData(syncPropFeatues)
   }, [syncPropFeatues]);
 
