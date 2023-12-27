@@ -28,7 +28,11 @@ import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
- import {flyTo} from "./fly"
+import { flyTo } from "./fly"
+ import { toLonLat } from "ol/proj";
+import { toStringHDMS } from "ol/coordinate";
+import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -311,6 +315,18 @@ export const AreaMap = () => {
   const areaFlyToLocation = useSelector(
     (state) => state.areaMapReducer.areaFlyToLocation
   );
+
+  //
+  const [coordinates, setCoordinates] = useState(undefined);
+  const [popup, setPopup] = useState();
+  const onSingleclick = useCallback((evt) => {
+    const { coordinate } = evt;
+    setCoordinates(coordinate);
+  }, []);
+
+ 
+  
+
 
   useEffect(() => {
     if(areaFlyToLocation?.length>0)
@@ -924,6 +940,7 @@ export const AreaMap = () => {
   return style;
 }
 
+  
     const claimLoaderFunc = useCallback((extent, resolution, projection) =>  {
     console.log("hit claims",extent)
     const url =
@@ -955,7 +972,112 @@ export const AreaMap = () => {
           }
         }
       });
-  }, []);
+    }, []);
+  
+  const handleClickPopup = (coordinates) => {
+    if(!coordinates){
+      return null
+    }
+  let extentDim;
+  const viewResolution = mapViewRef?.current?.getResolution()
+  if (viewResolution < 15) {
+    extentDim = 100;
+  } else if (viewResolution < 50) {
+    extentDim = 500;
+  } else if (viewResolution < 150) {
+    extentDim = 1000;
+  } else if (viewResolution < 250) {
+    extentDim = 1500;
+  } else if (viewResolution < 400) {
+    extentDim = 2500;
+  } else {
+    extentDim = 3000;
+    }
+    
+    const ext = [
+    coordinates[0] - extentDim,
+    coordinates[1] - extentDim,
+    coordinates[0] + extentDim,
+    coordinates[1] + extentDim,
+    ];
+  //first look for asset features
+    const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+    
+  let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
+  let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
+  let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
+  let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
+  let area = selAssetFeatures?.[0]?.get("area") ?? "";
+  let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+  let country = selAssetFeatures?.[0]?.get("country") ?? "";
+    let region = selAssetFeatures?.[0]?.get("region") ?? "";
+  const assetObject =   {
+    asset_name,
+    assetalias,
+    asset_type,
+    commodities,
+    area,
+    stateProv,
+    country,
+    region,
+  }
+  const selFPropertyFeatures =
+    fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+   
+  let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
+  let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
+  let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
+  let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
+  let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
+  let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
+  let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
+  let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+  let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
+
+  // const sponsoredowners = await getSponsorListFromRESTAPI(
+  //   features[0].get("id")
+  // );
+  const sponsoredowners = "sp owners"
+ const fPropertyObject =  {
+    sponsoredowners,
+    prop_name,
+    commo_ref,
+    assets,
+    resources,
+    map_area,
+    owners,
+    prop_exturl,
+    sale_name,
+    propertyid,
+  }
+
+
+  // const selBoundaryFeatures =
+  //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+
+  const selSyncPropFeatures =
+      syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+    
+     prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
+    owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
+    let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
+    stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+    country = selSyncPropFeatures?.[0]?.get("country") ?? "";
+    area = selSyncPropFeatures?.[0]?.get("area") ?? "";
+  // const selSynClaimLinkFeatures =
+  //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+  const syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
+  const claimFeatures =
+      claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+    
+     let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
+  const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
+  const claimObject = {ownerref,claimno}
+    
+
+  return (<AreaMapClickPopup assetObj={assetObject}/>)
+
+  }
   return (
     <div className="flex">
       <AreaSideNavbar />
@@ -1031,6 +1153,42 @@ export const AreaMap = () => {
             Terrain
           </Button>
         </ButtonGroup>
+
+         <div
+        ref={setPopup}
+        style={{
+          backgroundColor: "white",
+          boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+          padding: "15px",
+          borderRadius: "10px",
+          border: "1px solid #cccccc",
+          minWidth: "280px",
+          color: "black",
+        }}
+      >
+        <button
+          type="button"
+          onClick={(e) => {
+            setCoordinates(undefined);
+            e.target.blur();
+            return false;
+          }}
+          style={{
+            textDecoration: "none",
+            position: "absolute",
+            top: "2px",
+            right: "8px",
+          }}
+        >
+          ✖
+        </button>
+        <div id="popup-content">
+          <p>You clicked here:</p>
+          {handleClickPopup(coordinates)}
+        
+        </div>
+        </div>
+        
         <Map
           ref={mapRef}
           style={{
@@ -1039,7 +1197,18 @@ export const AreaMap = () => {
             height: "90vh",
           }}
           controls={[]}
+           onSingleclick={onSingleclick}
         >
+          {popup ? (
+          <olOverlay
+            element={popup}
+            position={coordinates}
+            autoPan
+            autoPanAnimation={{
+              duration: 250,
+            }}
+          />
+        ) : null}
           <olView
              ref={mapViewRef}
             initialCenter={[0, 0]}
@@ -1144,10 +1313,7 @@ export const AreaMap = () => {
     </div>
   );
 };
-{
-  /* <olLayerTile>
-  {/* <olSourceOSM /> */
-}
+ 
 //     <olSourceXYZ args={{ url: "https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}", }} > map=m terr=p satt=s
 //   </olSourceXYZ>
 // </olLayerTile> */}
