@@ -12,6 +12,8 @@ export const AreaCompanyNode = ({comapanyName, propertyNodes }) => {
     setIsOpen(!isOpen);
   };
 
+
+
   return (
     <div>
       <div onClick={handleToggle} className="flex hover:bg-slate-200 cursor-pointer" >
@@ -22,9 +24,9 @@ export const AreaCompanyNode = ({comapanyName, propertyNodes }) => {
       
        
       {isOpen  && (
-        <div style={{ marginLeft: "20px" }}>
+        <div className="odd:bg-slate-600"  style={{ marginLeft: "20px" }}>
           { propertyNodes.map((child) => (
-            <AreaPropertyNode key={child.label} propertyName={child.label}  />
+            <AreaPropertyNode  key={child.label} propertyName={child.label} location={child.location}   />
           ))}
         </div>
       )}

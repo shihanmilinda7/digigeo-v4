@@ -28,7 +28,7 @@ import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
-
+ import {flyTo} from "./fly"
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -168,7 +168,7 @@ const stroke = new Stroke({
   //     stroke: new Stroke({
   //       color: assetTypesColorMappings[0].color,
   //       width: 3,
-  //     }),
+  //     }), 
   //   });
   // }
   // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
@@ -304,7 +304,20 @@ export const AreaMap = () => {
   const [zoom, setZoom] = useState("");
  
   const mapRef = useRef();
+  const mapViewRef = useRef();
+
   const dispatch = useDispatch();
+
+  const areaFlyToLocation = useSelector(
+    (state) => state.areaMapReducer.areaFlyToLocation
+  );
+
+  useEffect(() => {
+    if(areaFlyToLocation?.length>0)
+    flyTo(mapViewRef?.current,areaFlyToLocation,()=>{})
+    
+  }, [areaFlyToLocation])
+  
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -1028,7 +1041,7 @@ export const AreaMap = () => {
           controls={[]}
         >
           <olView
-            // ref={mapRef}
+             ref={mapViewRef}
             initialCenter={[0, 0]}
             center={areaInitialCenter}
             initialZoom={2}

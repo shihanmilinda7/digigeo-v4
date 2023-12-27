@@ -34,6 +34,7 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "./area-tree-view";
 import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
+import GeoJSON from "ol/format/GeoJSON";
 
 const AreaSideNavbar = () => {
   let pathname = "";
@@ -168,6 +169,9 @@ const AreaSideNavbar = () => {
         },
         features: d.data[0].json_build_object.features,
       };
+
+     // const e =   new GeoJSON().readFeatures(gj)
+
       dispatch(setFPropertyFeatures(gj));
     };
 
@@ -181,7 +185,7 @@ const AreaSideNavbar = () => {
       );
       const d = await res.json();
       // console.log("fps", d);
-      console.log("fps", d.data);
+      // console.log("fps", d.data);
 
       // setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>

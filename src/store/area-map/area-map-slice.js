@@ -19,7 +19,8 @@ const initialState = {
   areaAssetDepositsVisible:true,
   areaAssetZoneVisible:true,
   areaAssetHistoricalVisible:true,
-  areaAssetOccurrenceVisible:true,
+  areaAssetOccurrenceVisible: true,
+  areaFlyToLocation:[],
 };
 
 const areaMapSlice = createSlice({
@@ -85,6 +86,9 @@ const areaMapSlice = createSlice({
     setareaAssetOccurrenceVisible: (state, action) => {
       state.areaAssetOccurrenceVisible = action.payload;
     },
+    setareaFlyToLocation: (state, action) => {
+      state.areaFlyToLocation = action.payload;
+    },
   },
 });
 
@@ -108,7 +112,7 @@ export const {
   setareaAssetHistoricalVisible,
   setareaAssetOccurrenceVisible,
   setareaAreaBoundaryLayerVisible,
-
+  setareaFlyToLocation,
 } = areaMapSlice.actions;
 
 export default areaMapSlice.reducer;
