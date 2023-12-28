@@ -998,10 +998,8 @@ export const  AreaMap =  () => {
 
     const fetchData = async()=>{
      let assetObject, fPropertyObject,syncPropertyObject,claimObject
+    // console.log("coordinates",coordinates,)
     
-    if(!coordinates){
-      return null
-    }
   let extentDim;
   const viewResolution = mapViewRef?.current?.getResolution()
   if (viewResolution < 15) {
@@ -1156,9 +1154,12 @@ export const  AreaMap =  () => {
   //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
     }
 
-    fetchData();
+    if(coordinates){
+        fetchData();
     setclickDataLoaded(true);
      console.log("222")
+    }
+     
   }, [coordinates])
   
 
