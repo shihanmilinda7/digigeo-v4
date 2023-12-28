@@ -2,10 +2,29 @@
 import React from 'react'
 import AreaMapClickPopupHeaderRow from './area-map-click-popup-header-row';
 import AreaMapClickPopupRow from './area-map-click-popup-row';
+import { useSelector } from 'react-redux';
 
-const AreaMapClickPopup = ({ syncPropObj, assetObj, fpropObj, claimObj }) => {
-  console.log("syncPropObj",syncPropObj)
+const AreaMapClickPopup = ({}) => {
+ 
+   //clickObjects
+  const claimObj = useSelector(
+    (state) => state.areaMapReducer.clickclaimObject
+  );
+  const fpropObj = useSelector(
+    (state) => state.areaMapReducer.clickfPropertyObject
+  );
+  const assetObj = useSelector(
+    (state) => state.areaMapReducer.clickassetObject
+  );
+  const syncPropObj = useSelector(
+    (state) => state.areaMapReducer.clicksyncPropertyObject
+  );
+
+
   return (
+
+    
+
 
     <div className='flex-col max-h-unit-7xl overflow-scroll'>
       
@@ -20,6 +39,7 @@ const AreaMapClickPopup = ({ syncPropObj, assetObj, fpropObj, claimObj }) => {
       }
         {fpropObj  && <div >
         <AreaMapClickPopupHeaderRow label="Featured Property Info" />
+        <AreaMapClickPopupRow label={"Property Name"} value={fpropObj.prop_name}/>
       <AreaMapClickPopupRow label={"Sponsored owners"} value={fpropObj.sponsoredowners}/>
       <AreaMapClickPopupRow label={"commo_ref"} value={fpropObj.commo_ref}/>
       <AreaMapClickPopupRow label={"assets"} value={fpropObj.assets}/>

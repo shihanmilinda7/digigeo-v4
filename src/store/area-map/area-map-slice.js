@@ -15,12 +15,17 @@ const initialState = {
   areaSyncClaimLinkLayerVisible: true,
   areaClaimLayerVisible: true,
   areaAreaBoundaryLayerVisible: true,
-  areaAssetOpMineVisible:true,
-  areaAssetDepositsVisible:true,
-  areaAssetZoneVisible:true,
-  areaAssetHistoricalVisible:true,
+  areaAssetOpMineVisible: true,
+  areaAssetDepositsVisible: true,
+  areaAssetZoneVisible: true,
+  areaAssetHistoricalVisible: true,
   areaAssetOccurrenceVisible: true,
-  areaFlyToLocation:[],
+  areaFlyToLocation: [],
+  clickclaimObject:undefined,
+  clickfPropertyObject:undefined,
+  clickassetObject:undefined,
+  clicksyncPropertyObject:undefined,
+
 };
 
 const areaMapSlice = createSlice({
@@ -89,6 +94,19 @@ const areaMapSlice = createSlice({
     setareaFlyToLocation: (state, action) => {
       state.areaFlyToLocation = action.payload;
     },
+    //single click objects
+    setclickclaimObject: (state, action) => {
+      state.clickclaimObject = action.payload;
+    },
+    setclickfPropertyObject: (state, action) => {
+      state.clickfPropertyObject = action.payload;
+    },
+    setclickassetObject: (state, action) => {
+      state.clickassetObject = action.payload;
+    },
+    setclicksyncPropertyObject: (state, action) => {
+      state.clicksyncPropertyObject = action.payload;
+    },
   },
 });
 
@@ -113,6 +131,11 @@ export const {
   setareaAssetOccurrenceVisible,
   setareaAreaBoundaryLayerVisible,
   setareaFlyToLocation,
+  setclickclaimObject,
+  setclickfPropertyObject,
+  setclickassetObject,
+  setclicksyncPropertyObject,
+
 } = areaMapSlice.actions;
 
 export default areaMapSlice.reducer;

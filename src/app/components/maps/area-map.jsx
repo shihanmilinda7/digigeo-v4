@@ -19,7 +19,7 @@ import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
 import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
+import { setIsAreaSideNavOpen,setclickassetObject,setclickclaimObject,setclickfPropertyObject,setclicksyncPropertyObject } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Circle, Text } from "ol/style";
@@ -294,7 +294,7 @@ const stroke = new Stroke({
   }
 
 
-export const AreaMap = () => {
+export const  AreaMap =  () => {
 
   
 
@@ -306,7 +306,13 @@ export const AreaMap = () => {
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
- 
+  const [claimObject, setclaimObject] = useState(undefined);
+  // const [fPropertyObject, setfPropertyObject] = useState(undefined);
+  // const [assetObject, setassetObject] = useState(undefined);
+  // const [syncPropertyObject, setsyncPropertyObject] = useState(undefined);
+  const [clickDataLoaded, setclickDataLoaded] = useState(false);
+  
+  
   const mapRef = useRef();
   const mapViewRef = useRef();
 
@@ -378,6 +384,20 @@ export const AreaMap = () => {
   const assetFeatures = useSelector(
     (state) => state.areaMapReducer.assetFeatures
   );
+
+    //clickObjects
+  // const clickclaimObject = useSelector(
+  //   (state) => state.areaMapReducer.clickclaimObject
+  // );
+  // const clickfPropertyObject = useSelector(
+  //   (state) => state.areaMapReducer.clickfPropertyObject
+  // );
+  // const clickassetObject = useSelector(
+  //   (state) => state.areaMapReducer.clickassetObject
+  // );
+  // const clicksyncPropertyObject = useSelector(
+  //   (state) => state.areaMapReducer.clicksyncPropertyObject
+  // );
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
@@ -974,8 +994,10 @@ export const AreaMap = () => {
       });
     }, []);
   
-  const handleClickPopup = useCallback((coordinates) => {
-    let assetObject, fPropertyObject,syncPropertyObject,claimObject
+  useEffect( () => {
+
+    const fetchData = async()=>{
+     let assetObject, fPropertyObject,syncPropertyObject,claimObject
     
     if(!coordinates){
       return null
@@ -1004,7 +1026,7 @@ export const AreaMap = () => {
     ];
   //first look for asset features
     const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-    console.log("selAssetFeatures",selAssetFeatures)
+  
     if (selAssetFeatures.length > 0) {
       let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
       let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
@@ -1024,10 +1046,15 @@ export const AreaMap = () => {
         country,
         region,
       }
+
+       dispatch(setclickassetObject(assetObject))
+    } else {
+       dispatch(setclickassetObject(undefined))
     }
   const selFPropertyFeatures =
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
     if(selFPropertyFeatures.length>0){
+        console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
   let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
@@ -1037,11 +1064,42 @@ export const AreaMap = () => {
   let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
   let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
   let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
+  let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
   // const sponsoredowners = await getSponsorListFromRESTAPI(
   //   features[0].get("id")
-  // );
-  const sponsoredowners = "sp owners"
+      // );
+
+      const getData = async (hotplayid) => {
+        const url = "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
+        //load data from api - changed to return array
+
+        let sponsors = await fetch(url, {
+          method: "GET", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+          .then((response) => response.json())
+          .then((res) => {
+            // let sponsors = "";
+            // res.data.forEach((element) => {
+            //   sponsors += element.sponsor + "/";
+            // });
+            return res.data;
+          });
+
+        // sponsors = sponsors.slice(0, -1);
+        // console.log("sponsors", sponsors);
+        return sponsors;
+      }
+      
+
+  const sponsoredowners = (await getData(hotplayid).data?.[0]?.sponsor) ?? ""
    fPropertyObject =  {
     sponsoredowners,
     prop_name,
@@ -1053,8 +1111,12 @@ export const AreaMap = () => {
     prop_exturl,
     sale_name,
     propertyid,
-  }
+      }
+      
+  dispatch(setclickfPropertyObject(fPropertyObject))
 
+    }else{
+      dispatch(setclickfPropertyObject(undefined))
     }
   // const selBoundaryFeatures =
   //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
@@ -1073,6 +1135,10 @@ export const AreaMap = () => {
   // const selSynClaimLinkFeatures =
   //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
     syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
+    
+    dispatch(setclicksyncPropertyObject(syncPropertyObject))
+    }else{
+    dispatch(setclicksyncPropertyObject(undefined))
     }
   const claimFeatures =
       claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
@@ -1080,12 +1146,27 @@ export const AreaMap = () => {
      let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
     const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
     claimObject = {ownerref,claimno}
+   
+    dispatch(setclickclaimObject(claimObject))
+     }else{
+       dispatch(setclickclaimObject(undefined))
      }
     
+     console.log("111")
+  //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
+    }
 
-    return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
+    fetchData();
+    setclickDataLoaded(true);
+     console.log("222")
+  }, [coordinates])
+  
 
-  },[coordinates])
+  // const handleClickPopup = useCallback(   (coordinates) =>  {
+   
+  // },[coordinates])
+
+
   return (
     <div className="flex">
       <AreaSideNavbar />
@@ -1192,7 +1273,7 @@ export const AreaMap = () => {
         </button>
         <div id="popup-content">
           <p>Info:</p>
-          {handleClickPopup(coordinates)}
+          { clickDataLoaded && (<AreaMapClickPopup  />)}
         
         </div>
         </div>
