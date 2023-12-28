@@ -30,7 +30,7 @@ import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
-import PropertiesSideNavbar from "../side-navbar-second/properties-sidenavbar";
+import PropertiesSideNavbar from "../side-navbar-second/property-map/properties-sidenavbar";
 
 const fill = new Fill();
 const stroke = new Stroke({

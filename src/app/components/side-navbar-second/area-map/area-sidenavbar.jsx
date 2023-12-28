@@ -110,7 +110,6 @@ const AreaSideNavbar = () => {
       );
       const d = await res.json();
       // console.log("fps", d);
-      console.log("fps", d.data);
       
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
@@ -152,7 +151,6 @@ const AreaSideNavbar = () => {
       );
      const d = await res.json();
       // console.log("fps", d);
-      console.log("fps-geom", d.data);
 
       // setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>

@@ -1157,7 +1157,7 @@ export const  AreaMap =  () => {
     if(coordinates){
         fetchData();
     setclickDataLoaded(true);
-     console.log("222")
+    //  console.log("222")
     }
      
   }, [coordinates])

@@ -17,24 +17,25 @@ import {
   setIsSideNavOpen,
   setSelectedMap,
   setUrlUpdate,
-} from "../../../store/map-selector/map-selector-slice";
+} from "../../../../store/map-selector/map-selector-slice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { MdLocationOn } from "react-icons/md";
-import AreaFilter from "../filter-popups/area-filters";
+import AreaFilter from "../../filter-popups/area-filters";
 import {
   setAssetFeatures,
   setFPropertyFeatures,
   setIsAreaSideNavOpen,
   setSyncPropertyFeatures,
-} from "../../../store/area-map/area-map-slice";
-import TreeView from "../common-comp/treeview";
-import Accordion from "../common-comp/accordion";
-import AccordionItemWithEye from "../common-comp/accordion-eye";
-import AreaTreeView from "./area-map/area-tree-view";
-import FeaturedCompanyDetailDiv from "./area-map/featured-company-detail-div";
-import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
+} from "../../../../store/area-map/area-map-slice";
+import TreeView from "../../common-comp/treeview";
+import Accordion from "../../common-comp/accordion";
+import AccordionItemWithEye from "../../common-comp/accordion-eye";
+import AreaTreeView from "../area-map/area-tree-view";
+import FeaturedCompanyDetailDiv from "../area-map/featured-company-detail-div";
+import { setIsPropertiesSideNavOpen } from "../../../../store/properties-map/properties-map-slice";
+import { setIsCompanySideNavOpen } from "@/store/company-map/company-map-slice";
 
-const PropertiesSideNavbar = () => {
+const CompanySideNavbar = () => {
   let pathname = "";
   const dispatch = useDispatch();
   const router = useRouter();
@@ -55,28 +56,26 @@ const PropertiesSideNavbar = () => {
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
-
-  const propertiesLyrs = useSelector(
-    (state) => state.mapSelectorReducer.propertiesLyrs
+  const companyLyrs = useSelector(
+    (state) => state.mapSelectorReducer.companyLyrs
   );
-  const propertiesZoomLevel = useSelector(
-    (state) => state.mapSelectorReducer.propertiesZoomLevel
+  const companyZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.companyZoomLevel
   );
-  const propertiesInitialCenter = useSelector(
-    (state) => state.mapSelectorReducer.propertiesInitialCenter
+  const companyInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.companyInitialCenter
   );
-
-  const isPropertiesSideNavOpen = useSelector(
-    (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
+  const isCompanySideNavOpen = useSelector(
+    (state) => state.companyMapReducer.isCompanySideNavOpen
   );
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
     let newUrl;
-    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
 
     window.history.replaceState({}, "", newUrl);
-    dispatch(setIsPropertiesSideNavOpen(false));
+    dispatch(setIsCompanySideNavOpen(false));
   };
 
   return (
@@ -85,19 +84,19 @@ const PropertiesSideNavbar = () => {
         <div
           className={`
         ${
-          isPropertiesSideNavOpen && isSideNavOpen
+          isCompanySideNavOpen && isSideNavOpen
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
         h-[90vh] ml-2 mt-2
         ${
-          isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
+          isCompanySideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
         } 
         duration-500`}
         >
           <div
             className={`${
-              isPropertiesSideNavOpen && isSideNavOpen
+              isCompanySideNavOpen && isSideNavOpen
                 ? "py-0.1 flex flex-col "
                 : "hidden"
             }`}
@@ -117,9 +116,7 @@ const PropertiesSideNavbar = () => {
                   Company List
                 </AccordionItemWithEye>
                 <AccordionItemWithEye title="All Properties">
-                  <div className="overflow-y-auto max-h-[25vh]">
-                    Tree View
-                  </div>
+                  <div className="overflow-y-auto max-h-[25vh]">Tree View</div>
                 </AccordionItemWithEye>
               </div>
             </Accordion>
@@ -129,4 +126,4 @@ const PropertiesSideNavbar = () => {
     </section>
   );
 };
-export default PropertiesSideNavbar;
+export default CompanySideNavbar;
