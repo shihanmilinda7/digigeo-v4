@@ -974,7 +974,9 @@ export const AreaMap = () => {
       });
     }, []);
   
-  const handleClickPopup = (coordinates) => {
+  const handleClickPopup = useCallback((coordinates) => {
+    let assetObject, fPropertyObject,syncPropertyObject,claimObject
+    
     if(!coordinates){
       return null
     }
@@ -1002,28 +1004,30 @@ export const AreaMap = () => {
     ];
   //first look for asset features
     const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-    
-  let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
-  let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
-  let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
-  let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
-  let area = selAssetFeatures?.[0]?.get("area") ?? "";
-  let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
-  let country = selAssetFeatures?.[0]?.get("country") ?? "";
-    let region = selAssetFeatures?.[0]?.get("region") ?? "";
-  const assetObject =   {
-    asset_name,
-    assetalias,
-    asset_type,
-    commodities,
-    area,
-    stateProv,
-    country,
-    region,
-  }
+    console.log("selAssetFeatures",selAssetFeatures)
+    if (selAssetFeatures.length > 0) {
+      let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
+      let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
+      let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
+      let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
+      let area = selAssetFeatures?.[0]?.get("area") ?? "";
+      let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+      let country = selAssetFeatures?.[0]?.get("country") ?? "";
+      let region = selAssetFeatures?.[0]?.get("region") ?? "";
+      assetObject = {
+        asset_name,
+        assetalias,
+        asset_type,
+        commodities,
+        area,
+        stateProv,
+        country,
+        region,
+      }
+    }
   const selFPropertyFeatures =
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-   
+    if(selFPropertyFeatures.length>0){
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
   let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
@@ -1038,7 +1042,7 @@ export const AreaMap = () => {
   //   features[0].get("id")
   // );
   const sponsoredowners = "sp owners"
- const fPropertyObject =  {
+   fPropertyObject =  {
     sponsoredowners,
     prop_name,
     commo_ref,
@@ -1051,33 +1055,37 @@ export const AreaMap = () => {
     propertyid,
   }
 
-
+    }
   // const selBoundaryFeatures =
   //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
 
   const selSyncPropFeatures =
       syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-    
-     prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
-    owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
+
+      console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
+    if(selSyncPropFeatures.length>0){ 
+     const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
+    const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
     let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
-    stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
-    country = selSyncPropFeatures?.[0]?.get("country") ?? "";
-    area = selSyncPropFeatures?.[0]?.get("area") ?? "";
+    const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+    const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
+    const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
   // const selSynClaimLinkFeatures =
   //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
-  const syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
+    syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
+    }
   const claimFeatures =
       claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-    
+     if(claimFeatures.length>0){ 
      let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
-  const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
-  const claimObject = {ownerref,claimno}
+    const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
+    claimObject = {ownerref,claimno}
+     }
     
 
-  return (<AreaMapClickPopup assetObj={assetObject}/>)
+    return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
 
-  }
+  },[coordinates])
   return (
     <div className="flex">
       <AreaSideNavbar />
@@ -1183,7 +1191,7 @@ export const AreaMap = () => {
           ✖
         </button>
         <div id="popup-content">
-          <p>You clicked here:</p>
+          <p>Info:</p>
           {handleClickPopup(coordinates)}
         
         </div>
