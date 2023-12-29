@@ -121,7 +121,7 @@ const AreaMapButton = ({ onClick }) => {
         <Chip
           color="primary"
           variant="bordered"
-          className="cursor-pointer hover:bg-gray-200 border-blue-900"
+          className="cursor-pointer hover:bg-gray-200"
           size="sm"
           onClick={openAreaNav}
         >
