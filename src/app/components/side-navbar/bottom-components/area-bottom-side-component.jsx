@@ -14,6 +14,7 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
 import { setareaAreaBoundaryLayerVisible, setareaAssetDepositsVisible, setareaAssetHistoricalVisible, setareaAssetLayerVisible, setareaAssetOccurrenceVisible, setareaAssetOpMineVisible, setareaAssetZoneVisible, setareaClaimLayerVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
+import Image from "next/image";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
@@ -188,47 +189,92 @@ const AreaBottomSideComp = () => {
                   title="Operating Mines"
                   onClick={setareaAssetOpMineVisibility}   eyeState={areaAssetOpMineVisible}
                 >
-                  <AiFillAppstore />
+                    <Image
+                          src="./asset-opmine.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Deposits"
                  onClick={setareaAssetDepositVisibility}   eyeState={areaAssetDepositsVisible}
                 >
-                  <AiFillAppstore />
+                  <Image
+                          src="./asset-deposit.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Zone"
                   onClick={setareaAssetZoneVisibility}   eyeState={areaAssetZoneVisible}
                 >
-                  <AiFillAppstore />
+                  <Image
+                          src="./asset-zone.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv title="Historical Mines"
                 onClick={setareaAssetHistoricalVisibility}   eyeState={areaAssetHistoricalVisible}>
-                  <AiFillAppstore />
+                  <Image
+                          src="./asset-historical.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv title="Occurrences"
                 onClick={setareaAssetOccurrenceVisibility}   eyeState={areaAssetOccurrenceVisible}>
-                  <AiFillAppstore />
+                   <Image
+                          src="./asset-occurrence.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye title="Properties" onClick={setPropertiesGroupEye} eyeState={property_claimLinkGroupVisible}>
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv title="Property Points" onClick={setareaSyncPropLayerVisibility}   eyeState={areaSyncPropLayerVisible}>
-                  <AiFillAppstore />
+                   <Image
+                          src="./sync-prop.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv onClick={setareaSyncClaimLinkLayerVisibility} title="Property Outlines" eyeState={areaSyncClaimLinkLayerVisible}>
-                  <AiFillAppstore />
+                    <Image
+                          src="./sync-prop-outline.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
             <AccordionItemWithEye title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
-                  <AiFillAppstore />
+                    <Image
+                          src="./claims-layer.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv title="Mining Areas"  onClick={setareaAreaBoundaryLayerVisibility}   eyeState={areaAreaBoundaryLayerVisible}>
-                  <AiFillAppstore />
+                    <Image
+                          src="./minning-areas-layer.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
