@@ -184,14 +184,14 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       label="Country"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-full rounded-lg border border-blue-500"
+                      className="w-full rounded-lg border border-blue-700"
                       variant="bordered"bbb
                     /> */}
                     {/* <NextTextInputField
                       label="Mining Area"
                       value={miningArea}
                       onChange={(e) => setMiningArea(e.target.value)}
-                      className="w-full rounded-lg border border-blue-500"
+                      className="w-full rounded-lg border border-blue-700"
                       variant="bordered"
                     /> */}
                   </div>
@@ -210,7 +210,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                 <div className="mt-2">
                   <Chip
                     color="primary"
-                    className="cursor-pointer hover:bg-blue-500 custom-button-1 right-0"
+                    className="cursor-pointer hover:bg-blue-600 custom-button-1 right-0 bg-blue-700"
                     onClick={searchAction}
                   >
                     Search

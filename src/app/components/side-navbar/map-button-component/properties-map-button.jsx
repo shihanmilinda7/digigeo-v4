@@ -73,10 +73,10 @@ const PropertiesMapButton = ({ onClick }) => {
       <div className="flex justify-center gap-1 w-full">
         <button
           onClick={onClick}
-          className={`relative flex items-center border rounded-lg border-blue-500 focus:outline-none ${
+          className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
             selectedMap === "properties"
-              ? " text-white bg-blue-600 w-10/12"
-              : " text-blue-600 bg-white w-full"
+              ? " text-white bg-blue-900 w-10/12"
+              : " text-blue-900 bg-white w-full"
           } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
         >
           <BsFillBuildingsFill className="h-6 w-6 ml-2" />
@@ -87,9 +87,9 @@ const PropertiesMapButton = ({ onClick }) => {
         ) : null}
         <button
           onClick={() => setIsOpenIn(true)}
-          className={`relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none ${
+          className={`relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none ${
             selectedMap === "properties"
-              ? " text-white bg-blue-600 w-2/12"
+              ? " text-white bg-blue-900 w-2/12"
               : " hidden"
           } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
         >
@@ -98,12 +98,11 @@ const PropertiesMapButton = ({ onClick }) => {
       </div>
       <div
         className={`${
-          selectedMap === "properties" &&
-          !isPropertiesSideNavOpen 
-          // &&
-          // areaCountry != "" &&
-          // areaState != ""
-            ? "flex justify-between"
+          selectedMap === "properties" && !isPropertiesSideNavOpen
+            ? // &&
+              // areaCountry != "" &&
+              // areaState != ""
+              "flex justify-between"
             : "hidden"
         } `}
       >

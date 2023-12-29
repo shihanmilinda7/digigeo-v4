@@ -104,9 +104,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   useEffect(() => {
     const f = async () => {
-      const res = await fetch(`https://atlas.ceyinfo.cloud/matlas/countrylist`, {
-        cache: "force-cache",
-      });
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+        {
+          cache: "force-cache",
+        }
+      );
       const d = await res.json();
       setCountryList(d.data);
     };
@@ -180,14 +183,14 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                       label="Country"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="w-full rounded-lg border border-blue-500"
+                      className="w-full rounded-lg border border-blue-700"
                       variant="bordered"bbb
                     /> */}
                     {/* <NextTextInputField
                       label="Mining Area"
                       value={miningArea}
                       onChange={(e) => setMiningArea(e.target.value)}
-                      className="w-full rounded-lg border border-blue-500"
+                      className="w-full rounded-lg border border-blue-700"
                       variant="bordered"
                     /> */}
                   </div>
@@ -206,7 +209,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 <div className="mt-2">
                   <Chip
                     color="primary"
-                    className="cursor-pointer hover:bg-blue-500 custom-button-1"
+                    className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
                     onClick={searchAction}
                   >
                     Search

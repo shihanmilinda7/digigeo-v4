@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
 import AreaFCompanyPopup from "./area-fcompany-popup";
-const FeaturedCompanyDetailDiv = ({ companyid,title, children, onClick }) => {
+const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
   const [isOpenIn, setIsOpenIn] = useState();
 
@@ -14,7 +14,7 @@ const FeaturedCompanyDetailDiv = ({ companyid,title, children, onClick }) => {
     <div>
       <div
         style={{ alignItems: "center" }}
-        className="relative item-center flex pl-4 border rounded-lg border-blue-500 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+        className="relative item-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
       >
         <span className="mr-2">{children}</span>
         <h3
@@ -55,4 +55,3 @@ const FeaturedCompanyDetailDiv = ({ companyid,title, children, onClick }) => {
 export default FeaturedCompanyDetailDiv;
 
 //select working br
-

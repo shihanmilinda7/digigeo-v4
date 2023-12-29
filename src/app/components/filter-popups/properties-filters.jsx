@@ -312,7 +312,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                 <div className="mt-2">
                   <Chip
                     color="primary"
-                    className="cursor-pointer hover:bg-blue-500 custom-button-1"
+                    className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
                     onClick={searchAction}
                   >
                     Search

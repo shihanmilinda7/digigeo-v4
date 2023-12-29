@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { FaChevronDown, FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 
-const LayerVisibleDiv = ({ title, children, onClick,eyeState }) => {
+const LayerVisibleDiv = ({ title, children, onClick, eyeState }) => {
   return (
     <div>
       <div
         style={{ alignItems: "center" }}
-        className="relative item-center flex pl-4 border rounded-lg border-blue-500 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+        className="relative item-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
       >
         <span className="mr-2">{children}</span>
         <h3 style={{ margin: 0, marginRight: "10px" }}>{title}</h3>
@@ -17,9 +17,12 @@ const LayerVisibleDiv = ({ title, children, onClick,eyeState }) => {
             {isOpen ? <FaChevronDown /> : <FaChevronLeft />}
           </span> */}
           <span className="">
-          {eyeState && <VscEye className="cursor-pointer" onClick={onClick} />}
-            {!eyeState && <VscEyeClosed className="cursor-pointer" onClick={onClick}/>}
- 
+            {eyeState && (
+              <VscEye className="cursor-pointer" onClick={onClick} />
+            )}
+            {!eyeState && (
+              <VscEyeClosed className="cursor-pointer" onClick={onClick} />
+            )}
           </span>
         </div>
       </div>

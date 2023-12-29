@@ -178,7 +178,7 @@ export const PropertiesMap = () => {
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
                 // size={26}
                 className={`cursor-pointer text-white h-6 w-6 ${
@@ -187,15 +187,15 @@ export const PropertiesMap = () => {
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillPlusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillMinusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
@@ -211,8 +211,8 @@ export const PropertiesMap = () => {
             onClick={() => setLyrs("m")}
             className={`${
               propertiesLyrs == "m"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Map
@@ -221,8 +221,8 @@ export const PropertiesMap = () => {
             onClick={() => setLyrs("s")}
             className={`${
               propertiesLyrs == "s"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Satelite
@@ -231,8 +231,8 @@ export const PropertiesMap = () => {
             onClick={() => setLyrs("p")}
             className={`${
               propertiesLyrs == "p"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Terrain

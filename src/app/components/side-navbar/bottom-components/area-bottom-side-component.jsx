@@ -13,15 +13,27 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setareaAreaBoundaryLayerVisible, setareaAssetDepositsVisible, setareaAssetHistoricalVisible, setareaAssetLayerVisible, setareaAssetOccurrenceVisible, setareaAssetOpMineVisible, setareaAssetZoneVisible, setareaClaimLayerVisible, setareaFpropLayerVisible, setareaSyncClaimLinkLayerVisible, setareaSyncPropLayerVisible } from "@/store/area-map/area-map-slice";
+import {
+  setareaAreaBoundaryLayerVisible,
+  setareaAssetDepositsVisible,
+  setareaAssetHistoricalVisible,
+  setareaAssetLayerVisible,
+  setareaAssetOccurrenceVisible,
+  setareaAssetOpMineVisible,
+  setareaAssetZoneVisible,
+  setareaClaimLayerVisible,
+  setareaFpropLayerVisible,
+  setareaSyncClaimLinkLayerVisible,
+  setareaSyncPropLayerVisible,
+} from "@/store/area-map/area-map-slice";
 import Image from "next/image";
 
 const AreaBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
 
-  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
-
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] =
+    useState(true);
 
   const router = useRouter();
   try {
@@ -53,127 +65,120 @@ const AreaBottomSideComp = () => {
     },
   ];
 
-  //layer visibility redux states 
-   const areaFpropLayerVisible = useSelector(
+  //layer visibility redux states
+  const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
-    );
-   const areaAssetLayerVisible = useSelector(
+  );
+  const areaAssetLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetLayerVisible
-    );
-   const areaSyncPropLayerVisible = useSelector(
+  );
+  const areaSyncPropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerVisible
-    );
-   const areaSyncClaimLinkLayerVisible = useSelector(
+  );
+  const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
-    );
-   const areaClaimLayerVisible = useSelector(
+  );
+  const areaClaimLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaClaimLayerVisible
-    );
-   const areaAreaBoundaryLayerVisible = useSelector(
+  );
+  const areaAreaBoundaryLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAreaBoundaryLayerVisible
-    );
-    //layer visibility functions
+  );
+  //layer visibility functions
   const setareaFpropLayerVisibility = (e) => {
-      dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
-  }
+    dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
+  };
   const setareaAssetLayerVisibility = (e) => {
-      dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
-   
-  }
+    dispatch(setareaAssetLayerVisible(!areaAssetLayerVisible));
+  };
   const setareaSyncPropLayerVisibility = (e) => {
-      dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
-  }
+    dispatch(setareaSyncPropLayerVisible(!areaSyncPropLayerVisible));
+  };
   const setareaSyncClaimLinkLayerVisibility = (e) => {
-      dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
-  }
+    dispatch(setareaSyncClaimLinkLayerVisible(!areaSyncClaimLinkLayerVisible));
+  };
   const setareaClaimLayerVisibility = (e) => {
-      dispatch(setareaClaimLayerVisible(!areaClaimLayerVisible));
-  }
+    dispatch(setareaClaimLayerVisible(!areaClaimLayerVisible));
+  };
   const setareaAreaBoundaryLayerVisibility = (e) => {
-      dispatch(setareaAreaBoundaryLayerVisible(!areaAreaBoundaryLayerVisible));
-  }
+    dispatch(setareaAreaBoundaryLayerVisible(!areaAreaBoundaryLayerVisible));
+  };
 
-  //asset visibility redux states 
-    const areaAssetOpMineVisible = useSelector(
+  //asset visibility redux states
+  const areaAssetOpMineVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetOpMineVisible
-    );
-    const areaAssetDepositsVisible = useSelector(
+  );
+  const areaAssetDepositsVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetDepositsVisible
-    );
-    const areaAssetZoneVisible = useSelector(
+  );
+  const areaAssetZoneVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetZoneVisible
-    );
-    const areaAssetHistoricalVisible = useSelector(
+  );
+  const areaAssetHistoricalVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetHistoricalVisible
-    );
-    const areaAssetOccurrenceVisible = useSelector(
+  );
+  const areaAssetOccurrenceVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetOccurrenceVisible
-    );
+  );
 
- //asset type visibility functions
+  //asset type visibility functions
   const setareaAssetOpMineVisibility = (e) => {
-      dispatch(setareaAssetOpMineVisible(!areaAssetOpMineVisible));
-  }
+    dispatch(setareaAssetOpMineVisible(!areaAssetOpMineVisible));
+  };
   const setareaAssetDepositVisibility = (e) => {
-      dispatch(setareaAssetDepositsVisible(!areaAssetDepositsVisible));
-  }
+    dispatch(setareaAssetDepositsVisible(!areaAssetDepositsVisible));
+  };
   const setareaAssetZoneVisibility = (e) => {
-      dispatch(setareaAssetZoneVisible(!areaAssetZoneVisible));
-  }
+    dispatch(setareaAssetZoneVisible(!areaAssetZoneVisible));
+  };
   const setareaAssetHistoricalVisibility = (e) => {
-      dispatch(setareaAssetHistoricalVisible(!areaAssetHistoricalVisible));
-  }
+    dispatch(setareaAssetHistoricalVisible(!areaAssetHistoricalVisible));
+  };
   const setareaAssetOccurrenceVisibility = (e) => {
-      dispatch(setareaAssetOccurrenceVisible(!areaAssetOccurrenceVisible));
-  }
-
+    dispatch(setareaAssetOccurrenceVisible(!areaAssetOccurrenceVisible));
+  };
 
   useEffect(() => {
-
-    if(areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible){
-      setproperty_claimLinkGroupVisible(true)
-    }else{
-      setproperty_claimLinkGroupVisible(false)
+    if (areaSyncPropLayerVisible && areaSyncClaimLinkLayerVisible) {
+      setproperty_claimLinkGroupVisible(true);
+    } else {
+      setproperty_claimLinkGroupVisible(false);
     }
-    
-  
-  
-  }, [areaSyncPropLayerVisible,areaSyncClaimLinkLayerVisible])
-  
+  }, [areaSyncPropLayerVisible, areaSyncClaimLinkLayerVisible]);
 
   //handle Properties Group Eye
   const setPropertiesGroupEye = () => {
-
-     if(areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible){
-
-       dispatch(setareaSyncPropLayerVisible(false));
-       dispatch(setareaSyncClaimLinkLayerVisible(false));
+    if (areaSyncPropLayerVisible || areaSyncClaimLinkLayerVisible) {
+      dispatch(setareaSyncPropLayerVisible(false));
+      dispatch(setareaSyncClaimLinkLayerVisible(false));
     } else {
-       dispatch(setareaSyncPropLayerVisible(true));
-       dispatch(setareaSyncClaimLinkLayerVisible(true));
+      dispatch(setareaSyncPropLayerVisible(true));
+      dispatch(setareaSyncClaimLinkLayerVisible(true));
     }
-  }
+  };
 
-  
   //handle Asset Group Eye
   const setAssetGroupEye = () => {
-
-     if(areaAssetOpMineVisible || areaAssetDepositsVisible || areaAssetZoneVisible ||areaAssetHistoricalVisible ||areaAssetOccurrenceVisible ){
-
-       dispatch(setareaAssetOpMineVisible(false));
-       dispatch(setareaAssetDepositsVisible(false));
-       dispatch(setareaAssetZoneVisible(false));
-       dispatch(setareaAssetHistoricalVisible(false));
-       dispatch(setareaAssetOccurrenceVisible(false));
+    if (
+      areaAssetOpMineVisible ||
+      areaAssetDepositsVisible ||
+      areaAssetZoneVisible ||
+      areaAssetHistoricalVisible ||
+      areaAssetOccurrenceVisible
+    ) {
+      dispatch(setareaAssetOpMineVisible(false));
+      dispatch(setareaAssetDepositsVisible(false));
+      dispatch(setareaAssetZoneVisible(false));
+      dispatch(setareaAssetHistoricalVisible(false));
+      dispatch(setareaAssetOccurrenceVisible(false));
     } else {
-       dispatch(setareaAssetOpMineVisible(true));
-       dispatch(setareaAssetDepositsVisible(true));
-       dispatch(setareaAssetZoneVisible(true));
-       dispatch(setareaAssetHistoricalVisible(true));
-       dispatch(setareaAssetOccurrenceVisible(true));
+      dispatch(setareaAssetOpMineVisible(true));
+      dispatch(setareaAssetDepositsVisible(true));
+      dispatch(setareaAssetZoneVisible(true));
+      dispatch(setareaAssetHistoricalVisible(true));
+      dispatch(setareaAssetOccurrenceVisible(true));
     }
-  }
-
+  };
 
   return (
     <div className="flex flex-col w-full">
@@ -183,98 +188,135 @@ const AreaBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[40vh]">
         <Accordion>
           <div className="flex flex-col gap-6">
-            <AccordionItemWithEye title="Assets" onClick={setareaAssetLayerVisibility}   eyeState={areaAssetLayerVisible} >
+            <AccordionItemWithEye
+              title="Assets"
+              onClick={setareaAssetLayerVisibility}
+              eyeState={areaAssetLayerVisible}
+            >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
-                  onClick={setareaAssetOpMineVisibility}   eyeState={areaAssetOpMineVisible}
+                  onClick={setareaAssetOpMineVisibility}
+                  eyeState={areaAssetOpMineVisible}
                 >
-                    <Image
-                          src="./asset-opmine.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                  <Image
+                    src="./asset-opmine.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Deposits"
-                 onClick={setareaAssetDepositVisibility}   eyeState={areaAssetDepositsVisible}
+                  onClick={setareaAssetDepositVisibility}
+                  eyeState={areaAssetDepositsVisible}
                 >
                   <Image
-                          src="./asset-deposit.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-deposit.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Zone"
-                  onClick={setareaAssetZoneVisibility}   eyeState={areaAssetZoneVisible}
+                  onClick={setareaAssetZoneVisibility}
+                  eyeState={areaAssetZoneVisible}
                 >
                   <Image
-                          src="./asset-zone.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-zone.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Historical Mines"
-                onClick={setareaAssetHistoricalVisibility}   eyeState={areaAssetHistoricalVisible}>
+                <LayerVisibleDiv
+                  title="Historical Mines"
+                  onClick={setareaAssetHistoricalVisibility}
+                  eyeState={areaAssetHistoricalVisible}
+                >
                   <Image
-                          src="./asset-historical.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-historical.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Occurrences"
-                onClick={setareaAssetOccurrenceVisibility}   eyeState={areaAssetOccurrenceVisible}>
-                   <Image
-                          src="./asset-occurrence.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
-                </LayerVisibleDiv>
-              </div>
-            </AccordionItemWithEye>
-            <AccordionItemWithEye title="Properties" onClick={setPropertiesGroupEye} eyeState={property_claimLinkGroupVisible}>
-              <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Property Points" onClick={setareaSyncPropLayerVisibility}   eyeState={areaSyncPropLayerVisible}>
-                   <Image
-                          src="./sync-prop.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
-                </LayerVisibleDiv>
-                <LayerVisibleDiv onClick={setareaSyncClaimLinkLayerVisibility} title="Property Outlines" eyeState={areaSyncClaimLinkLayerVisible}>
-                    <Image
-                          src="./sync-prop-outline.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                <LayerVisibleDiv
+                  title="Occurrences"
+                  onClick={setareaAssetOccurrenceVisibility}
+                  eyeState={areaAssetOccurrenceVisible}
+                >
+                  <Image
+                    src="./asset-occurrence.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
+            <AccordionItemWithEye
+              title="Properties"
+              onClick={setPropertiesGroupEye}
+              eyeState={property_claimLinkGroupVisible}
+            >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Claims" onClick={setareaClaimLayerVisibility}   eyeState={areaClaimLayerVisible}>
-                    <Image
-                          src="./claims-layer.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                <LayerVisibleDiv
+                  title="Property Points"
+                  onClick={setareaSyncPropLayerVisibility}
+                  eyeState={areaSyncPropLayerVisible}
+                >
+                  <Image
+                    src="./sync-prop.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Mining Areas"  onClick={setareaAreaBoundaryLayerVisibility}   eyeState={areaAreaBoundaryLayerVisible}>
-                    <Image
-                          src="./minning-areas-layer.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                <LayerVisibleDiv
+                  onClick={setareaSyncClaimLinkLayerVisibility}
+                  title="Property Outlines"
+                  eyeState={areaSyncClaimLinkLayerVisible}
+                >
+                  <Image
+                    src="./sync-prop-outline.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleDiv>
+              </div>
+            </AccordionItemWithEye>
+            <AccordionItemWithEye
+              title="Claims"
+              onClick={setareaClaimLayerVisibility}
+              eyeState={areaClaimLayerVisible}
+            >
+              <div className="flex flex-col gap-1">
+                <LayerVisibleDiv
+                  title="Claims"
+                  onClick={setareaClaimLayerVisibility}
+                  eyeState={areaClaimLayerVisible}
+                >
+                  <Image
+                    src="./claims-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
+                </LayerVisibleDiv>
+                <LayerVisibleDiv
+                  title="Mining Areas"
+                  onClick={setareaAreaBoundaryLayerVisibility}
+                  eyeState={areaAreaBoundaryLayerVisible}
+                >
+                  <Image
+                    src="./minning-areas-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
@@ -286,7 +328,7 @@ const AreaBottomSideComp = () => {
         key="1"
           aria-label="Accordion 1"
           title="Accordion 1"
-          className="w-full bg-blue-600"
+          className="w-full bg-blue-900"
           
           >
           <span className="font-bold w-full">Map Layers 1</span>

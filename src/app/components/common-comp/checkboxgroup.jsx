@@ -41,7 +41,7 @@ const CheckboxGroup = ({ options, onChange }) => {
             size="sm"
             color="primary"
             className={`cursor-pointer custom-button-1 ${
-              isYesButton ? "bg-white text-blue-500" : "bg-blue-500 text-white"
+              isYesButton ? "bg-white text-blue-700" : "bg-blue-700 text-white"
             }`}
             onClick={handleClearSelection}
           >
@@ -51,7 +51,7 @@ const CheckboxGroup = ({ options, onChange }) => {
             size="sm"
             color="primary"
             className={`cursor-pointer custom-button-1 ${
-              isYesButton ? "bg-blue-500 text-white" : "bg-white text-blue-500"
+              isYesButton ? "bg-blue-700 text-white" : "bg-white text-blue-700"
             }`}
             onClick={handleSelectAll}
           >

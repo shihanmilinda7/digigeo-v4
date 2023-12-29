@@ -50,7 +50,7 @@ const HomeNavbar = () => {
   // styles for all links
   const commonStyles = "md:p-4 py-2 block hover:font-bold text-indigo-800";
   const activeStyle =
-    // commonStyles + " rounded-t-lg bg-blue-500 text-blue-900";
+    // commonStyles + " rounded-t-lg bg-blue-700 text-blue-900";
     commonStyles + " overline";
   const nonActiveStyle = commonStyles;
 
@@ -76,10 +76,10 @@ const HomeNavbar = () => {
         "
       >
         <div className="flex">
-          <Link href="/" >
-          <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
-            DigiGeo<span className="text-white">Maps</span>
-          </span>
+          <Link href="/">
+            <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
+              DigiGeo<span className="text-white">Maps</span>
+            </span>
           </Link>
           {/* <img src="/logo.png"></img> */}
         </div>
