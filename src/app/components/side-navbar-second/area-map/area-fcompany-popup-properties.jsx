@@ -38,7 +38,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   return (
     < div style={{ height:"10rem"}} > 
-     <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
+      <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
       <div className="bg-slate-100"
       style={{
       display: "flex",
@@ -47,7 +47,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       alignItems: "flex-start", 
       padding: "1rem",
       overflowY:"scroll"
-    }}>
+      }}>
      
               {  featureObjects.map(fp => {
                 if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
@@ -72,15 +72,14 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                           height={10}
                           alt="prop"
                         />
-                    </div>
+                      </div>
                     
                     )
                   }
               
               })}
-         
-        
           
+      </div>
     </div>
   );
 };
