@@ -19,10 +19,24 @@ import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
 import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { setIsAreaSideNavOpen,setclickassetObject,setclickclaimObject,setclickfPropertyObject,setclicksyncPropertyObject } from "../../../store/area-map/area-map-slice";
+import {
+  setIsAreaSideNavOpen,
+  setclickassetObject,
+  setclickclaimObject,
+  setclickfPropertyObject,
+  setclicksyncPropertyObject,
+} from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
-import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Circle, Text } from "ol/style";
+import {
+  Circle as CircleStyle,
+  Fill,
+  Stroke,
+  Style,
+  Icon,
+  Circle,
+  Text,
+} from "ol/style";
 import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
@@ -32,42 +46,38 @@ import { flyTo } from "./fly"
  
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
 
-
 const fill = new Fill();
 const stroke = new Stroke({
   color: "rgba(0,0,0,0.8)",
   width: 2,
 });
 
-   const areaMApPropertyVectorRendererFuncV2 = (
-  pixelCoordinates,
-  state
-) => {
+const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   //  console.log("sssss", state);
   const context = state.context;
   const geometry = state.geometry.clone();
   geometry.setCoordinates(pixelCoordinates);
   const extent = geometry.getExtent();
   const width = getWidth(extent);
-     const height = getHeight(extent);
-     //new code
- const svgtext2 = state.feature.get("hatch");
+  const height = getHeight(extent);
+  //new code
+  const svgtext2 = state.feature.get("hatch");
   //  const img = new Image();
 
-    // img.onload = function () {
-    //   feature.set("flag", img);
-    // };
-    
-   // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+  // img.onload = function () {
+  //   feature.set("flag", img);
+  // };
 
-     //end new code
-      const flag = state.feature.get("flag");
-    // const flag = img
-    //   console.log("flag",flag)
+  // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+
+  //end new code
+  const flag = state.feature.get("flag");
+  // const flag = img
+  //   console.log("flag",flag)
   if (!flag || height < 1 || width < 1) {
     return;
   }
- 
+
   context.save();
   const renderContext = toContext(context, {
     pixelRatio: 1,
@@ -83,12 +93,12 @@ const stroke = new Stroke({
   const left = bottomLeft[0];
   const bottom = bottomLeft[1];
   const hf = width / (height * 8);
-  context.drawImage(flag,  left, bottom, width *20, height*hf*20);
- 
+  context.drawImage(flag, left, bottom, width * 20, height * hf * 20);
+
   context.restore();
 };
 
- const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
+const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
   resolution
 ) => {
@@ -171,7 +181,7 @@ const stroke = new Stroke({
   //     stroke: new Stroke({
   //       color: assetTypesColorMappings[0].color,
   //       width: 3,
-  //     }), 
+  //     }),
   //   });
   // }
   // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
@@ -293,14 +303,11 @@ const stroke = new Stroke({
   // }
 
 
-export const  AreaMap =  () => {
-
-  
-
+export const AreaMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
-  } catch (error) { }
+  } catch (error) {}
 
   const router = useRouter();
   const [center, setCenter] = useState("");
@@ -310,8 +317,7 @@ export const  AreaMap =  () => {
   // const [assetObject, setassetObject] = useState(undefined);
   // const [syncPropertyObject, setsyncPropertyObject] = useState(undefined);
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
-  
-  
+
   const mapRef = useRef();
   const mapViewRef = useRef();
 
@@ -331,11 +337,9 @@ export const  AreaMap =  () => {
 
 
   useEffect(() => {
-    if(areaFlyToLocation?.length>0)
-    flyTo(mapViewRef?.current,areaFlyToLocation,()=>{})
-    
-  }, [areaFlyToLocation])
-  
+    if (areaFlyToLocation?.length > 0)
+      flyTo(mapViewRef?.current, areaFlyToLocation, () => {});
+  }, [areaFlyToLocation]);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -401,8 +405,7 @@ export const  AreaMap =  () => {
     style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
     fPropVectorLayerRef.current?.setStyle(style);
-  }, [fPropVectorLayerRef.current])
-  
+  }, [fPropVectorLayerRef.current]);
 
   // useEffect(() => {
   //   console.log("ue2")
@@ -415,40 +418,32 @@ export const  AreaMap =  () => {
   
   
   useEffect(() => {
-      
     if (syncPropertyFeatures) {
-      syncPropSourceRef?.current?.clear()
-      const e = new GeoJSON().readFeatures(syncPropertyFeatures)
-       
+      syncPropSourceRef?.current?.clear();
+      const e = new GeoJSON().readFeatures(syncPropertyFeatures);
+
       syncPropSourceRef?.current?.addFeatures(e);
     }
-        
-     
+
     if (syncPropSourceRef.current) {
-      const p1 = syncPropSourceRef.current?.getExtent()[0]
+      const p1 = syncPropSourceRef.current?.getExtent()[0];
       if (p1 != Infinity) {
         mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
           padding: [200, 200, 200, 200],
           duration: 3000,
         });
       }
-       
     }
   }, [syncPropertyFeatures]);
- 
+
   useEffect(() => {
-      
     if (featuredPropertyFeatures) {
-      
-      fPropSourceRef?.current?.clear()
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-       
+      fPropSourceRef?.current?.clear();
+      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+
       fPropSourceRef?.current?.addFeatures(e);
-
-
     }
-        
-     
+
     //  if (fPropSourceRef.current) {
     //    const p1= fPropSourceRef.current?.getExtent()[0]
     //    if (p1 != Infinity) {
@@ -457,16 +452,15 @@ export const  AreaMap =  () => {
     //        duration: 3000,
     //      });
     //    }
-       
+
     //  }
   }, [featuredPropertyFeatures]);
 
   useEffect(() => {
-      
     if (syncClaimLinkPropertyFeatures) {
-      claimLinkSourceRef?.current?.clear()
-      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures)
-       
+      claimLinkSourceRef?.current?.clear();
+      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
+
       claimLinkSourceRef?.current?.addFeatures(e);
     }
     // if (claimLinkSourceRef.current) {
@@ -477,20 +471,19 @@ export const  AreaMap =  () => {
     //       duration: 3000,
     //     });
     //   }
-       
+
     // }
   }, [syncClaimLinkPropertyFeatures]);
-   
+
   useEffect(() => {
-    console.log("assetFeatures", assetFeatures,)
+    console.log("assetFeatures", assetFeatures);
     if (assetFeatures?.features) {
-      assetSourceRef?.current?.clear()
-      const e = new GeoJSON().readFeatures(assetFeatures)
-       
+      assetSourceRef?.current?.clear();
+      const e = new GeoJSON().readFeatures(assetFeatures);
+
       assetSourceRef?.current?.addFeatures(e);
     }
-        
-     
+
     // if (assetSourceRef.current) {
     //   const p1 = assetSourceRef.current?.getExtent()[0]
     //   if (p1 != Infinity) {
@@ -499,32 +492,30 @@ export const  AreaMap =  () => {
     //       duration: 3000,
     //     });
     //   }
-       
+
     // }
   }, [assetFeatures]);
-   
+
   useEffect(() => {
     mouseScrollEvent();
 
   }, []);
 
   useEffect(() => {
-     
-    fPropVectorLayerRef?.current?.getSource().on("addfeature", function (event) {
-   
-      const feature = event.feature;
-      const svgtext2 = feature.get("hatch");
-      const img = new Image();
+    fPropVectorLayerRef?.current
+      ?.getSource()
+      .on("addfeature", function (event) {
+        const feature = event.feature;
+        const svgtext2 = feature.get("hatch");
+        const img = new Image();
 
-      img.onload = function () {
-        feature.set("flag", img);
-      };
-    
-      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
-    });
-    
+        img.onload = function () {
+          feature.set("flag", img);
+        };
+
+        img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+      });
   }, [fPropVectorLayerRef?.current]);
-
 
   useEffect(() => {
     let newUrl;
@@ -562,7 +553,7 @@ export const  AreaMap =  () => {
       map?.un("moveend", handleMoveEnd);
     };
   }, []);
-  
+
   // const collapsibleBtnHandler = () => {
   //   const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
   //   dispatch(setIsSideNavOpen(!tmpValue));
@@ -578,11 +569,13 @@ export const  AreaMap =  () => {
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
     if (areaName == "") {
-      newUrl = `${window.location.pathname
-        }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+      newUrl = `${
+        window.location.pathname
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
     } else {
-      newUrl = `${window.location.pathname
-        }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
+      newUrl = `${
+        window.location.pathname
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
@@ -626,64 +619,61 @@ export const  AreaMap =  () => {
     return s;
   };
 
-
-
-
   //layer visibilty redux states
-    const areaFpropLayerVisible = useSelector(
+  const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
-    );
-    const areaAssetLayerVisible = useSelector(
+  );
+  const areaAssetLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetLayerVisible
-    );
-    const areaSyncPropLayerVisible = useSelector(
+  );
+  const areaSyncPropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerVisible
-    );
-    const areaSyncClaimLinkLayerVisible = useSelector(
+  );
+  const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
   );
-    const areaClaimLayerVisible = useSelector(
+  const areaClaimLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaClaimLayerVisible
   );
-    const areaAreaBoundaryLayerVisible = useSelector(
+  const areaAreaBoundaryLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAreaBoundaryLayerVisible
   );
 
-    //asset type visibilty redux states
-    const areaAssetOpMineVisible = useSelector(
+  //asset type visibilty redux states
+  const areaAssetOpMineVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetOpMineVisible
-    );
-    const areaAssetDepositsVisible = useSelector(
+  );
+  const areaAssetDepositsVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetDepositsVisible
-    );
-    const areaAssetZoneVisible = useSelector(
+  );
+  const areaAssetZoneVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetZoneVisible
-    );
-    const areaAssetHistoricalVisible = useSelector(
+  );
+  const areaAssetHistoricalVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetHistoricalVisible
-    );
-    const areaAssetOccurrenceVisible = useSelector(
+  );
+  const areaAssetOccurrenceVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetOccurrenceVisible
-    );
-  
+  );
+
   //layer visibility useEffects
   useEffect(() => {
-    fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible)
+    fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible);
   }, [areaFpropLayerVisible]);
   useEffect(() => {
-    claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible)
+    claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible);
   }, [areaSyncClaimLinkLayerVisible]);
   useEffect(() => {
-    syncPropVectorLayerRef?.current?.setVisible(areaSyncPropLayerVisible)
+    syncPropVectorLayerRef?.current?.setVisible(areaSyncPropLayerVisible);
   }, [areaSyncPropLayerVisible]);
   useEffect(() => {
-    assetLayerRef?.current?.setVisible(areaAssetLayerVisible)
+    assetLayerRef?.current?.setVisible(areaAssetLayerVisible);
   }, [areaAssetLayerVisible]);
   useEffect(() => {
-    claimVectorImgLayerRef?.current?.setVisible(areaClaimLayerVisible)
+    claimVectorImgLayerRef?.current?.setVisible(areaClaimLayerVisible);
   }, [areaClaimLayerVisible]);
   useEffect(() => {
-    areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible)
+    areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible);
   }, [areaAreaBoundaryLayerVisible]);
 
   
@@ -692,98 +682,93 @@ export const  AreaMap =  () => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (areaAssetOpMineVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Operating Mine") {
-           f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Operating Mine") {
-           
-              f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [areaAssetOpMineVisible]);
 
-    useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (areaAssetDepositsVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Deposit") {
-           f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Deposit") {
-            
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [areaAssetDepositsVisible]);
 
-      useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (areaAssetZoneVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Zone") {
-             f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Zone") {
-           f.setStyle(new Style({}))
-            
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [areaAssetZoneVisible]);
 
-        useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (areaAssetHistoricalVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Historical Mine") {
-            f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Historical Mine") {
-           
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [areaAssetHistoricalVisible]);
 
-    useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (areaAssetOccurrenceVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Occurrence") {
-            f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Occurrence") {
-           
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [areaAssetOccurrenceVisible]);
@@ -822,25 +807,23 @@ export const  AreaMap =  () => {
   //     });
   // }
 
-    const styleFunctionAreaBoundary =   (feature) => {
-     console.log("sf");
+  const styleFunctionAreaBoundary = (feature) => {
+    console.log("sf");
     const s = new Style({
-       
       stroke: new Stroke({
         color: "blue",
         width: 1,
       }),
-      
     });
 
     return s;
-  }
+  };
 
-  const areaLoaderFunc =  useCallback((extent, resolution, projection) =>{
+  const areaLoaderFunc = useCallback((extent, resolution, projection) => {
     const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin 
+      mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
@@ -853,7 +836,7 @@ export const  AreaMap =  () => {
           const features = new GeoJSON().readFeatures(
             json.data[0].json_build_object
           );
-           
+
           areaBoundaryImgSourceRef.current.addFeatures(features);
 
           // console.log("mapCommodityTbl40Source", features );
@@ -861,81 +844,80 @@ export const  AreaMap =  () => {
           console.log("else area map area boundry not loading ");
         }
       });
-  },[])
+  }, []);
 
   const styleFunctionClaim = (feature, resolution) => {
-  // console.log("sf claims")
+    // console.log("sf claims")
     const colour = "#D3D3D3"; //feature.values_.colour;
-  //console.log("colour", colour);
-  // const fill = new Fill({
-  //   color: `rgba(${r},${g},${b},1)`,
-  //   opacity:1,
-  // });
-  // const fill = new Fill({
-  //   // color: `rgba(${r},${g},${b},1)`,
+    //console.log("colour", colour);
+    // const fill = new Fill({
+    //   color: `rgba(${r},${g},${b},1)`,
+    //   opacity:1,
+    // });
+    // const fill = new Fill({
+    //   // color: `rgba(${r},${g},${b},1)`,
 
-  //   color:colour,
-  //   opacity: 1,
-  // });
-  let fill = new Fill({
-    // color: `rgba(${r},${g},${b},1)`,
+    //   color:colour,
+    //   opacity: 1,
+    // });
+    let fill = new Fill({
+      // color: `rgba(${r},${g},${b},1)`,
 
-    color: colour,
-    opacity: 1,
-  });
+      color: colour,
+      opacity: 1,
+    });
 
-  // const stroke = new Stroke({
-  //   color: "#8B4513",
-  //   width: 1.25,
-  // });
+    // const stroke = new Stroke({
+    //   color: "#8B4513",
+    //   width: 1.25,
+    // });
 
-  // let image;
-  // let text;
+    // let image;
+    // let text;
 
-  // image = new Circle({
-  //   radius: 9,
-  //   fill: new Fill({ color: colour }),
-  //   // stroke: new Stroke({ color: "#8B4513", width: 3 }),
-  // });
+    // image = new Circle({
+    //   radius: 9,
+    //   fill: new Fill({ color: colour }),
+    //   // stroke: new Stroke({ color: "#8B4513", width: 3 }),
+    // });
 
-  let textObj;
+    let textObj;
 
-  const claimno = feature.get("claimno");
-  textObj = new Text({
-    //       // textAlign: align == "" ? undefined : align,
-    //       // textBaseline: baseline,
-    font: "10px serif",
-    text: claimno,
-    // fill: new Fill({ color: fillColor }),
-    // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-    offsetX: 2,
-    offsetY: -13,
-    // placement: placement,
-    // maxAngle: maxAngle,
-    // overflow: overflow,
-    // rotation: rotation,
-  });
+    const claimno = feature.get("claimno");
+    textObj = new Text({
+      //       // textAlign: align == "" ? undefined : align,
+      //       // textBaseline: baseline,
+      font: "10px serif",
+      text: claimno,
+      // fill: new Fill({ color: fillColor }),
+      // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+      offsetX: 2,
+      offsetY: -13,
+      // placement: placement,
+      // maxAngle: maxAngle,
+      // overflow: overflow,
+      // rotation: rotation,
+    });
 
-  const style = new Style({
-    stroke: new Stroke({
-      color: "#707070",
-      width: 1,
-    }),
+    const style = new Style({
+      stroke: new Stroke({
+        color: "#707070",
+        width: 1,
+      }),
 
-    text: textObj,
-    fill,
-  });
+      text: textObj,
+      fill,
+    });
 
-  return style;
-}
+    return style;
+  };
 
-  
-    const claimLoaderFunc = useCallback((extent, resolution, projection) =>  {
-    console.log("hit claims",extent)
+  const claimLoaderFunc = useCallback((extent, resolution, projection) => {
+    console.log("hit claims", extent);
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
-   // console.log("url", url);
+    // console.log("url", url);
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -947,195 +929,202 @@ export const  AreaMap =  () => {
     })
       .then((response) => response.json())
       .then((json) => {
-          console.log("hit claims2.0",json)
+        console.log("hit claims2.0", json);
         if (json.data) {
-             console.log("hit claims2.1")
+          console.log("hit claims2.1");
           if (json.data[0].json_build_object.features) {
             const features = new GeoJSON().readFeatures(
               json.data[0].json_build_object
             );
-              //console.log("hit claims3")
+            //console.log("hit claims3")
             claimVectorImgSourceRef.current.addFeatures(features);
 
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
-    }, []);
-  
-  useEffect( () => {
+  }, []);
 
-    const fetchData = async()=>{
-     let assetObject, fPropertyObject,syncPropertyObject,claimObject
-    // console.log("coordinates",coordinates,)
-    
-  let extentDim;
-  const viewResolution = mapViewRef?.current?.getResolution()
-  if (viewResolution < 15) {
-    extentDim = 100;
-  } else if (viewResolution < 50) {
-    extentDim = 500;
-  } else if (viewResolution < 150) {
-    extentDim = 1000;
-  } else if (viewResolution < 250) {
-    extentDim = 1500;
-  } else if (viewResolution < 400) {
-    extentDim = 2500;
-  } else {
-    extentDim = 3000;
-    }
-    
-    const ext = [
-    coordinates[0] - extentDim,
-    coordinates[1] - extentDim,
-    coordinates[0] + extentDim,
-    coordinates[1] + extentDim,
-    ];
-  //first look for asset features
-    const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-  
-    if (selAssetFeatures.length > 0) {
-      let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
-      let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
-      let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
-      let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
-      let area = selAssetFeatures?.[0]?.get("area") ?? "";
-      let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
-      let country = selAssetFeatures?.[0]?.get("country") ?? "";
-      let region = selAssetFeatures?.[0]?.get("region") ?? "";
-      assetObject = {
-        asset_name,
-        assetalias,
-        asset_type,
-        commodities,
-        area,
-        stateProv,
-        country,
-        region,
+  useEffect(() => {
+    const fetchData = async () => {
+      let assetObject, fPropertyObject, syncPropertyObject, claimObject;
+      // console.log("coordinates",coordinates,)
+
+      let extentDim;
+      const viewResolution = mapViewRef?.current?.getResolution();
+      if (viewResolution < 15) {
+        extentDim = 100;
+      } else if (viewResolution < 50) {
+        extentDim = 500;
+      } else if (viewResolution < 150) {
+        extentDim = 1000;
+      } else if (viewResolution < 250) {
+        extentDim = 1500;
+      } else if (viewResolution < 400) {
+        extentDim = 2500;
+      } else {
+        extentDim = 3000;
       }
 
-       dispatch(setclickassetObject(assetObject))
-    } else {
-       dispatch(setclickassetObject(undefined))
-    }
-  const selFPropertyFeatures =
-    fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-    if(selFPropertyFeatures.length>0){
-        console.log("selFPropertyFeatures",selFPropertyFeatures)
-  let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
-  let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
-  let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
-  let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
-  let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
-  let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
-  let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
-  let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
-  let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
-  let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
+      const ext = [
+        coordinates[0] - extentDim,
+        coordinates[1] - extentDim,
+        coordinates[0] + extentDim,
+        coordinates[1] + extentDim,
+      ];
+      //first look for asset features
+      const selAssetFeatures =
+        assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-  // const sponsoredowners = await getSponsorListFromRESTAPI(
-  //   features[0].get("id")
-      // );
+      if (selAssetFeatures.length > 0) {
+        let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
+        let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
+        let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
+        let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
+        let area = selAssetFeatures?.[0]?.get("area") ?? "";
+        let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+        let country = selAssetFeatures?.[0]?.get("country") ?? "";
+        let region = selAssetFeatures?.[0]?.get("region") ?? "";
+        assetObject = {
+          asset_name,
+          assetalias,
+          asset_type,
+          commodities,
+          area,
+          stateProv,
+          country,
+          region,
+        };
 
-      const getData = async (hotplayid) => {
-        const url = "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
-        //load data from api - changed to return array
-
-        let sponsors = await fetch(url, {
-          method: "GET", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        })
-          .then((response) => response.json())
-          .then((res) => {
-            // let sponsors = "";
-            // res.data.forEach((element) => {
-            //   sponsors += element.sponsor + "/";
-            // });
-            return res.data;
-          });
-
-        // sponsors = sponsors.slice(0, -1);
-        // console.log("sponsors", sponsors);
-        return sponsors;
+        dispatch(setclickassetObject(assetObject));
+      } else {
+        dispatch(setclickassetObject(undefined));
       }
-      
+      const selFPropertyFeatures =
+        fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+      if (selFPropertyFeatures.length > 0) {
+        console.log("selFPropertyFeatures", selFPropertyFeatures);
+        let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
+        let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
+        let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
+        let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
+        let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
+        let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
+        let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
+        let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+        let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
+        let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
-  const sponsoredowners = (await getData(hotplayid).data?.[0]?.sponsor) ?? ""
-   fPropertyObject =  {
-    sponsoredowners,
-    prop_name,
-    commo_ref,
-    assets,
-    resources,
-    map_area,
-    owners,
-    prop_exturl,
-    sale_name,
-    propertyid,
+        // const sponsoredowners = await getSponsorListFromRESTAPI(
+        //   features[0].get("id")
+        // );
+
+        const getData = async (hotplayid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            hotplayid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const sponsoredowners =
+          (await getData(hotplayid).data?.[0]?.sponsor) ?? "";
+        fPropertyObject = {
+          sponsoredowners,
+          prop_name,
+          commo_ref,
+          assets,
+          resources,
+          map_area,
+          owners,
+          prop_exturl,
+          sale_name,
+          propertyid,
+        };
+
+        dispatch(setclickfPropertyObject(fPropertyObject));
+      } else {
+        dispatch(setclickfPropertyObject(undefined));
       }
-      
-  dispatch(setclickfPropertyObject(fPropertyObject))
+      // const selBoundaryFeatures =
+      //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
 
-    }else{
-      dispatch(setclickfPropertyObject(undefined))
-    }
-  // const selBoundaryFeatures =
-  //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+      const selSyncPropFeatures =
+        syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-  const selSyncPropFeatures =
-      syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+      console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
+      if (selSyncPropFeatures.length > 0) {
+        const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
+        const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
+        let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
+        const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+        const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
+        const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
+        // const selSynClaimLinkFeatures =
+        //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+        syncPropertyObject = {
+          prop_name,
+          owners,
+          name: name1,
+          stateProv,
+          country,
+          area,
+        };
 
-      console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
-    if(selSyncPropFeatures.length>0){ 
-     const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
-    const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
-    let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
-    const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
-    const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
-    const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
-  // const selSynClaimLinkFeatures =
-  //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
-    syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
-    
-    dispatch(setclicksyncPropertyObject(syncPropertyObject))
-    }else{
-    dispatch(setclicksyncPropertyObject(undefined))
-    }
-  const claimFeatures =
-      claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-     if(claimFeatures.length>0){ 
-     let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
-    const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
-    claimObject = {ownerref,claimno}
-   
-    dispatch(setclickclaimObject(claimObject))
-     }else{
-       dispatch(setclickclaimObject(undefined))
-     }
-    
-     console.log("111")
-  //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
-    }
+        dispatch(setclicksyncPropertyObject(syncPropertyObject));
+      } else {
+        dispatch(setclicksyncPropertyObject(undefined));
+      }
+      const claimFeatures =
+        claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
+          coordinates
+        ) ?? [];
+      if (claimFeatures.length > 0) {
+        let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
+        const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
+        claimObject = { ownerref, claimno };
 
-    if(coordinates){
-        fetchData();
-    setclickDataLoaded(true);
-    //  console.log("222")
+        dispatch(setclickclaimObject(claimObject));
+      } else {
+        dispatch(setclickclaimObject(undefined));
+      }
+
+      console.log("111");
+      //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
+    };
+
+    if (coordinates) {
+      fetchData();
+      setclickDataLoaded(true);
+      //  console.log("222")
     }
-     
-  }, [coordinates])
-  
+  }, [coordinates]);
 
   // const handleClickPopup = useCallback(   (coordinates) =>  {
-   
-  // },[coordinates])
 
+  // },[coordinates])
 
   return (
     <div className="flex">
@@ -1143,7 +1132,7 @@ export const  AreaMap =  () => {
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
                 // size={26}
                 className={`cursor-pointer text-white h-6 w-6 ${
@@ -1152,15 +1141,15 @@ export const  AreaMap =  () => {
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillPlusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillMinusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
@@ -1168,7 +1157,7 @@ export const  AreaMap =  () => {
             {/* {!isAreaSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
-                className="bg-blue-700 mt-12 -ml-5 rotate-90"
+                className="bg-blue-900 mt-12 -ml-5 rotate-90"
                 onClick={openAreaNav}
               >
                 <FaChevronUp className={`text-white cursor-pointer h-6 w-6`} />
@@ -1185,8 +1174,8 @@ export const  AreaMap =  () => {
             onClick={() => setLyrs("m")}
             className={`${
               mapLyrs == "m"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Map
@@ -1195,8 +1184,8 @@ export const  AreaMap =  () => {
             onClick={() => setLyrs("s")}
             className={`${
               mapLyrs == "s"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Satelite
@@ -1205,49 +1194,48 @@ export const  AreaMap =  () => {
             onClick={() => setLyrs("p")}
             className={`${
               mapLyrs == "p"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Terrain
           </Button>
         </ButtonGroup>
 
-         <div
-        ref={setPopup}
-        style={{
-          backgroundColor: "white",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-          padding: "15px",
-          borderRadius: "10px",
-          border: "1px solid #cccccc",
-          minWidth: "280px",
-          color: "black",
-        }}
-      >
-        <button
-          type="button"
-          onClick={(e) => {
-            setCoordinates(undefined);
-            e.target.blur();
-            return false;
-          }}
+        <div
+          ref={setPopup}
           style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
+            backgroundColor: "white",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            padding: "15px",
+            borderRadius: "10px",
+            border: "1px solid #cccccc",
+            minWidth: "280px",
+            color: "black",
           }}
         >
-          ✖
-        </button>
-        <div id="popup-content">
-          <p>Info:</p>
-          { clickDataLoaded && (<AreaMapClickPopup  />)}
-        
+          <button
+            type="button"
+            onClick={(e) => {
+              setCoordinates(undefined);
+              e.target.blur();
+              return false;
+            }}
+            style={{
+              textDecoration: "none",
+              position: "absolute",
+              top: "2px",
+              right: "8px",
+            }}
+          >
+            ✖
+          </button>
+          <div id="popup-content">
+            <p>Info:</p>
+            {clickDataLoaded && <AreaMapClickPopup />}
+          </div>
         </div>
-        </div>
-        
+
         <Map
           ref={mapRef}
           style={{
@@ -1256,20 +1244,20 @@ export const  AreaMap =  () => {
             height: "90vh",
           }}
           controls={[]}
-           onSingleclick={onSingleclick}
+          onSingleclick={onSingleclick}
         >
           {popup ? (
-          <olOverlay
-            element={popup}
-            position={coordinates}
-            autoPan
-            autoPanAnimation={{
-              duration: 250,
-            }}
-          />
-        ) : null}
+            <olOverlay
+              element={popup}
+              position={coordinates}
+              autoPan
+              autoPanAnimation={{
+                duration: 250,
+              }}
+            />
+          ) : null}
           <olView
-             ref={mapViewRef}
+            ref={mapViewRef}
             initialCenter={[0, 0]}
             center={areaInitialCenter}
             initialZoom={2}
@@ -1285,31 +1273,23 @@ export const  AreaMap =  () => {
               }}
             ></olSourceXYZ>
           </olLayerTile>
-           <olLayerVectorImage
+          <olLayerVectorImage
             ref={areaBoundaryImgLayerRef}
             style={styleFunctionAreaBoundary}
-            
           >
-            
-              <olSourceVector
+            <olSourceVector
               ref={areaBoundaryImgSourceRef}
               // format={new GeoJSON()}
               strategy={all}
               loader={areaLoaderFunc}
-              >
-              </olSourceVector>
-           
+            ></olSourceVector>
           </olLayerVectorImage>
-              <olLayerVector
-            ref={claimLinkVectorLayerRef}
-            >
-            {syncClaimLinkPropertyFeatures  && (
+          <olLayerVector ref={claimLinkVectorLayerRef}>
+            {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                 style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
-              >
-              
-              </olSourceVector>
+                style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              ></olSourceVector>
             )}
           </olLayerVector>
           <olLayerVectorImage
@@ -1318,61 +1298,36 @@ export const  AreaMap =  () => {
             minResolution={0}
             maxResolution={150}
           >
-            
-              <olSourceVector
+            <olSourceVector
               ref={claimVectorImgSourceRef}
               // format={new GeoJSON()}
               strategy={bbox}
               loader={claimLoaderFunc}
-              >
-              </olSourceVector>
-           
+            ></olSourceVector>
           </olLayerVectorImage>
 
-             <olLayerVector ref={fPropVectorLayerRef}>
-             
-              <olSourceVector
-                ref={fPropSourceRef}
-              >
-              </olSourceVector>
-             
+          <olLayerVector ref={fPropVectorLayerRef}>
+            <olSourceVector ref={fPropSourceRef}></olSourceVector>
           </olLayerVector>
-         
-         
 
-
-          
-            <olLayerVector
+          <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
           >
-            
-              <olSourceVector
-                ref={assetSourceRef}
-                 
-              >
-               
-              </olSourceVector>
-            
+            <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
-           <olLayerVector
+          <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
           >
-            
-              <olSourceVector
-                ref={syncPropSourceRef}
-            
-              >
-              </olSourceVector>
-           
+            <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
         </Map>
       </div>
     </div>
   );
 };
- 
+
 //     <olSourceXYZ args={{ url: "https://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}", }} > map=m terr=p satt=s
 //   </olSourceXYZ>
 // </olLayerTile> */}

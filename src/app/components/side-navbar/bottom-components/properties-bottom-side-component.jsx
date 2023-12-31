@@ -112,7 +112,7 @@ const PropertiesBottomSideComp = () => {
         key="1"
           aria-label="Accordion 1"
           title="Accordion 1"
-          className="w-full bg-blue-600"
+          className="w-full bg-blue-900"
           
           >
           <span className="font-bold w-full">Map Layers 1</span>

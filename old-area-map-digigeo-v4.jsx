@@ -28,254 +28,246 @@ import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 
-
-
- 
-
- const AreaMap2 = () => {
-
+const AreaMap2 = () => {
   const fill = new Fill();
-const stroke = new Stroke({
-  color: "rgba(0,0,0,0.8)",
-  width: 2,
-});
-   const areaMApPropertyVectorRendererFuncV2 = (
-  pixelCoordinates,
-  state
-) => {
-   console.log("sssss", state);
-  const context = state.context;
-  const geometry = state.geometry.clone();
-  geometry.setCoordinates(pixelCoordinates);
-  const extent = geometry.getExtent();
-  const width = getWidth(extent);
-     const height = getHeight(extent);
-     //new code
- const svgtext2 = state.feature.get("hatch");
+  const stroke = new Stroke({
+    color: "rgba(0,0,0,0.8)",
+    width: 2,
+  });
+  const areaMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
+    console.log("sssss", state);
+    const context = state.context;
+    const geometry = state.geometry.clone();
+    geometry.setCoordinates(pixelCoordinates);
+    const extent = geometry.getExtent();
+    const width = getWidth(extent);
+    const height = getHeight(extent);
+    //new code
+    const svgtext2 = state.feature.get("hatch");
     const img = new Image();
 
     // img.onload = function () {
     //   feature.set("flag", img);
     // };
-    
+
     img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
 
-     //end new code
+    //end new code
     //  const flag = state.feature.get("flag");
-    const flag = img
-  if (!flag || height < 1 || width < 1) {
-    return;
-  }
- 
-  context.save();
-  const renderContext = toContext(context, {
-    pixelRatio: 1,
-  });
+    const flag = img;
+    if (!flag || height < 1 || width < 1) {
+      return;
+    }
 
-  renderContext.setFillStrokeStyle(fill, stroke);
-  renderContext.drawGeometry(geometry);
+    context.save();
+    const renderContext = toContext(context, {
+      pixelRatio: 1,
+    });
 
-  context.clip();
+    renderContext.setFillStrokeStyle(fill, stroke);
+    renderContext.drawGeometry(geometry);
 
-  // Fill transparent country with the flag image
-  const bottomLeft = getBottomLeft(extent);
-  const left = bottomLeft[0];
-  const bottom = bottomLeft[1];
-  const hf = width / (height * 8);
-  context.drawImage(flag,  left, bottom, width *20, height*hf*20);
- 
-  context.restore();
-};
+    context.clip();
 
- const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
-  feature,
-  resolution
-) => {
-  //console.log("feature:", feature);
-  //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
-  //  spanClaim1.textContent = "visibility";
-  // const r = Math.random() * 255;
-  // const g = Math.random() * 255;
-  // const b = Math.random() * 255;
-  //console.log("fill", feature.values_.hatch);
-  const colour = "#0000FF"; //feature.values_.colour;
-  //console.log("colour", colour);
-  // const fill = new Fill({
-  //   color: `rgba(${r},${g},${b},1)`,
-  //   opacity:1,
-  // });
-  // const fill = new Fill({
-  //   // color: `rgba(${r},${g},${b},1)`,
+    // Fill transparent country with the flag image
+    const bottomLeft = getBottomLeft(extent);
+    const left = bottomLeft[0];
+    const bottom = bottomLeft[1];
+    const hf = width / (height * 8);
+    context.drawImage(flag, left, bottom, width * 20, height * hf * 20);
 
-  //   color:colour,
-  //   opacity: 1,
-  // });
-  const fill = new Fill({
-    // color: `rgba(${r},${g},${b},1)`,
+    context.restore();
+  };
 
-    color: colour,
-    opacity: 0.3,
-  });
+  const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
+    feature,
+    resolution
+  ) => {
+    //console.log("feature:", feature);
+    //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
+    //  spanClaim1.textContent = "visibility";
+    // const r = Math.random() * 255;
+    // const g = Math.random() * 255;
+    // const b = Math.random() * 255;
+    //console.log("fill", feature.values_.hatch);
+    const colour = "#0000FF"; //feature.values_.colour;
+    //console.log("colour", colour);
+    // const fill = new Fill({
+    //   color: `rgba(${r},${g},${b},1)`,
+    //   opacity:1,
+    // });
+    // const fill = new Fill({
+    //   // color: `rgba(${r},${g},${b},1)`,
 
-  const stroke = new Stroke({
-    color: "darkblue",
-    width: 1.25,
-  });
-  //console.log("res22", resolution);
+    //   color:colour,
+    //   opacity: 1,
+    // });
+    const fill = new Fill({
+      // color: `rgba(${r},${g},${b},1)`,
 
-  // let svgScale = 0;
-  // let radius = 0;
-  //  const spanClaim = document.getElementById("spanClaimsLayerVisibility");
-  //  spanClaim.textContent = "visibility_off";
-  // if (resolution > 1000) {
-  //   svgScale = 0.5;
-  //   radius = 2;
-  // } else if (resolution > 937.5) {
-  //   svgScale = 0.562;
-  //   radius = 5;
-  // } else if (resolution > 875) {
-  //   svgScale = 0.625;
-  //   radius = 5;
-  // } else if (resolution > 750) {
-  //   svgScale = 0.75;
-  //   radius = 5;
-  // } else if (resolution > 625) {
-  //   svgScale = 0.875;
-  //   radius = 5;
-  // } else if (resolution > 500) {
-  //   svgScale = 1;
-  //   radius = 5;
-  // } else if (resolution > 375) {
-  //   svgScale = 1.125;
-  //   radius = 5;
-  // } else if (resolution > 250) {
-  //   svgScale = 1.25;
-  //   radius = 5;
-  // } else if (resolution > 125) {
-  //   svgScale = 1.375;
-  //   radius = 5;
-  //   // const spanClaim = document.getElementById("spanClaimsLayerVisibility");
-  //   // spanClaim.textContent = "visibility";
-  // } else {
-  //   svgScale = 1.5;
-  //   radius = 10;
-  // }
-  let image;
-  let text;
+      color: colour,
+      opacity: 0.3,
+    });
 
-  // if (feature.values_.asset_type == assetTypesColorMappings[0].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[0].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[0].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
-  //   image = new Icon({
-  //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgZone),
-  //     scale: svgScale,
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[2].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[2].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[2].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[3].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[3].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[3].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[4].type) {
-  //   image = new Icon({
-  //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgDeposit),
-  //     scale: svgScale,
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[5].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[5].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[5].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[6].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[6].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[6].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[7].type) {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: assetTypesColorMappings[7].color }),
-  //     stroke: new Stroke({
-  //       color: assetTypesColorMappings[7].color,
-  //       width: 3,
-  //     }),
-  //   });
-  // }
-  // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
-  //   image = new Icon({
-  //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
-  //     scale: svgScale,
-  //   });
-  // } else if (feature.values_.asset_type == assetTypesColorMappings[9].type) {
-  //   image = new Icon({
-  //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgHisMine),
-  //     scale: svgScale,
-  //   });
-  // }
-  // else {
-  //   image = new Circle({
-  //     radius: 10,
-  //     fill: new Fill({ color: "pink" }),
-  //     stroke: new Stroke({ color: "pink", width: 3 }),
-  //   });
-  // }
+    const stroke = new Stroke({
+      color: "darkblue",
+      width: 1.25,
+    });
+    //console.log("res22", resolution);
 
-  //set text Style
+    // let svgScale = 0;
+    // let radius = 0;
+    //  const spanClaim = document.getElementById("spanClaimsLayerVisibility");
+    //  spanClaim.textContent = "visibility_off";
+    // if (resolution > 1000) {
+    //   svgScale = 0.5;
+    //   radius = 2;
+    // } else if (resolution > 937.5) {
+    //   svgScale = 0.562;
+    //   radius = 5;
+    // } else if (resolution > 875) {
+    //   svgScale = 0.625;
+    //   radius = 5;
+    // } else if (resolution > 750) {
+    //   svgScale = 0.75;
+    //   radius = 5;
+    // } else if (resolution > 625) {
+    //   svgScale = 0.875;
+    //   radius = 5;
+    // } else if (resolution > 500) {
+    //   svgScale = 1;
+    //   radius = 5;
+    // } else if (resolution > 375) {
+    //   svgScale = 1.125;
+    //   radius = 5;
+    // } else if (resolution > 250) {
+    //   svgScale = 1.25;
+    //   radius = 5;
+    // } else if (resolution > 125) {
+    //   svgScale = 1.375;
+    //   radius = 5;
+    //   // const spanClaim = document.getElementById("spanClaimsLayerVisibility");
+    //   // spanClaim.textContent = "visibility";
+    // } else {
+    //   svgScale = 1.5;
+    //   radius = 10;
+    // }
+    let image;
+    let text;
 
-  // text = createTextStyle(feature, resolution);
-  image = new Circle({
-    radius: 2,
-    fill: new Fill({ color: colour }),
-    stroke: new Stroke({ color: colour, width: 1 }),
-  });
-  const st = new Style({
-    stroke: new Stroke({
-      color: "red",
-      width: 2,
-    }),
-    image,
-    // text,
-    fill,
-  });
-  // console.log("st", st);
-  return st;
-};
+    // if (feature.values_.asset_type == assetTypesColorMappings[0].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[0].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[0].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgZone),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[2].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[2].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[2].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[3].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[3].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[3].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[4].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgDeposit),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[5].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[5].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[5].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[6].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[6].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[6].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[7].type) {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: assetTypesColorMappings[7].color }),
+    //     stroke: new Stroke({
+    //       color: assetTypesColorMappings[7].color,
+    //       width: 3,
+    //     }),
+    //   });
+    // }
+    // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
+    //     scale: svgScale,
+    //   });
+    // } else if (feature.values_.asset_type == assetTypesColorMappings[9].type) {
+    //   image = new Icon({
+    //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgHisMine),
+    //     scale: svgScale,
+    //   });
+    // }
+    // else {
+    //   image = new Circle({
+    //     radius: 10,
+    //     fill: new Fill({ color: "pink" }),
+    //     stroke: new Stroke({ color: "pink", width: 3 }),
+    //   });
+    // }
 
-///////////////////////////////////
+    //set text Style
+
+    // text = createTextStyle(feature, resolution);
+    image = new Circle({
+      radius: 2,
+      fill: new Fill({ color: colour }),
+      stroke: new Stroke({ color: colour, width: 1 }),
+    });
+    const st = new Style({
+      stroke: new Stroke({
+        color: "red",
+        width: 2,
+      }),
+      image,
+      // text,
+      fill,
+    });
+    // console.log("st", st);
+    return st;
+  };
+
+  ///////////////////////////////////
   let pathname = "";
   try {
     pathname = window.location.href;
@@ -321,7 +313,7 @@ const stroke = new Stroke({
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
   );
-    const syncClaimLinkPropertyFeatures = useSelector(
+  const syncClaimLinkPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncClaimLinkPropertyFeatures
   );
   const assetFeatures = useSelector(
@@ -344,11 +336,7 @@ const stroke = new Stroke({
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
 
- 
-  
-  
   useEffect(() => {
-    
     if (syncPropertyFeatures) {
       syncPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
@@ -356,7 +344,6 @@ const stroke = new Stroke({
       syncPropSourceRef?.current?.addFeatures(e);
     }
 
-    
     if (syncPropSourceRef.current) {
       const p1 = syncPropSourceRef.current?.getExtent()[0];
       if (p1 != Infinity) {
@@ -365,12 +352,10 @@ const stroke = new Stroke({
           duration: 3000,
         });
       }
-
     }
   }, [syncPropertyFeatures]);
 
   useEffect(() => {
-    
     if (featuredPropertyFeatures) {
       fPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
@@ -378,7 +363,6 @@ const stroke = new Stroke({
       fPropSourceRef?.current?.addFeatures(e);
     }
 
-    
     // if (fPropSourceRef.current) {
     //   const p1 = fPropSourceRef.current?.getExtent()[0];
     //   if (p1 != Infinity) {
@@ -391,12 +375,12 @@ const stroke = new Stroke({
     // }
   }, [featuredPropertyFeatures]);
 
-      useEffect(() => {
-      console.log("syncClaimLinkPropertyFeatures",syncClaimLinkPropertyFeatures,)
+  useEffect(() => {
+    console.log("syncClaimLinkPropertyFeatures", syncClaimLinkPropertyFeatures);
     if (syncClaimLinkPropertyFeatures?.features) {
-      claimLinkSourceRef?.current?.clear()
-      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures)
-       
+      claimLinkSourceRef?.current?.clear();
+      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
+
       claimLinkSourceRef?.current?.addFeatures(e);
     }
     //  if (claimLinkSourceRef.current) {
@@ -407,10 +391,10 @@ const stroke = new Stroke({
     //        duration: 3000,
     //      });
     //    }
-       
+
     //  }
-      }, [syncClaimLinkPropertyFeatures]);
-  
+  }, [syncClaimLinkPropertyFeatures]);
+
   useEffect(() => {
     console.log("assetFeatures", assetFeatures);
     if (assetFeatures?.features) {
@@ -420,7 +404,6 @@ const stroke = new Stroke({
       assetSourceRef?.current?.addFeatures(e);
     }
 
-    
     // if (assetSourceRef.current) {
     //   const p1 = assetSourceRef.current?.getExtent()[0];
     //   if (p1 != Infinity) {
@@ -529,33 +512,31 @@ const stroke = new Stroke({
     return s;
   };
 
-   const areaFpropLayerVisible = useSelector(
+  const areaFpropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaFpropLayerVisible
-    );
-    const areaAssetLayerVisible = useSelector(
+  );
+  const areaAssetLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaAssetLayerVisible
-    );
-    const areaSyncPropLayerVisible = useSelector(
+  );
+  const areaSyncPropLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncPropLayerVisible
-    );
-    const areaSyncClaimLinkLayerVisible = useSelector(
+  );
+  const areaSyncClaimLinkLayerVisible = useSelector(
     (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
   );
-  
-  
+
   useEffect(() => {
-    fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible)
+    fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible);
   }, [areaFpropLayerVisible]);
   useEffect(() => {
-    claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible)
+    claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible);
   }, [areaSyncClaimLinkLayerVisible]);
   useEffect(() => {
-    syncPropVectorLayerRef?.current?.setVisible(areaSyncPropLayerVisible)
+    syncPropVectorLayerRef?.current?.setVisible(areaSyncPropLayerVisible);
   }, [areaSyncPropLayerVisible]);
   useEffect(() => {
-    assetLayerRef?.current?.setVisible(areaAssetLayerVisible)
+    assetLayerRef?.current?.setVisible(areaAssetLayerVisible);
   }, [areaAssetLayerVisible]);
-
 
   return (
     <div className="flex">
@@ -563,7 +544,7 @@ const stroke = new Stroke({
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
                 // size={26}
                 className={`cursor-pointer text-white h-6 w-6 ${
@@ -572,15 +553,15 @@ const stroke = new Stroke({
                 onClick={() => collapsibleBtnHandler()}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillPlusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
             </Button>
-            <Button isIconOnly variant="bordered" className="bg-blue-700">
+            <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillMinusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
               />
@@ -588,7 +569,7 @@ const stroke = new Stroke({
             {/* {!isAreaSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
-                className="bg-blue-700 mt-12 -ml-5 rotate-90"
+                className="bg-blue-900 mt-12 -ml-5 rotate-90"
                 onClick={openAreaNav}
               >
                 <FaChevronUp className={`text-white cursor-pointer h-6 w-6`} />
@@ -605,8 +586,8 @@ const stroke = new Stroke({
             onClick={() => setLyrs("m")}
             className={`${
               mapLyrs == "m"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Map
@@ -615,8 +596,8 @@ const stroke = new Stroke({
             onClick={() => setLyrs("s")}
             className={`${
               mapLyrs == "s"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Satelite
@@ -625,8 +606,8 @@ const stroke = new Stroke({
             onClick={() => setLyrs("p")}
             className={`${
               mapLyrs == "p"
-                ? "bg-blue-700 text-white"
-                : "bg-blue-500 text-white"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
             } `}
           >
             Terrain
@@ -659,23 +640,18 @@ const stroke = new Stroke({
           </olLayerTile>
           <olLayerVector ref={fPropVectorLayerRef}>
             {featuredPropertyFeatures && (
-              <olSourceVector
-                ref={fPropSourceRef}
-              >
-                
-              </olSourceVector>
+              <olSourceVector ref={fPropSourceRef}></olSourceVector>
             )}
           </olLayerVector>
-            <olLayerVector ref={claimLinkVectorLayerRef} >
-            {syncClaimLinkPropertyFeatures  && (
+          <olLayerVector ref={claimLinkVectorLayerRef}>
+            {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                 style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction} >
-              
-              </olSourceVector>
+                style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+              ></olSourceVector>
             )}
-          </olLayerVector>    
-          
+          </olLayerVector>
+
           {/* <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}

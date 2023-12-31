@@ -94,9 +94,9 @@
 //           isSideNavOpen
 //             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
 //             : ""
-//         } 
+//         }
 //         h-[90vh] ml-2 mt-2
-//         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
+//         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"}
 //         duration-500`}
 //         >
 //           <div
@@ -114,7 +114,7 @@
 //                 variant="flat"
 //                 placeholder="Search here..."
 //                 onClear={() => console.log("input cleared")}
-//                 className="w-full rounded-lg border border-blue-500"
+//                 className="w-full rounded-lg border border-blue-700"
 //                 startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
 //               />
 //             </div>
@@ -123,11 +123,11 @@
 //                 <div className="flex justify-center gap-1 w-full">
 //                   <button
 //                     onClick={() => selectMapHandler("area")}
-//                     className={`relative flex items-center border rounded-lg border-blue-500 focus:outline-none ${
+//                     className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
 //                       selectedMap === "area"
-//                         ? " text-white bg-blue-600 w-10/12"
-//                         : " text-blue-600 bg-white w-full"
-//                     } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
+//                         ? " text-white bg-blue-900 w-10/12"
+//                         : " text-blue-900 bg-white w-full"
+//                     } text-sm sm:text-sm hover:bg-blue-500 py-2 transition duration-150 ease-in`}
 //                   >
 //                     <MdLocationOn className="h-6 w-6 ml-4" />
 //                     <span className="uppercase ml-4 font-semibold">
@@ -140,11 +140,11 @@
 //                   ) : null}
 //                   <button
 //                     onClick={() => setIsOpenIn(true)}
-//                     className={`relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none ${
+//                     className={`relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none ${
 //                       selectedMap === "area"
-//                         ? " text-white bg-blue-600 w-2/12"
+//                         ? " text-white bg-blue-900 w-2/12"
 //                         : " hidden"
-//                     } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
+//                     } text-sm sm:text-sm hover:bg-blue-500 py-2 transition duration-150 ease-in`}
 //                   >
 //                     <FaFilter className="h-4 w-4" />
 //                   </button>
@@ -178,11 +178,11 @@
 //                   </Chip>
 //                 </div>
 //                 {/* <button
-//                   className={`relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none ${
+//                   className={`relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none ${
 //                     selectedMap === "area"
-//                       ? " text-white bg-blue-600 w-2/12"
+//                       ? " text-white bg-blue-900 w-2/12"
 //                       : " hidden"
-//                   } text-sm sm:text-sm hover:bg-blue-200 py-2 transition duration-150 ease-in`}
+//                   } text-sm sm:text-sm hover:bg-blue-500 py-2 transition duration-150 ease-in`}
 //                 >
 //                   <FaFilter className="h-4 w-4" />
 //                 </button> */}
@@ -190,11 +190,11 @@
 //               <div className="flex justify-center">
 //                 <button
 //                   onClick={() => selectMapHandler("commodity")}
-//                   className={`relative flex items-center border rounded-lg border-blue-500 focus:outline-none ${
+//                   className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
 //                     selectedMap === "commodity"
-//                       ? " text-white bg-blue-600 "
-//                       : " text-blue-600 bg-white "
-//                   } text-sm sm:text-sm hover:bg-blue-200 py-2 w-full transition duration-150 ease-in`}
+//                       ? " text-white bg-blue-900 "
+//                       : " text-blue-900 bg-white "
+//                   } text-sm sm:text-sm hover:bg-blue-500 py-2 w-full transition duration-150 ease-in`}
 //                 >
 //                   <BsFillBuildingsFill className="h-6 w-6 ml-4" />
 //                   <span className="uppercase ml-4 font-semibold">
@@ -206,11 +206,11 @@
 //               <div className="flex justify-center">
 //                 <button
 //                   onClick={() => selectMapHandler("company")}
-//                   className={`relative flex items-center border rounded-lg border-blue-500 focus:outline-none ${
+//                   className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
 //                     selectedMap === "company"
-//                       ? " text-white bg-blue-600 "
-//                       : " text-blue-600 bg-white "
-//                   } text-sm sm:text-sm hover:bg-blue-200 py-2 w-full transition duration-150 ease-in`}
+//                       ? " text-white bg-blue-900 "
+//                       : " text-blue-900 bg-white "
+//                   } text-sm sm:text-sm hover:bg-blue-500 py-2 w-full transition duration-150 ease-in`}
 //                 >
 //                   <AiTwotoneGold className="h-6 w-6 ml-4" />
 //                   <span className="uppercase ml-4 font-semibold">
@@ -227,7 +227,7 @@
 //               <div className="flex justify-center">
 //                 <button
 //                   // onClick={masterLoginEvent}
-//                   className="relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none bg-blue-600 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
+//                   className="relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
 //                 >
 //                   {/* <AiTwotoneGold className="h-6 w-6 ml-4" /> */}
 //                   <span className="uppercase font-semibold">
@@ -242,7 +242,7 @@
 //         </div>
 //         {/* <div className="w-12">
 //           <div className="flex flex-col gap-4 mt-2">
-//             <Button isIconOnly variant="bordered" className="bg-blue-700">
+//             <Button isIconOnly variant="bordered" className="bg-blue-900">
 //               <BsFillArrowLeftSquareFill
 //                 // size={26}
 //                 className={`cursor-pointer text-white h-6 w-6 ${
@@ -251,15 +251,15 @@
 //                 onClick={() => collapsibleBtnHandler()}
 //               />
 //             </Button>
-//             <Button isIconOnly variant="bordered" className="bg-blue-700">
+//             <Button isIconOnly variant="bordered" className="bg-blue-900">
 //               <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
 //             </Button>
-//             <Button isIconOnly variant="bordered" className="bg-blue-700">
+//             <Button isIconOnly variant="bordered" className="bg-blue-900">
 //               <AiFillPlusSquare
 //                 className={`text-white cursor-pointer h-6 w-6`}
 //               />
 //             </Button>
-//             <Button isIconOnly variant="bordered" className="bg-blue-700">
+//             <Button isIconOnly variant="bordered" className="bg-blue-900">
 //               <AiFillMinusSquare
 //                 className={`text-white cursor-pointer h-6 w-6`}
 //               />

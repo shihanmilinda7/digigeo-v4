@@ -1,55 +1,41 @@
-
-
-
-
-import Image from 'next/image';
-import   { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 
-import { setareaFlyToLocation } from '@/store/area-map/area-map-slice';
- 
+import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
 
-const AreaFCompanyFProperties = ({companyid}) => {
-    const [featureObjects, setfeaturesObjects] = useState([])  
+const AreaFCompanyFProperties = ({ companyid }) => {
+  const [featureObjects, setfeaturesObjects] = useState([]);
 
-    
-
-      const featuredPropertyFeatures = useSelector(
+  const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
-    );
+  );
 
-  
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const areaName = useSelector(
-    (state) => state.areaMapReducer.areaMiningArea
-    );
+  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
-    useEffect(() => {
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-      setfeaturesObjects(e)
-       
-    }, [featuredPropertyFeatures])
-    
- 
+  useEffect(() => {
+    const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+    setfeaturesObjects(e);
+  }, [featuredPropertyFeatures]);
+
   //flyto
-  
+
   const flytoHandler = (feature) => {
     // console.log("feature", feature,)
 
     const polygon = feature.getGeometry();
     let loc = [];
     if (polygon) {
-     const extent = polygon.getExtent();
+      const extent = polygon.getExtent();
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
-    }  
+    }
     //flyTo
     dispatch(setareaFlyToLocation(loc));
-
   };
 
-    
   return (
     < div style={{ height:"10rem"}} > 
      <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
@@ -96,8 +82,7 @@ const AreaFCompanyFProperties = ({companyid}) => {
         
           
     </div>
-    </div> 
-  )
-}
+  );
+};
 
-export default AreaFCompanyFProperties
+export default AreaFCompanyFProperties;

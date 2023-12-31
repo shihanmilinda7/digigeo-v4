@@ -147,7 +147,7 @@ const SideNavbar = () => {
                 variant="flat"
                 placeholder="Search here..."
                 onClear={() => console.log("input cleared")}
-                className="w-full rounded-lg border border-blue-500"
+                className="w-full rounded-lg border border-blue-700"
                 startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
               />
             </div>
@@ -186,7 +186,7 @@ const SideNavbar = () => {
             </div>
             <div className="w-full pb-2 pl-2 pr-2 pt-2">
               <div className="flex justify-center">
-                <button className="relative flex items-center justify-center border rounded-lg border-blue-500 focus:outline-none bg-blue-600 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">
+                <button className="relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">
                   <span className="uppercase font-semibold">
                     Reset all filters
                   </span>
