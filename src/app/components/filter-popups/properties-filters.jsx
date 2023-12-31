@@ -19,14 +19,21 @@ import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
 import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
+import useDebounce from "./useDebounce";
 
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
+
+  const [searchPropertyName, setSearchPropertyName] = useState('')
+  const debouncedSearchPropertyName = useDebounce(searchPropertyName, 500)
+  const [propertyName, setpropertyName] = useState("");
+  const [propertyNameList, setpropertyNameList] = useState([]);
+  const [propertyId, setpropertyId] = useState(0);
+
+  const [searchAssetName, setSearchAssetName] = useState('')
+  // const debouncedSearchAssetName = useDebounce(searchSAssetName, 500)
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
-  
-  const [country, setCountry] = useState("");
-  const [countryList, setCountryList] = useState([]);
 
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedCommodity, setSelectedCommodity] = useState([]);
@@ -90,24 +97,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const handleFilterByCommodityChange = (selectedOptions) => {
     setSelectedCommodity(selectedOptions);
   };
-  // useEffect(() => {
-  //   setCountry(areaCountry);
-  //   setMiningArea(areaName);
-  // }, [areaName, areaCountry]);
-  //areal load
-  // useEffect(() => {
-  //   const f = async () => {
-  //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/areas/${country}`,
-  //       { cache: "force-cache" }
-  //     );
-  //     const d = await res.json();
-  //     console.log("areas", d.data);
-  //     setAreaList(d.data);
-  //   };
-
-  //   f().catch(console.error);
-  // }, [country]);
+ 
 
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
@@ -117,19 +107,24 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   };
 
   useEffect(() => {
+    console.log("lll")
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+        `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
         {
           cache: "force-cache",
         }
       );
       const d = await res.json();
-      setCountryList(d.data);
+      console.log("length",d.data.length)
+      setpropertyNameList(d.data);
+      
+      
     };
-
-    f().catch(console.error);
-  }, []);
+    if (searchPropertyName?.length>2) {
+      f().catch(console.error);
+    }
+  }, [debouncedSearchPropertyName]);
 
   return (
     <div>
@@ -142,7 +137,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         <div className="bg-white rounded-lg ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Filters
+              Filters {propertyId} name-{propertyName}
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
@@ -158,21 +153,26 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       size={"sm"}
                       label="Property Name"
                       className="w-1/2"
+                       selectedKey={propertyId}
                       onInputChange={(e) => {
-                        setCountry(e);
+                        setSearchPropertyName(e)
                       }}
-                      defaultSelectedKey={country}
+                        onSelectionChange={(e) => {
+                         setpropertyId(e)
+                      
+                      }}
+                      defaultSelectedKey={propertyId}
                     >
-                      {countryList.map((countryObj) => (
+                      {propertyNameList.map((prop) => (
                         <AutocompleteItem
-                          key={countryObj.country}
-                          value={countryObj.country}
+                          key={prop.propertyid}
+                          value={prop.prop_name}
                         >
-                          {countryObj.country}
+                          {prop.prop_name}
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                    <Autocomplete
+                    {/* <Autocomplete
                       size={"sm"}
                       label="Asset Name"
                       className="w-1/2 mb-4"
@@ -189,7 +189,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           {countryObj.country}
                         </AutocompleteItem>
                       ))}
-                    </Autocomplete>
+                    </Autocomplete> */}
                   </div>
                   <div className="border-b-2 flex w-full max-h-[250px]">
                     <div className="flex flex-col gap-2 w-1/2">
@@ -238,7 +238,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       Filter By Location
                     </span>
                     <div className="flex gap-2">
-                      <Autocomplete
+                      {/* <Autocomplete
                         size={"sm"}
                         label="Country"
                         className="w-1/2"
@@ -255,8 +255,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete>
-                      <Autocomplete
+                      </Autocomplete> */}
+                      {/* <Autocomplete
                         size={"sm"}
                         label="State / Province"
                         className="w-1/2"
@@ -273,11 +273,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete>
+                      </Autocomplete> */}
                     </div>
                   </div>
                   <div className="flex">
-                    <Autocomplete
+                    {/* <Autocomplete
                       size={"sm"}
                       label="Mining Area"
                       className="w-1/2"
@@ -294,7 +294,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           {countryObj.country}
                         </AutocompleteItem>
                       ))}
-                    </Autocomplete>
+                    </Autocomplete> */}
                   </div>
                 </div>
               </div>

@@ -114,11 +114,11 @@ const PropertiesSideNavbar = () => {
             <Accordion>
               <div className="flex flex-col gap-6">
                 <AccordionItemWithEye title="Featured Companies">
-                  Company List
+                  
                 </AccordionItemWithEye>
                 <AccordionItemWithEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
-                    Tree View
+                    
                   </div>
                 </AccordionItemWithEye>
               </div>

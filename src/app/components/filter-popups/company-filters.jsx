@@ -123,9 +123,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     // }
   };
 
-  const onCompanyChange =(e)=>{
-    console.log("oncomp sel ch",e)
-  }
+ 
 
   useEffect(() => {
     const f = async () => {
