@@ -9,22 +9,32 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setAreaCountry,
+  setAreaCompany,
   setAreaMiningArea,
   setAreaZoomMode,
   setIsAreaSideNavOpen,
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { setIsCompanySideNavOpen } from "@/store/company-map/company-map-slice";
+import { setIsCompanySideNavOpen, setcompanyId, setcompanyName } from "@/store/company-map/company-map-slice";
+import useDebounce from "./useDebounce";
 
 const CompanyFilter = ({ isOpenIn, closePopup }) => {
+   const [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 500)
+   const [searchStockcode, setSearchStockcode] = useState('')
+  const debouncedSearchStockcode = useDebounce(searchStockcode, 500)
+
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
-  // const [country, setCountry] = useState("");
-  const [country, setCountry] = useState("Canada");
-  const [countryList, setCountryList] = useState([]);
+  // const [company, setCompany] = useState("");
+  const [company, setCompany] = useState("");
+  const [stockcode, setStockcode] = useState("");
+  const [companyidLocal, setCompanyidLocal] = useState(0);
+  const [companyList, setCompanyList] = useState([]);
+  const [StockcodeList, setStockcodeList] = useState([]);
+  const [historicalCompany, sethistoricalCompany] = useState(false);
   // const [areaList, setAreaList] = useState([]);
   // const [miningArea, setMiningArea] = useState("");
   // const [miningArea, setMiningArea] = useState("Timmins");
@@ -47,11 +57,11 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
-  // const areaCountry = "Test";
+  // const areaCompany = "Test";
   // const areaState = "Test";
 
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  // const areaCompany = useSelector((state) => state.areaMapReducer.areaCompany);
 
   const customStyles = {
     overlay: {
@@ -70,19 +80,29 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     },
   };
 
+
+
+
   useEffect(() => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
+  useEffect(() => {
+    dispatch(setcompanyId(companyidLocal));
+    const c = companyList.find(c=> c.companyid==companyidLocal)
+    if(c){
+      dispatch(setcompanyName(c.name));
+    }
+  }, [companyidLocal]);
 
   // useEffect(() => {
-  //   setCountry(areaCountry);
+  //   setCompany(areaCompany);
   //   setMiningArea(areaName);
-  // }, [areaName, areaCountry]);
+  // }, [areaName, areaCompany]);
   //areal load
   // useEffect(() => {
   //   const f = async () => {
   //     const res = await fetch(
-  //       `https://atlas.ceyinfo.cloud/matlas/areas/${country}`,
+  //       `https://atlas.ceyinfo.cloud/matlas/areas/${company}`,
   //       { cache: "force-cache" }
   //     );
   //     const d = await res.json();
@@ -91,10 +111,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   //   };
 
   //   f().catch(console.error);
-  // }, [country]);
+  // }, [company]);
 
   const searchAction = async () => {
-    // if (country && miningArea) {
+    // if (company && miningArea) {
     dispatch(setAreaZoomMode("extent"));
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
@@ -103,20 +123,45 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     // }
   };
 
+  const onCompanyChange =(e)=>{
+    console.log("oncomp sel ch",e)
+  }
+
   useEffect(() => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+        `https://atlas.ceyinfo.cloud/matlas/companylist/${search}`,
         {
           cache: "force-cache",
         }
       );
       const d = await res.json();
-      setCountryList(d.data);
+      setCompanyList(d.data);
+       setStockcodeList(d.data);
+      console.log("clist",d.data)
     };
+    if (debouncedSearch) {
+      f().catch(console.error);
+    }
+  }, [debouncedSearch]);
 
-    f().catch(console.error);
-  }, []);
+   useEffect(() => {
+    const f = async () => {
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/stockcodelist/${searchStockcode}`,
+        {
+          cache: "force-cache",
+        }
+      );
+      const d = await res.json();
+      setStockcodeList(d.data);
+      setCompanyList(d.data);
+      console.log("clist",d.data)
+    };
+    if (debouncedSearchStockcode) {
+      f().catch(console.error);
+    }
+  }, [debouncedSearchStockcode]);
 
   return (
     <div>
@@ -142,48 +187,72 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
               <div className="-mx-3 flex flex-wrap mt-8">
                 <div className="w-full px-3 flex flex-col gap-3">
                   <span className="text-base font-semibold leading-none text-gray-900 mt-3 w-fit">
-                    Filter By Name & Stoke Code
+                    Filter By Name & Stoke Code 
                   </span>
+                  {companyidLocal}
                   <div className="flex flex-col gap-2">
                     <Autocomplete
                       label="Company Name"
                       className="max-w-xs"
+                      selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                        setCountry(e);
+                      
+                         setSearch(e)
+                        // setCompany(e);
+                        
                       }}
-                      defaultSelectedKey={country}
+                      onSelectionChange={(e) => {
+                       
+                         setCompanyidLocal(e)
+                         const c = companyList.find(c=> c.companyid==e)
+                         if(c){
+                          sethistoricalCompany(c.historical)
+                         }else{
+                          sethistoricalCompany(false)
+                         }
+                      
+                      }}
+                      defaultSelectedKey={company}
                     >
-                      {countryList.map((countryObj) => (
+                      {companyList.map((companyObj) => (
                         <AutocompleteItem
-                          key={countryObj.country}
-                          value={countryObj.country}
+                          key={companyObj.companyid}
+                          value={companyObj.name} 
                         >
-                          {countryObj.country}
+                          {companyObj.name}
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
                     <Autocomplete
                       label="Stoke Code"
                       className="max-w-xs"
+                       selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                        setCountry(e);
+                        
+                         setSearchStockcode(e)
+                         setStockcode(e);
                       }}
-                      defaultSelectedKey={country}
+                      onSelectionChange={(e) => {
+                       
+                         setCompanyidLocal(e)
+                      
+                      }}
+                      defaultSelectedKey={stockcode}
                     >
-                      {countryList.map((countryObj) => (
+                      {StockcodeList.map((companyObj) => (
                         <AutocompleteItem
-                          key={countryObj.country}
-                          value={countryObj.country}
+                          key={companyObj.companyid}
+                          value={companyObj.stockcode}
                         >
-                          {countryObj.country}
+                          {companyObj.stockcode}
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
 
                     {/* <NextTextInputField
-                      label="Country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
+                      label="Company"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
                       className="w-full rounded-lg border border-blue-500"
                       variant="bordered"bbb
                     /> */}

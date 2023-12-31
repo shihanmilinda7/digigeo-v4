@@ -54,19 +54,23 @@ const AreaSideNavbar = () => {
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
 
+    const selectedMap = useSelector(
+    (state) => state.mapSelectorReducer.selectedMap
+  );
+
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
   const isAreaSideNavOpen = useSelector(
     (state) => state.areaMapReducer.isAreaSideNavOpen
   );
-  const selectedMap = useSelector(
-    (state) => state.mapSelectorReducer.selectedMap
-  );
+
   const areaLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
   const areaZoomLevel = useSelector(
     (state) => state.mapSelectorReducer.areaZoomLevel
   );
+
+
   const areaInitialCenter = useSelector(
     (state) => state.mapSelectorReducer.areaInitialCenter
   );
@@ -74,6 +78,7 @@ const AreaSideNavbar = () => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
+  
   const syncPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncPropertyFeatures
   );

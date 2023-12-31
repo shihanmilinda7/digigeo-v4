@@ -1,6 +1,6 @@
 
 
-const AreaMapClickPopupRow = ({label, value}) => {
+const CompanyMapClickPopupRow = ({label, value}) => {
   return (
       <div className='flex bg-slate-200'>
         <span className='w-48 bg-slate-400 p-1'>{label}</span>  
@@ -10,4 +10,4 @@ const AreaMapClickPopupRow = ({label, value}) => {
   )
 }
 
-export default AreaMapClickPopupRow
+export default CompanyMapClickPopupRow

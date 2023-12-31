@@ -29,8 +29,7 @@ import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 import { flyTo } from "./fly"
- import { toLonLat } from "ol/proj";
-import { toStringHDMS } from "ol/coordinate";
+ 
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
 
 
@@ -277,21 +276,21 @@ const stroke = new Stroke({
   return st;
 };
 
-   const styleFunctionClaim = (feature) => {
-     console.log("sf");
-    const s = new Style({
+  //  const styleFunctionClaim = (feature) => {
+  //    console.log("sf");
+  //   const s = new Style({
        
-      stroke: new Stroke({
-        color: "grey",
-        width: 1,
-      }),
-      fill: new Fill({
-        color: "rgba(211,211,211,0.1)",
-      }),
-    });
+  //     stroke: new Stroke({
+  //       color: "grey",
+  //       width: 1,
+  //     }),
+  //     fill: new Fill({
+  //       color: "rgba(211,211,211,0.1)",
+  //     }),
+  //   });
 
-    return s;
-  }
+  //   return s;
+  // }
 
 
 export const  AreaMap =  () => {
@@ -330,9 +329,6 @@ export const  AreaMap =  () => {
     setCoordinates(coordinate);
   }, []);
 
- 
-  
-
 
   useEffect(() => {
     if(areaFlyToLocation?.length>0)
@@ -347,6 +343,9 @@ export const  AreaMap =  () => {
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
+
+
+
 
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
   const areaZoomLevel = useSelector(
@@ -385,29 +384,18 @@ export const  AreaMap =  () => {
     (state) => state.areaMapReducer.assetFeatures
   );
 
-    //clickObjects
-  // const clickclaimObject = useSelector(
-  //   (state) => state.areaMapReducer.clickclaimObject
-  // );
-  // const clickfPropertyObject = useSelector(
-  //   (state) => state.areaMapReducer.clickfPropertyObject
-  // );
-  // const clickassetObject = useSelector(
-  //   (state) => state.areaMapReducer.clickassetObject
-  // );
-  // const clicksyncPropertyObject = useSelector(
-  //   (state) => state.areaMapReducer.clicksyncPropertyObject
-  // );
+ 
+
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
-  const areaZoomMode = useSelector(
-    (state) => state.areaMapReducer.areaZoomMode
-  );
+  // const areaZoomMode = useSelector(
+  //   (state) => state.areaMapReducer.areaZoomMode
+  // );
 
   useEffect(() => {
-    console.log("ue2")
+    // console.log("ue2")
     //set style
     const style = new Style({});
     style.setRenderer(areaMApPropertyVectorRendererFuncV2);
@@ -416,14 +404,14 @@ export const  AreaMap =  () => {
   }, [fPropVectorLayerRef.current])
   
 
-  useEffect(() => {
-    console.log("ue2")
-    //set style
-    const style = new Style({});
-    style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+  // useEffect(() => {
+  //   console.log("ue2")
+  //   //set style
+  //   const style = new Style({});
+  //   style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
-    claimVectorImgLayerRef.current?.setStyle(style);
-  }, [claimVectorImgLayerRef.current])
+  //   claimVectorImgLayerRef.current?.setStyle(style);
+  // }, [claimVectorImgLayerRef.current])
   
   
   useEffect(() => {
@@ -517,10 +505,7 @@ export const  AreaMap =  () => {
    
   useEffect(() => {
     mouseScrollEvent();
-    // //add  console.log("popp") featured prop svg
-   
- 
-    
+
   }, []);
 
   useEffect(() => {
@@ -604,16 +589,6 @@ export const  AreaMap =  () => {
   };
 
 
-
-
-
-  // const setLyrs = (lyrs) => {
-  //   dispatch(setAreaLyrs(lyrs));
-  //   const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-  //   window.history.replaceState({}, "", newUrl);
-  // };
-
-
   const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
@@ -630,14 +605,7 @@ export const  AreaMap =  () => {
     dispatch(setIsAreaSideNavOpen(true));
   };
 
- 
-
-
-
-
-
-
-  const image = new Icon({
+   const image = new Icon({
     src: "./sync-prop.svg",
     scale: 1,
   });
@@ -718,6 +686,7 @@ export const  AreaMap =  () => {
     areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible)
   }, [areaAreaBoundaryLayerVisible]);
 
+  
     //asset type visibility useEffects
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();

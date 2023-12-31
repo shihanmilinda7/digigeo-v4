@@ -10,7 +10,7 @@ import GeoJSON from "ol/format/GeoJSON";
 import { setareaFlyToLocation } from '@/store/area-map/area-map-slice';
  
 
-const AreaFCompanyFProperties = ({companyid}) => {
+const CompanyFCompanyFProperties = ({companyid}) => {
     const [featureObjects, setfeaturesObjects] = useState([])  
 
     
@@ -53,22 +53,22 @@ const AreaFCompanyFProperties = ({companyid}) => {
   return (
     < div style={{ height:"10rem"}} > 
      <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
-      <div className="bg-slate-100"
-      style={{
+    <div className="bg-slate-100"    style={{
       display: "flex",
       flexDirection: "column",
       justify: "center",
       alignItems: "flex-start", 
       padding: "1rem",
+     
       overflowY:"scroll"
     }}>
      
+        
               {  featureObjects.map(fp => {
                 if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
                     // console.log("companyid",companyid,"pname",fp.properties )
                     return (
-                      <div key={fp.get("propertyid")} className="hover:bg-blue-200 odd:bg-slate-200" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
-                          onClick={(e) => {
+                      <div key={fp.get("propertyid")} className="hover:bg-blue-200 odd:bg-slate-200"  style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width:"100%"}} onClick={(e) => {
                           flytoHandler(fp)
                       }}>
                         <div className="flex">
@@ -100,4 +100,4 @@ const AreaFCompanyFProperties = ({companyid}) => {
   )
 }
 
-export default AreaFCompanyFProperties
+export default CompanyFCompanyFProperties

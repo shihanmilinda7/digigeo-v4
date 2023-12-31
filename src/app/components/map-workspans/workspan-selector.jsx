@@ -32,12 +32,12 @@ export const WorkspanSelector = () => {
         <AreaMapWorkspan />
         {/* <h1>AREA</h1> */}
       </div>
-      {/* <div style={{ display: selectedMap === "company" ? "block" : "none" }}>
+      <div style={{ display: selectedMap === "company" ? "block" : "none" }}>
         <CompanyMapWorkspan />
       </div>
       <div style={{ display: selectedMap === "properties" ? "block" : "none" }}>
         <PropertiesMapWorkspan />
-      </div> */}
+      </div>
     </div>
   );
 };
