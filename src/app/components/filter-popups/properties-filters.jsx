@@ -10,7 +10,7 @@ import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAreaCountry,
-  setAreaMiningArea,
+  setAreaMiningArea, 
   setAreaZoomMode,
   setIsAreaSideNavOpen,
 } from "../../../store/area-map/area-map-slice";
@@ -20,6 +20,7 @@ import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
 import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
+import PropertyFilterItemBrowser from "./property-filter-item-browser";
 
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
@@ -28,6 +29,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [propertyName, setpropertyName] = useState("");
   const [propertyNameList, setpropertyNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
+  const [listWidth, setlistWidth] = useState(0);
 
   const [searchAssetName, setSearchAssetName] = useState('')
   // const debouncedSearchAssetName = useDebounce(searchSAssetName, 500)
@@ -109,6 +111,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
     console.log("lll")
     const f = async () => {
+      //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
         {
@@ -123,17 +126,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     };
     if (searchPropertyName?.length>2) {
       f().catch(console.error);
+    }else{
+      setpropertyNameList([]);
     }
   }, [debouncedSearchPropertyName]);
 
   return (
-    <div>
+    <div className="flex rounded-lg transition-all duration-1000 ease-linear">
       <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}
         style={customStyles}
         ariaHideApp={false}
+        
       >
+        <div className="flex ">
         <div className="bg-white rounded-lg ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
@@ -150,6 +157,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                 <div className="w-full px-3 flex flex-col gap-3">
                   <div className="flex gap-2 border-b-2 w-full">
                     <Autocomplete
+                      allowsCustomValue
                       size={"sm"}
                       label="Property Name"
                       className="w-1/2"
@@ -172,7 +180,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                    {/* <Autocomplete
+                     {/* <Autocomplete
                       size={"sm"}
                       label="Asset Name"
                       className="w-1/2 mb-4"
@@ -181,15 +189,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       }}
                       defaultSelectedKey={country}
                     >
-                      {countryList.map((countryObj) => (
-                        <AutocompleteItem
-                          key={countryObj.country}
-                          value={countryObj.country}
-                        >
-                          {countryObj.country}
-                        </AutocompleteItem>
-                      ))}
-                    </Autocomplete> */}
+                    
+                    </Autocomplete>  */}
                   </div>
                   <div className="border-b-2 flex w-full max-h-[250px]">
                     <div className="flex flex-col gap-2 w-1/2">
@@ -238,7 +239,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       Filter By Location
                     </span>
                     <div className="flex gap-2">
-                      {/* <Autocomplete
+                     {/* <Autocomplete
                         size={"sm"}
                         label="Country"
                         className="w-1/2"
@@ -255,8 +256,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete> */}
-                      {/* <Autocomplete
+                      </Autocomplete>  */}
+                   {/* <Autocomplete
                         size={"sm"}
                         label="State / Province"
                         className="w-1/2"
@@ -273,11 +274,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete> */}
+                      </Autocomplete>  */}
                     </div>
                   </div>
                   <div className="flex">
-                    {/* <Autocomplete
+                     {/* <Autocomplete
                       size={"sm"}
                       label="Mining Area"
                       className="w-1/2"
@@ -294,7 +295,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           {countryObj.country}
                         </AutocompleteItem>
                       ))}
-                    </Autocomplete> */}
+                    </Autocomplete>  */}
                   </div>
                 </div>
               </div>
@@ -322,7 +323,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
             </div>
           </div>
         </div>
+        {propertyNameList?.length && (<div className="min-w-[550px]   h-[400px] bg-white overflow-scroll transition-all duration-1000 ease-linear">
+          <PropertyFilterItemBrowser  properties={propertyNameList}  />
+        </div>)}
+          {/* {propertyNameList?.length && (<div className="min-w-[550px]   h-[400px] bg-white overflow-scroll transition-all duration-1000 ease-linear">
+          <PropertyFilterItemBrowser  properties={propertyNameList}  />
+        </div>)} */}
+      </div>
+     
       </Modal>
+
+        {/* <div className="min-w-[550px]   h-[400px] bg-white overflow-scroll">
+          <PropertyFilterItemBrowser  properties={propertyNameList}  />
+        </div>
+
+      */}
     </div>
   );
 };
