@@ -10,7 +10,7 @@ import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAreaCountry,
-  setAreaMiningArea, 
+  setAreaMiningArea,
   setAreaZoomMode,
   setIsAreaSideNavOpen,
 } from "../../../store/area-map/area-map-slice";
@@ -22,6 +22,41 @@ import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-ma
 import useDebounce from "./useDebounce";
 import PropertyFilterItemBrowser from "./property-filter-item-browser";
 
+const buildSqlWhereClause = (conditions) => {
+// const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
+  // console.log("conditions",conditions)
+  const q = conditions.reduce((acc, cur) => {
+    const quotes= cur.dataType=="string" ? "'":"";
+    const stringCompareFunc = cur.stringCompareFunc ? cur.stringCompareFunc :""
+    const openBracket = stringCompareFunc? "(" :""
+    const closeBracket = stringCompareFunc? ")" :""
+    const wildcard = cur.wildcard ? cur.wildcard :""
+    let startWildCard = ""
+    let endWildCard = ""
+    if(cur.wildcardPosition){
+      if(cur.wildcardPosition=="both"){
+        startWildCard=wildcard
+        endWildCard=wildcard
+      } else if(cur.wildcardPosition=="start"){
+        startWildCard=wildcard
+        endWildCard=""
+      }else if(cur.wildcardPosition=="end"){
+        startWildCard=""
+        endWildCard=wildcard
+      }
+    } 
+   const clause = cur.searchValue ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} ${stringCompareFunc}${openBracket}${quotes}${startWildCard}${cur.searchValue}${endWildCard}${quotes}${closeBracket}` : "";
+    
+
+    return acc ? (acc + (clause ? " and " + clause: "")): clause 
+
+  },"")
+ console.log("q",q,)
+return q
+
+
+}
+
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
   const [searchPropertyName, setSearchPropertyName] = useState('')
@@ -30,12 +65,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [propertyNameList, setpropertyNameList] = useState([]);
   const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
-    const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [stateProvList, setstateProvList] = useState([]);
   const [stateProv, setstateProv] = useState("");
   const [areaList, setareaList] = useState([]);
-  const [area, setarea] = useState("");
+  const [area, setarea] = useState(""); 
+  const [searchQuery, setsearchQuery] = useState(""); 
 
   const [searchAssetName, setSearchAssetName] = useState('')
   // const debouncedSearchAssetName = useDebounce(searchSAssetName, 500)
@@ -146,14 +182,16 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     closePopup();
   };
 
+  //debounced prop name
   useEffect(() => {
     console.log("lll")
     const f = async () => {
+       buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
       //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
         {
-          cache: "force-cache",
+          cache: "no-store",
         }
       );
       const d = await res.json();
@@ -169,11 +207,47 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     }
   }, [debouncedSearchPropertyName]);
 
+  const buildSearchQuery = (propNameLikeParam,assetNameLikeParam,countryParam,stProvParam,areaParam,assetTypesParam,commoditiesParam) => {
+    
+    const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
+    const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "like" ,stringCompareFunc:"lower"}
+    const countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
+    const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
+    const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
+    const assetTypeList= {columnName:"asset_type", searchValue: assetTypesParam, dataType: "string", matchType: "in", stringCompareFunc:"lower"}
+    const commodityList= {columnName:"commodities", searchValue: commoditiesParam, dataType: "string", matchType: "in", stringCompareFunc:"lower"}
+    
+    // const pro= propNameLikeParam ?? ""
+    // const ass= assetNameLikeParam ?? ""
+    // const cou= countryParam ?? ""
+    // const stp= stProvParam ?? ""
+    // const are= areaParam ?? ""
+    // const ast= assetTypesParam ?? ""
+    // const com= commoditiesParam ?? ""
+
+    // const pro1 = pro ?  `lower(propsearchcol) like lower('%${pro}%')`: "" 
+    // const ass1 = ass ? (pro1 ? " and ": "" + `lower(assetsearchcol) like lower('%${ass}%')`): "" 
+    
+    const q = buildSqlWhereClause([propName, countryName,stProvName,areaName])
+    console.log("query",q)
+    return q
+  }
+  //country changed
   useEffect(() => {
+
+    //set search Query
+    buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
+
+
+
     if(country){
-      console.log(" country loaded",country)
-      const t =  propertyNameList?.filter(c=> c.country==country)
-      setpropertyNameList(t)
+      // console.log(" country loaded",country)
+      // const t =  propertyNameList?.filter(c=> c.country==country)
+      // setpropertyNameList(t)
+
+      //load results from api
+
+
       //load state prov 
       const f = async () => {
       const res = await fetch(
@@ -232,6 +306,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   
 
   useEffect(() => {
+   buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
+
       if(country && !stateProv && !area){
       // console.log("filtered")
       const t =  propertyMasterNameList?.filter(c=> c.country==country)
@@ -255,6 +331,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   
   
   useEffect(() => {
+   buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
       if(country && !stateProv && !area){
       // console.log("filtered")
       const t =  propertyMasterNameList?.filter(c=> c.country==country)
@@ -474,7 +551,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       { 
             ( <div className="flex-col">
              
-              <div className="border-solid border  h-[465px] w-[250px]   bg-white overflow-y-auto   rounded-lg m-2 ">
+              <div className="border-solid border  h-[465px] w-[250px]   bg-white     rounded-lg m-2 ">
                 <PropertyFilterItemBrowser  properties={propertyNameList}  />
               </div>
                <div > 
