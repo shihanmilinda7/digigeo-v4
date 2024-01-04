@@ -15,13 +15,16 @@ const PropertyFilterItemBrowser = ({properties}) => {
     );
     
     return (
-
+      <div  >
+       
          <ListboxWrapper>
             <Listbox variant="flat" aria-label="Listbox menu with descriptions"
             disallowEmptySelection
           selectionMode="multiple"
           selectedKeys={selectedKeys}
-          onSelectionChange={setSelectedKeys}
+                    onSelectionChange={setSelectedKeys}
+            className="overflow-hidden width-[400px"
+            itemClasses={"width-[400px]"}
             >
        {properties.map(p=> {
         let alias = p.prop_alias ? "Alias:" + p.prop_alias + "," :"";
@@ -34,6 +37,7 @@ const PropertyFilterItemBrowser = ({properties}) => {
         </ListboxItem>)}) }
             </Listbox>    
     </ListboxWrapper>
+    </div>
     //   <div>
     //     <div className="flex gap-4"> <span> Property id </span><span> Property Name </span> </div>
     //         {properties.map(p => (<div key={p.propertyid} className="flex gap-4"><span>{p.propertyid}</span><span>{p.prop_name}</span></div>))} 

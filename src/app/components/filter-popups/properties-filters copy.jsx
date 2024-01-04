@@ -28,14 +28,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const debouncedSearchPropertyName = useDebounce(searchPropertyName, 500)
   const [propertyName, setpropertyName] = useState("");
   const [propertyNameList, setpropertyNameList] = useState([]);
-  const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
-    const [country, setCountry] = useState("");
-  const [countryList, setCountryList] = useState([]);
-  const [stateProvList, setstateProvList] = useState([]);
-  const [stateProv, setstateProv] = useState("");
-  const [areaList, setareaList] = useState([]);
-  const [area, setarea] = useState("");
+  const [listWidth, setlistWidth] = useState(0);
 
   const [searchAssetName, setSearchAssetName] = useState('')
   // const debouncedSearchAssetName = useDebounce(searchSAssetName, 500)
@@ -62,37 +56,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const propertiesInitialCenter = useSelector(
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
-
-  useEffect(() => {
-    const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
-        {
-          cache: "no-store",
-        }
-      );
-      const d = await res.json();
-      setCountryList(d.data);
-    };
-
-    f().catch(console.error);
-  }, []);
-
-    // useEffect(() => {
-    // const f = async () => {
-    //   const res = await fetch(
-    //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
-    //     {
-    //       cache: "force-cache",
-    //     }
-    //   );
-    //   const d = await res.json();
-    //   setCountryList(d.data);
-    // };
-
-    // f().catch(console.error);
-    // }, [stateProv]);
-
 
   const customStyles = {
     overlay: {
@@ -158,125 +121,16 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       );
       const d = await res.json();
       console.log("length",d.data.length)
-      setpropertyMasterNameList(d.data);
+      setpropertyNameList(d.data);
       
       
     };
     if (searchPropertyName?.length>2) {
       f().catch(console.error);
     }else{
-      setpropertyMasterNameList([]);
+      setpropertyNameList([]);
     }
   }, [debouncedSearchPropertyName]);
-
-  useEffect(() => {
-    if(country){
-      console.log(" country loaded",country)
-      const t =  propertyNameList?.filter(c=> c.country==country)
-      setpropertyNameList(t)
-      //load state prov 
-      const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/stateprovlist/${country}`,
-        {
-          cache: "force-cache",
-        }
-      );
-      const d = await res.json();
-      setstateProvList(d.data);
-    };
-
-    f().catch(console.error);
-    //load  areas
-        const farea = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/arealist/${country}`,
-        {
-          cache: "force-cache",
-        }
-      );
-      const d1 = await res.json();
-      setareaList(d1.data);
-    };
-
-    farea().catch(console.error);
-
-    }else{
-      console.log("empty country loaded")
-      setpropertyNameList(propertyMasterNameList)
-      setstateProvList([])
-      setareaList([])
-    }
-
-  }, [country])
-
-
-  useEffect(() => {
-    if(country && !stateProv && !area){
-      // console.log("filtered")
-      const t =  propertyMasterNameList?.filter(c=> c.country==country)
-      setpropertyNameList(t)
-    } else if (country && stateProv && !area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv)
-      setpropertyNameList(t)
-    }else if (country && stateProv && area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv && c.area==area)
-      setpropertyNameList(t)
-    }
-    else{
-      setpropertyNameList(propertyMasterNameList)
-    }
-  
-    
-  }, [propertyMasterNameList])
-  
-
-  useEffect(() => {
-      if(country && !stateProv && !area){
-      // console.log("filtered")
-      const t =  propertyMasterNameList?.filter(c=> c.country==country)
-      setpropertyNameList(t)
-    } else if (country && stateProv && !area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv)
-      setpropertyNameList(t)
-    }else if (country && stateProv && area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv && c.area==area)
-      setpropertyNameList(t)
-    } else if (country && !stateProv && area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.area==area)
-      setpropertyNameList(t)
-    }
-    else{
-      setpropertyNameList(propertyMasterNameList)
-    }
-  
-   
-  }, [stateProv])
-  
-  
-  useEffect(() => {
-      if(country && !stateProv && !area){
-      // console.log("filtered")
-      const t =  propertyMasterNameList?.filter(c=> c.country==country)
-      setpropertyNameList(t)
-    } else if (country && stateProv && !area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv)
-      setpropertyNameList(t)
-    }else if (country && stateProv && area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.state_prov==stateProv && c.area==area)
-      setpropertyNameList(t)
-    }
-    else if (country && !stateProv && area) {
-      const t =  propertyMasterNameList?.filter(c=> c.country==country && c.area==area)
-      setpropertyNameList(t)
-    }
-    else{
-      setpropertyNameList(propertyMasterNameList)
-    }
-  
-   
-  }, [area])
-
 
   return (
     
@@ -286,19 +140,18 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         style={customStyles}
         ariaHideApp={false}
         
-    >
-      <div className="flex-col bg-white rounded-lg">
-        <div className="flex items-center justify-center">
+      >
+        <div className="flex  ">
+        <div className="bg-red-200 rounded-lg ">
+          <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Filters  
+              Filters {propertyId} name-{propertyName}
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
           </div>
-        <div className="rounded-lg flex ">
-         
           <div className="flex items-center justify-center pl-8 pr-8">
             <div className="mx-auto w-full max-w-[550px] min-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap mt-8">
@@ -387,11 +240,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       Filter By Location
                     </span>
                     <div className="flex gap-2">
-                     <Autocomplete
+                     {/* <Autocomplete
                         size={"sm"}
                         label="Country"
                         className="w-1/2"
-                        onSelectionChange={(e) => {
+                        onInputChange={(e) => {
                           setCountry(e);
                         }}
                         defaultSelectedKey={country}
@@ -404,46 +257,46 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete> 
-                   <Autocomplete
+                      </Autocomplete>  */}
+                   {/* <Autocomplete
                         size={"sm"}
                         label="State / Province"
                         className="w-1/2"
                         onInputChange={(e) => {
-                          setstateProv(e);
+                          setCountry(e);
                         }}
-                        defaultSelectedKey={stateProv}
+                        defaultSelectedKey={country}
                       >
-                        {stateProvList.map((spObj) => (
+                        {countryList.map((countryObj) => (
                           <AutocompleteItem
-                            key={spObj.state_prov}
-                            value={spObj.state_prov}
+                            key={countryObj.country}
+                            value={countryObj.country}
                           >
-                            {spObj.state_prov}
+                            {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete> 
+                      </Autocomplete>  */}
                     </div>
                   </div>
                   <div className="flex">
-                     <Autocomplete
+                     {/* <Autocomplete
                       size={"sm"}
                       label="Mining Area"
                       className="w-1/2"
                       onInputChange={(e) => {
-                        setarea(e);
+                        setCountry(e);
                       }}
-                      defaultSelectedKey={area}
+                      defaultSelectedKey={country}
                     >
-                      {areaList.map((ao) => (
+                      {countryList.map((countryObj) => (
                         <AutocompleteItem
-                          key={ao.area}
-                          value={ao.area}
+                          key={countryObj.country}
+                          value={countryObj.country}
                         >
-                          {ao.area}
+                          {countryObj.country}
                         </AutocompleteItem>
                       ))}
-                    </Autocomplete> 
+                    </Autocomplete>  */}
                   </div>
                 </div>
               </div>
@@ -469,35 +322,15 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                 </div>
               </div>
             </div>
-
           </div>
-                      { 
-            ( <div className="flex-col">
-             
-              <div className="border-solid border  h-[465px] w-[250px]   bg-white overflow-y-auto   rounded-lg m-2 ">
-                <PropertyFilterItemBrowser  properties={propertyNameList}  />
-              </div>
-               <div > 
-                 <span className="ml-2"  >{`Selected Properties- ${propertyNameList.length}`} </span>
-              </div>
-              </div>
-            )}  
-          {/* {(propertyNameList?.length ? true:null) &&
-            ( <div className="flex-col">
-              <div > 
-                 <span  >{`Selected Properties- ${propertyNameList.length} Nos. `} </span>
-              </div>
-              <div className="min-w-[550px]  h-[465px]    bg-white overflow-y-auto   rounded-lg  ">
-                <PropertyFilterItemBrowser  properties={propertyNameList}  />
-              </div>
-              </div>
-            )} */}
         </div>
-       
+        {propertyNameList?.length && (<div className="min-w-[550px]  h-[465px]    bg-white overflow-y-auto   rounded-lg  ">
+          <PropertyFilterItemBrowser  properties={propertyNameList}  />
+        </div>)}
           {/* {propertyNameList?.length && (<div className="min-w-[550px]   h-[400px] bg-white overflow-scroll transition-all duration-1000 ease-linear">
           <PropertyFilterItemBrowser  properties={propertyNameList}  />
         </div>)} */}
-     </div>
+      </div>
      
       </Modal>
 

@@ -9,6 +9,21 @@ module.exports = {
   ],
   theme: {
     extend: {
+      keyframes: () => ({
+        slideRight: {
+          "0%": { opacity: 0, marginLeft: "-600px" },
+          "100%": { opacity: 1, marginLeft: "0" },
+        },
+        slideLeft: {
+          "0%": { opacity: 0, marginRight: "-600px" },
+          "100%": { opacity: 1, marginRight: "0" },
+        },
+      }),
+      animation: {
+        slideRight: "slideRight 0.5s ease-in",
+        slideLeft: "slideLeft 0.5s ease-in",
+      },
+
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
