@@ -1,32 +1,41 @@
-import {Listbox, ListboxItem, cn} from "@nextui-org/react";
+import {Listbox, ListboxItem, cn,ListboxSection} from "@nextui-org/react";
 import {ListboxWrapper} from "./ListboxWrapper";
-import { useMemo, useState } from "react";
- import {Pagination, Button} from "@nextui-org/react";
+import { useMemo, useState,useEffect } from "react";
+import { Pagination, Button } from "@nextui-org/react";
+ import {Chip} from "@nextui-org/react";
 
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
-const PropertyFilterItemBrowser = ({properties}) => {
+const PropertyFilterItemBrowser = ({properties,totalResultCount,curPageHandler,itemsPerPage}) => {
      const [currentPage, setCurrentPage] =  useState(1);
 
      const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
 
+  useEffect(() => {
+    //console.log("currentPage",currentPage)
+     
+    curPageHandler(currentPage)
+   
+  }, [currentPage])
+  
   const selectedValue =  useMemo(
     () => Array.from(selectedKeys).join(", "),
     [selectedKeys]
     );
     
     return (
-      <div className="flex-col"   >
-         <div className="overflow-y-auto max-h-[465px]">
+      <div className="flex-col  "   >
+         <div className="overflow-y-auto max-h-[455px] min-h-[455px]">
          <ListboxWrapper>
             <Listbox variant="flat" aria-label="Listbox menu with descriptions"
             disallowEmptySelection
           selectionMode="multiple"
           selectedKeys={selectedKeys}
                     onSelectionChange={setSelectedKeys}
-            className="overflow-hidden width-[400px"
+            className="overflow-hidden"
             itemClasses={"width-[400px]"}
             >
+              <ListboxSection title="Property Details" showDivider>
        {properties.map(p=> {
         const pdesc = (p.prop_name ?? "") + (p.prop_alias ? "(" +p.prop_alias +")":"")
         const adesc = (p.asset_name ?? "") + (p.assetalias ? "(" +p.assetalias +")":"")
@@ -40,17 +49,41 @@ const PropertyFilterItemBrowser = ({properties}) => {
         >
          {pdesc}
         </ListboxItem>)}) }
+        </ListboxSection>
           </Listbox>
           
         </ListboxWrapper>
         </div>
-        {properties?.length !=0 && (<div className="mt-2"><Pagination
+        <div className="text-white">essential place </div>
+        {properties?.length != 0 && (<div className="flex-col mt-4">
+          <Pagination
         isCompact
-        total={10}
+        total={Math.ceil(totalResultCount/itemsPerPage)}
         color="secondary"
         page={currentPage}
         onChange={setCurrentPage}
-        /> </div>)}
+        />
+              <div className="flex gap-2 items-center mt-2">
+        <Button
+          size="sm"
+          variant="flat"
+          color="secondary"
+          onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
+        >
+          Previous
+        </Button>
+        <Button
+          size="sm"
+          variant="flat"
+          color="secondary"
+          onPress={() => setCurrentPage((prev) => (prev < 10 ? prev + 1 : prev))}
+        >
+          Next
+        </Button>
+            <Chip color="success">{ ((currentPage-1)*itemsPerPage)+1 + "-" + ( currentPage*itemsPerPage < totalResultCount? currentPage*itemsPerPage:totalResultCount    ) + "/" + totalResultCount}</Chip>
+      </div>
+        
+         </div>)}
         
     </div>
     //   <div>
