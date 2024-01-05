@@ -530,8 +530,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           placement="top-left"
                            
                         >
-                            </span>
                            </Badge> }
+                             </span>
                     <Autocomplete
                       allowsCustomValue
                       size={"sm"}
