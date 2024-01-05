@@ -22,6 +22,11 @@ import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-ma
 import useDebounce from "./useDebounce";
 import PropertyFilterItemBrowser from "./property-filter-item-browser";
 
+import {Badge, Avatar} from "@nextui-org/react";
+ 
+import {CheckIcon} from "../icons/checkicon";
+
+
 const buildSqlWhereClause = (conditions) => {
 // const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
   // console.log("conditions",conditions)
@@ -48,14 +53,20 @@ const buildSqlWhereClause = (conditions) => {
     let inList
     if (cur.matchType == "in") {
        inList = cur.searchValue.reduce((acc,cur) => { return (acc ? acc +",":"")  + "'" + cur +"'"},"")
+    }else if(cur.matchType == "~*"){
+       inList = cur.searchValue.reduce((acc,cur) => { return (acc ? cur+"|"+acc:cur)} ,"" )
     }
     console.log("inList",inList)
     let clause = ""
     if (cur.matchType == "in") {
       clause = cur.searchValue?.length>0 ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} (${inList})` : "";
-      
-    }else{
-
+       
+    }else if  (cur.matchType == "~*") {
+      clause = cur.searchValue?.length>0 ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} '${inList}'` : "";
+       
+    }
+    else {
+ 
       // clause = cur.searchValue ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} ${stringCompareFunc}${openBracket}${quotes}${startWildCard}${cur.searchValue}${endWildCard}${quotes}${closeBracket}` : "";
       clause = cur.searchValue ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} ${stringCompareFunc}${openBracket}${quotes}${startWildCard}${cur.searchValue}${endWildCard}${quotes}${closeBracket}` : "";
     }
@@ -259,11 +270,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         //  }
         //};
     if (searchPropertyName?.length > 2) {
-       const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList)
+       const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
 
     } else {
-       const q =  buildSearchQuery("", "", country, stateProv, area,assetTypeList)
+       const q =  buildSearchQuery("", "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
     }
 
@@ -288,10 +299,17 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   }, [debouncedSearchPropertyName]);
 
   useEffect(()=>{
-    const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList)
+    const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
     setsearchQuery(q)
     
   },[assetTypeList])
+
+  
+  useEffect(()=>{
+    const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
+    setsearchQuery(q)
+    
+  },[commodityList])
 
   const buildSearchQuery = (propNameLikeParam="",assetNameLikeParam="",countryParam="",stProvParam="",areaParam="",assetTypeListParam=[],commodityListParam=[]) => {
     
@@ -301,7 +319,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
     const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
     const assetTypeList= {columnName:"asset_type", searchValue: assetTypeListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
-    const commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
+    const commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
     
     // const pro= propNameLikeParam ?? ""
     // const ass= assetNameLikeParam ?? ""
@@ -314,7 +332,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     // const pro1 = pro ?  `lower(propsearchcol) like lower('%${pro}%')`: "" 
     // const ass1 = ass ? (pro1 ? " and ": "" + `lower(assetsearchcol) like lower('%${ass}%')`): "" 
     
-    const q = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList])
+    const q = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
     setCurrentPage(1)
     console.log("query",q)
     return q
@@ -325,7 +343,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     //set search Query
     
  
-       const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList)
+       const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
        setsearchQuery(q)
 
     if(country){
@@ -391,7 +409,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   
 
   useEffect(() => {
-   const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList)
+   const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
        setsearchQuery(q)
 
     //   const fall = async () => {
@@ -435,7 +453,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
   //  buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
 
-     const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList)
+     const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
        setsearchQuery(q)
 
     // const fall = async () => {
@@ -487,7 +505,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         ariaHideApp={false}
         
     >
-      <div className="flex-col bg-white rounded-lg">
+      <div className="flex-col justify-start bg-white rounded-lg">
         <section  className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               Filters  
@@ -499,11 +517,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         </section>
         <div className="rounded-lg flex items-start">
          
-          <div className="flex items-center justify-center pl-8 pr-8">
+          <div className="flex items-start justify-center pl-8 pr-8">
             <div className="mx-auto w-full max-w-[550px] min-w-[550px] min-h-[350px]">
-              <div className="-mx-3 flex flex-wrap mt-8">
+              <div className="-mx-3 flex flex-wrap ">
                 <div className="w-full px-3 flex flex-col gap-3">
                   <div className="flex gap-2 border-b-2 w-full">
+                      <span className="flex  ">
+                       {searchPropertyName && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                           
+                        >
+                            </span>
+                           </Badge> }
                     <Autocomplete
                       allowsCustomValue
                       size={"sm"}
@@ -528,6 +556,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
+                  
                      <Autocomplete
                       size={"sm"}
                       label="Asset Name"
@@ -549,8 +578,17 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                   </div>
                   <div className="border-b-2 flex w-full max-h-[250px]">
                     <div className="flex flex-col gap-2 w-1/2">
+                      <span className="flex gap-2">
+                       {assetTypeList.length>0 && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                        >
+                           </Badge> }
                       <span className="text-sm font-semibold">
-                        Filter By Type
+                        Filter By Mine Type
+                      </span>
                       </span>
                       <div className="mb-4">
                         <CheckboxGroup
@@ -569,8 +607,17 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       </div> */}
                     </div>
                     <div className="flex flex-col gap-2 w-1/2">
+                       <span className="flex gap-2">
+                       {commodityList.length>0 && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                        >
+                           </Badge> }
                       <span className="text-sm font-semibold">
                         Filter By Commodity
+                      </span>
                       </span>
                       <div className="mb-4 max-h-[210px] overflow-y-auto">
                         <CheckboxGroupWithFilter
@@ -590,10 +637,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
+                    <span className="flex gap-2">
+                       {country && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                           
+                        >
+                           </Badge> }
                     <span className="text-sm font-semibold">
                       Filter By Location
                     </span>
+                    </span>
                     <div className="flex gap-2">
+                   
                      <Autocomplete
                         size={"sm"}
                         label="Country"
@@ -611,7 +669,15 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                             {countryObj.country}
                           </AutocompleteItem>
                         ))}
-                      </Autocomplete> 
+                      </Autocomplete>
+                      {stateProv && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                           
+                        >
+                           </Badge> }
                    <Autocomplete
                         size={"sm"}
                         label="State / Province"
@@ -633,6 +699,14 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     </div>
                   </div>
                   <div className="flex">
+                    {area && <Badge
+                          isOneChar
+                          content={<CheckIcon />}
+                          color="danger"
+                          placement="top-left"
+                           
+                        >
+                           </Badge> }
                      <Autocomplete
                       size={"sm"}
                       label="Mining Area"
@@ -670,8 +744,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     color="primary"
                     className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
                     onClick={searchAction}
+                    isDisabled={propertyNameList.length== 0 }
                   >
-                    Search
+                    Show on Map
                   </Chip>
                 </div>
               </div>
