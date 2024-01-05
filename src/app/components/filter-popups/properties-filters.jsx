@@ -89,6 +89,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [propertyNameList, setpropertyNameList] = useState([]);
   // const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
+  const [keyid, setkeyid] = useState("0");
   const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [stateProvList, setstateProvList] = useState([]);
@@ -161,7 +162,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
           }
         );
         const d = await res.json();
-           console.log("d.data",d.data.length,)
+           console.log("d.data",d.data,)
         setpropertyNameList(d.data);
         settotalResultCount(d.count)
          
@@ -239,6 +240,14 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     setcommodityList(selectedOptions);
   };
  
+    const resetAction = async () => {
+      setCountry("")
+      setpropertyNameList([])
+      setkeyid("0")
+      setSearchPropertyName("")
+      setassetTypeList([])
+      setcommodityList([])
+    }
 
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
@@ -268,7 +277,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         //  }else{
         //   setpropertyNameList([]);
         //  }
-        //};
+    //};
+    console.log("searchPropertyName",searchPropertyName)
+    console.log("debouncedSearchPropertyName",debouncedSearchPropertyName)
     if (searchPropertyName?.length > 2) {
        const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
@@ -313,8 +324,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
   const buildSearchQuery = (propNameLikeParam="",assetNameLikeParam="",countryParam="",stProvParam="",areaParam="",assetTypeListParam=[],commodityListParam=[]) => {
     
-    const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
-    const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "like" ,stringCompareFunc:""}
+    const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+    const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "ilike" ,stringCompareFunc:""}
     const countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
     const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
     const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
@@ -523,33 +534,36 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                 <div className="w-full px-3 flex flex-col gap-3">
                   <div className="flex gap-2 border-b-2 w-full">
                       <span className="flex  ">
-                       {searchPropertyName && <Badge
+                       {/* {searchPropertyName !="" && <Badge
+                        
                           isOneChar
                           content={<CheckIcon />}
                           color="danger"
                           placement="top-left"
                            
                         >
-                           </Badge> }
+                           </Badge> } */}
                              </span>
                     <Autocomplete
                       allowsCustomValue
                       size={"sm"}
                       label="Property Name"
                       className="w-1/2"
-                       selectedKey={propertyId}
+                       selectedKey={keyid}
                       onInputChange={(e) => {
+                        console.log("e1",e)
                         setSearchPropertyName(e)
                       }}
                         onSelectionChange={(e) => {
-                         setpropertyId(e)
+                           console.log("e2",e)
+                         setkeyid(e)
                       
                       }}
-                      defaultSelectedKey={propertyId}
+                      defaultSelectedKey={keyid}
                     >
-                      {propertyNameList?.map((prop) => (
+                      {propertyNameList.map((prop) => (
                         <AutocompleteItem
-                          key={prop.propertyid}
+                          key={prop.keyid }
                           value={prop.prop_name}
                         >
                           {prop.prop_name}
@@ -564,11 +578,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       onInputChange={(e) => {
                         setCountry(e);
                       }}
-                      defaultSelectedKey={propertyId}
+                      defaultSelectedKey={keyid}
                     >
                      {propertyNameList?.map((prop) => (
                         <AutocompleteItem
-                          key={prop.propertyid}
+                          key={prop.keyid}
                           value={prop.asset_name}
                         >
                           {prop.asset_name}
@@ -735,6 +749,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     color="default"
                     variant="light"
                     className="cursor-pointer"
+                     onClick={resetAction}
                   >
                     Reset
                   </Chip>
