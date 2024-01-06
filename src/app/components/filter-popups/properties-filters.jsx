@@ -83,11 +83,11 @@ return q
 
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
-  const [searchPropertyName, setSearchPropertyName] = useState('')
+  const [searchPropertyName, setSearchPropertyName] = useState(null)
   const debouncedSearchPropertyName = useDebounce(searchPropertyName, 500)
   const [propertyName, setpropertyName] = useState("");
   const [propertyNameList, setpropertyNameList] = useState([]);
-  // const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
+  const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
   const [keyid, setkeyid] = useState("0");
   const [country, setCountry] = useState("");
@@ -104,6 +104,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [commodityList, setcommodityList] =  useState([]);
   const [mineTypeSelections, setmineTypeSelections] =  useState([]);
   const [commoditySelections, setcommoditySelections] =  useState([]);
+  const [showPropNameBadge, setshowPropNameBadge] =  useState(false);
 
   const [searchAssetName, setSearchAssetName] = useState('')
   const debouncedSearchAssetName = useDebounce(searchAssetName, 500)
@@ -266,28 +267,33 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
   //debounced prop name
   useEffect(() => {
- 
-    
-    
       
-    // const fall = async () => {
+    const fGetPropertyAssetNameBasedOnSearchParams = async () => {
      
-        //  if(q){
-        //       const res = await fetch(
-        //         `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${q}/10/0`,
-        //         {
-        //           cache: "no-store",
-        //         }
-        //       );
-        //    const d = await res.json();
-        //    console.log("d.data",d.data.length,)
-        //       setpropertyNameList(d.data);
-        //  }else{
-        //   setpropertyNameList([]);
-        //  }
-    //};
-    console.log("searchPropertyName",searchPropertyName)
-    console.log("debouncedSearchPropertyName",debouncedSearchPropertyName)
+         if(searchPropertyName){
+              const res = await fetch(
+                `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
+                {
+                  cache: "no-store",
+                }
+              );
+           const d = await res.json();
+           console.log("d.data",d.data.length,)
+              setpropertyMasterNameList(d.data);
+         }else{
+          setpropertyMasterNameList([]);
+         }
+    };
+
+    if (searchPropertyName?.length > 2) {
+      fGetPropertyAssetNameBasedOnSearchParams()
+      setshowPropNameBadge(true)
+    
+    } else {
+      setpropertyMasterNameList([]);
+      setshowPropNameBadge(false)
+    }
+    // console.log("debouncedSearchPropertyName",debouncedSearchPropertyName)
     if (searchPropertyName?.length > 2) {
        const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
@@ -332,8 +338,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
   const buildSearchQuery = (propNameLikeParam="",assetNameLikeParam="",countryParam="",stProvParam="",areaParam="",assetTypeListParam=[],commodityListParam=[]) => {
     
-    const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
-    const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "ilike" ,stringCompareFunc:""}
+    const propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+   // const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "ilike" ,stringCompareFunc:""}
     const countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
     const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
     const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
@@ -541,36 +547,37 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
               <div className="-mx-3 flex flex-wrap ">
                 <div className="w-full px-3 flex flex-col gap-3">
                   <div className="flex gap-2 border-b-2 w-full">
-                      <span className="flex  ">
-                       {/* {searchPropertyName !="" && <Badge
-                        
+                      {/* <span className="flex  "> */}
+                        {showPropNameBadge  && <Badge
                           isOneChar
                           content={<CheckIcon />}
                           color="danger"
                           placement="top-left"
-                           
                         >
-                           </Badge> } */}
-                             </span>
+                           </Badge> }  
+                             {/* </span> */}
                     <Autocomplete
                       
                       allowsCustomValue
                       size={"sm"}
-                      label="Property Name"
+                      label="Property/Asset Name"
                       className="w-1/2"
                        selectedKey={keyid}
                       onInputChange={(e) => {
-                        console.log("e1",e)
-                        setSearchPropertyName(e)
+                       // console.log("e1",e)
+                         setSearchPropertyName(e)
+                        // setpropertyMasterNameList(e)
                       }}
                         onSelectionChange={(e) => {
-                           console.log("e2",e)
+                           //console.log("e2",e)
                          setkeyid(e)
                       
                       }}
                       defaultSelectedKey={keyid}
                     >
-                      {propertyNameList.map((prop) => (
+                      {propertyMasterNameList?.map((prop) => {
+                        console.log("prop",prop)
+                        return (
                         <AutocompleteItem
                           key={prop.keyid }
                           value={prop.prop_name}
@@ -579,27 +586,10 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         >
                           {prop.prop_name}
                         </AutocompleteItem>
-                      ))}
+                      )})}
                     </Autocomplete>
                   
-                     <Autocomplete
-                      size={"sm"}
-                      label="Asset Name"
-                      className="w-1/2 mb-4"
-                      onInputChange={(e) => {
-                        setCountry(e);
-                      }}
-                      defaultSelectedKey={keyid}
-                    >
-                     {propertyNameList?.map((prop) => (
-                        <AutocompleteItem
-                          key={prop.keyid}
-                          value={prop.asset_name}
-                        >
-                          {prop.asset_name}
-                        </AutocompleteItem>
-                      ))}
-                    </Autocomplete> 
+                    
                   </div>
                   <div className="border-b-2 flex w-full max-h-[250px]">
                     <div className="flex flex-col gap-2 w-1/2">
@@ -697,6 +687,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           setCountry(e);
                         }}
                         defaultSelectedKey={country}
+                        inputValue={country ?? ""}
                       >
                         {countryList.map((countryObj) => (
                           <AutocompleteItem
@@ -717,7 +708,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                            </Badge> }
                    <Autocomplete
                         size={"sm"}
-                        label="State / Province"
+                        label="State/Province"
                         className="w-1/2"
                         onInputChange={(e) => {
                           setstateProv(e);
