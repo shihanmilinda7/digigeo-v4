@@ -2,9 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { Chip } from "@nextui-org/react";
 
-const CheckboxGroup = ({ options, onChange }) => {
+const CheckboxGroup = ({ options, onChange,selectedValues }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isYesButton, setIsYesButton] = useState(false);
+
+   useEffect(() => {
+       
+      if(selectedValues){
+        
+        setSelectedOptions(selectedValues)
+      }
+   }, [selectedValues]);
+
 
   const handleCheckboxChange = (option) => {
     const updatedOptions = selectedOptions.includes(option)

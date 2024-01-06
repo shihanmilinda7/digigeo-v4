@@ -2,7 +2,7 @@
 
 import Modal from "react-modal";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Button, Checkbox, Chip } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -102,11 +102,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [itemsPerPage, setitemsPerPage] =  useState(10);
   const [assetTypeList, setassetTypeList] =  useState([]);
   const [commodityList, setcommodityList] =  useState([]);
+  const [mineTypeSelections, setmineTypeSelections] =  useState([]);
+  const [commoditySelections, setcommoditySelections] =  useState([]);
 
   const [searchAssetName, setSearchAssetName] = useState('')
   const debouncedSearchAssetName = useDebounce(searchAssetName, 500)
   
-
+   
 
 
   const dispatch = useDispatch();
@@ -223,6 +225,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     "Historical Mine",
     "Occurrence",
   ];
+
+ 
+
   const filterByCommodityOptions = [
     "Gold",
     "Silver",
@@ -247,6 +252,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       setSearchPropertyName("")
       setassetTypeList([])
       setcommodityList([])
+      setmineTypeSelections([])
+      setcommoditySelections([])
+       
     }
 
   const searchAction = async () => {
@@ -545,6 +553,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                            </Badge> } */}
                              </span>
                     <Autocomplete
+                      
                       allowsCustomValue
                       size={"sm"}
                       label="Property Name"
@@ -565,6 +574,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         <AutocompleteItem
                           key={prop.keyid }
                           value={prop.prop_name}
+                          color="warning"
+                          className="bg-red-400"
                         >
                           {prop.prop_name}
                         </AutocompleteItem>
@@ -605,10 +616,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       </span>
                       </span>
                       <div className="mb-4">
-                        <CheckboxGroup
+                         <CheckboxGroup
+                          selectedValues={mineTypeSelections}
+                          onChange={handleFilterByAssetTypeChange}
+                          
+                          options={filterByTypeOptions}
+
+                          
+                        >
+                       
+                        </CheckboxGroup>
+                        {/* <CheckboxGroup
                           options={filterByTypeOptions}
                           onChange={handleFilterByAssetTypeChange}
-                        />
+                          value={assetTypeList}
+                        /> */}
                       </div>
 
                       {/* <div>
@@ -635,6 +657,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       </span>
                       <div className="mb-4 max-h-[210px] overflow-y-auto">
                         <CheckboxGroupWithFilter
+                         selectedValues={commoditySelections}
                           options={filterByCommodityOptions}
                           onChange={handleFilterByCommodityChange}
                         />
