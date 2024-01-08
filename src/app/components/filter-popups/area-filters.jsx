@@ -101,7 +101,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     // dispatch(setAreaState("Canada"));
   };
   //const animals = [{value:"qqq", label:"q1"},{value:"qqq2", label:"q2"},{value:"qqq3", label:"q3"}]
-
+//init use effect
   useEffect(() => {
     const f = async () => {
       const res = await fetch(

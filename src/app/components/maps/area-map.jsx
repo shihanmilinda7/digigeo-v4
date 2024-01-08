@@ -11,7 +11,6 @@ import {
   setAreaInitialCenter,
   setAreaLyrs,
   setAreaZoomLevel,
-  setUrlUpdate,
   setIsSideNavOpen,
 } from "../../../store/map-selector/map-selector-slice";
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
@@ -286,21 +285,7 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   return st;
 };
 
-  //  const styleFunctionClaim = (feature) => {
-  //    console.log("sf");
-  //   const s = new Style({
-       
-  //     stroke: new Stroke({
-  //       color: "grey",
-  //       width: 1,
-  //     }),
-  //     fill: new Fill({
-  //       color: "rgba(211,211,211,0.1)",
-  //     }),
-  //   });
-
-  //   return s;
-  // }
+ 
 
 
 export const AreaMap = () => {
@@ -361,6 +346,8 @@ export const AreaMap = () => {
   const isAreaSideNavOpen = useSelector(
     (state) => state.areaMapReducer.isAreaSideNavOpen
   );
+
+  
 
   const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);

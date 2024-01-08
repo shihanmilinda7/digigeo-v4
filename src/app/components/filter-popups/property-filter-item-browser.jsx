@@ -36,7 +36,7 @@ const PropertyFilterItemBrowser = ({properties,totalResultCount,curPageHandler,i
             itemClasses={"width-[400px]"}
             >
               <ListboxSection title="Property Details" showDivider>
-       {properties.map(p=> {
+       {properties?.map(p=> {
         const pdesc = (p.prop_name ?? "") + (p.prop_alias ? "(" +p.prop_alias +")":"")
         const adesc = (p.asset_name ?? "") + (p.assetalias ? "(" +p.assetalias +")":"")
         const stpdesc = p.state_prov ? ","+ p.state_prov:""

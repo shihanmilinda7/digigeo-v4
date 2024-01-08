@@ -79,7 +79,7 @@ const CompanySideNavbar = () => {
   const companyInitialCenter = useSelector(
     (state) => state.mapSelectorReducer.companyInitialCenter
   );
-
+ 
     const featuredPropertyFeatures = useSelector(
     (state) => state.companyMapReducer.featuredPropertyFeatures
   );

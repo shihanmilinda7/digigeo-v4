@@ -124,6 +124,7 @@ const AreaSideNavbar = () => {
 
     f().catch(console.error);
   };
+  
       const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
@@ -148,20 +149,15 @@ const AreaSideNavbar = () => {
 
     f().catch(console.error);
   };
-      const getFeaturedCompanyGeometry = async () => {
+  const getFeaturedCompanyGeometry = async () => {
+        //view_hotplay_table_with_sponsor_prop
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
         { cache: "no-store" }
       );
      const d = await res.json();
-      // console.log("fps", d);
-
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
-
+     
       const gj = {
         type: "FeatureCollection",
         crs: {

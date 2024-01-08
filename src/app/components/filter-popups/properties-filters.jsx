@@ -18,7 +18,7 @@ import {
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
-import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
+import { setIsPropertiesSideNavOpen ,setpropertyMapPropertyIdCsv} from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
 import PropertyFilterItemBrowser from "./property-filter-item-browser";
 
@@ -261,9 +261,17 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
+
+     dispatch(setpropertyMapPropertyIdCsv(getPropertyIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
     closePopup();
   };
+
+  const getPropertyIdCvs = () => {
+   const csv =   propertyNameList.reduce((acc,cur)=> (acc ? acc + ",": "") + cur.propertyid,"") ?? ""
+   
+   return csv
+  }
 
   //debounced prop name
   useEffect(() => {
@@ -339,27 +347,16 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const buildSearchQuery = (propNameLikeParam="",assetNameLikeParam="",countryParam="",stProvParam="",areaParam="",assetTypeListParam=[],commodityListParam=[]) => {
     
     const propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
-   // const assetName = {columnName:"assetsearchcol", searchValue: assetNameLikeParam, dataType: "string", matchType: "ilike" ,stringCompareFunc:""}
     const countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
     const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
     const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
     const assetTypeList= {columnName:"asset_type", searchValue: assetTypeListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
     const commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
     
-    // const pro= propNameLikeParam ?? ""
-    // const ass= assetNameLikeParam ?? ""
-    // const cou= countryParam ?? ""
-    // const stp= stProvParam ?? ""
-    // const are= areaParam ?? ""
-    // const ast= assetTypesParam ?? ""
-    // const com= commoditiesParam ?? ""
-
-    // const pro1 = pro ?  `lower(propsearchcol) like lower('%${pro}%')`: "" 
-    // const ass1 = ass ? (pro1 ? " and ": "" + `lower(assetsearchcol) like lower('%${ass}%')`): "" 
     
     const q = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
     setCurrentPage(1)
-    console.log("query",q)
+   
     return q
   }
   //country changed
@@ -576,15 +573,15 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       defaultSelectedKey={keyid}
                     >
                       {propertyMasterNameList?.map((prop) => {
-                        console.log("prop",prop)
+                        // console.log("prop",prop)
                         return (
                         <AutocompleteItem
                           key={prop.keyid }
-                          value={prop.prop_name}
+                          value={prop.paname}
                           color="warning"
                           className="bg-red-400"
                         >
-                          {prop.prop_name}
+                          {prop.paname}
                         </AutocompleteItem>
                       )})}
                     </Autocomplete>
@@ -773,7 +770,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     color="primary"
                     className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
                     onClick={searchAction}
-                    isDisabled={propertyNameList.length== 0 }
+                    isDisabled={propertyNameList?.length== 0 }
                   >
                     Show on Map
                   </Chip>

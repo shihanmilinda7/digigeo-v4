@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   isPropertiesSideNavOpen: false,
-  propertyMapCountry: "",
-  propertyMapMiningArea: "",
+  propertyMapPropertyIdCsv: "",
+  propertyMapAssetCsv: "",
   syncPropertyFeatures: undefined,
   featuredPropertyFeatures: undefined,
   syncClaimLinkPropertyFeatures: undefined,
@@ -34,11 +34,11 @@ const propertiesMapSlice = createSlice({
     setIsPropertiesSideNavOpen: (state, action) => {
       state.isPropertiesSideNavOpen = action.payload;
     },
-     setpropertyMapCountry: (state, action) => {
-      state.propertyMapCountry = action.payload;
+     setpropertyMapPropertyIdCsv: (state, action) => {
+      state.propertyMapPropertyIdCsv = action.payload;
     },
-    setpropertyMapMiningArea: (state, action) => {
-      state.propertyMapMiningArea = action.payload;
+    setpropertyMapAssetCsv: (state, action) => {
+      state.propertyMapAssetCsv = action.payload;
     },
     setSyncPropertyFeatures: (state, action) => {
       state.syncPropertyFeatures = action.payload;
@@ -111,8 +111,8 @@ const propertiesMapSlice = createSlice({
 
 export const {
   setIsPropertiesSideNavOpen,
-  setpropertyMapCountry,
-  setpropertyMapMiningArea,
+  setpropertyMapPropertyIdCsv,
+  setpropertyMapAssetCsv,
   setSyncPropertyFeatures,
   setFPropertyFeatures,
   setsyncClaimLinkPropertyFeatures,
