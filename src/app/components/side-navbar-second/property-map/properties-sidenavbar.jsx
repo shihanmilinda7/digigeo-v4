@@ -26,12 +26,14 @@ import {
   setFPropertyFeatures,
   setIsPropertiesSideNavOpen,
   setSyncPropertyFeatures,
+  setpropertyMapFpropLayerVisible,
+  setsyncClaimLinkPropertyFeatures
 } from "../../../../store/properties-map/properties-map-slice";
 import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "../area-map/area-tree-view";
-import FeaturedCompanyDetailDiv from "../area-map/featured-company-detail-div";
+import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail-div";
 
 
 
@@ -96,7 +98,7 @@ const PropertiesSideNavbar = () => {
       getFeaturedCompanyDetails();
 
       getSyncPropertiesGeometry();
-      // getClaimLinkPropertiesGeometry();
+      getClaimLinkPropertiesGeometry();
       // getAssetsGeometry();
     }
   }, [propertyMapPropertyIdCsv]);
@@ -186,7 +188,7 @@ const PropertiesSideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
       dispatch(setSyncPropertyFeatures(gj));
-      console.log("gj", gj);
+      console.log("gj-clink", gj);
     };
     f().catch(console.error);
   };
@@ -221,15 +223,15 @@ const PropertiesSideNavbar = () => {
     f().catch(console.error);
   };
 
-        const getClaimLinkPropertiesGeometry = async () => {
+  const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_prop/${propertyMapPropertyIdCsv}`,
         { cache: "no-store" }
       );
      const d = await res.json();
-      // console.log("fps", d);
-       
+      //  console.log("fps-1", d);
+
       const gj = {
         type: "FeatureCollection",
         crs: {
@@ -245,6 +247,17 @@ const PropertiesSideNavbar = () => {
 
     f().catch(console.error);
   };
+
+    const propertyMapFpropLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapFpropLayerVisible
+  );
+
+  const setareaFpropLayerVisibility = (e) => {
+      console.log("zzzzzzz")
+      dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
+  }
+
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -279,10 +292,10 @@ const PropertiesSideNavbar = () => {
           <div className="mt-4 flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
-                <AccordionItemWithEye title="Featured Companies">
+                <AccordionItemWithEye title="Featured Companies" onClick = {setareaFpropLayerVisibility} eyeState={propertyMapFpropLayerVisible}>
                       <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                       {featuredCompanies?.map((i) => (
-                        <FeaturedCompanyDetailDiv
+                        <PropertyFeaturedCompanyDetailDiv
                           key={i.colour}
                           title={i.company2}
                           companyid={i.companyid}
@@ -292,7 +305,7 @@ const PropertiesSideNavbar = () => {
                             className={`w-4 h-4`}
                             style={{ backgroundColor: `${i.colour}` }}
                           ></div>
-                        </FeaturedCompanyDetailDiv>
+                        </PropertyFeaturedCompanyDetailDiv>
                       ))}
                     </div>
                 </AccordionItemWithEye>

@@ -13,10 +13,22 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
+import {
+  
+  setpropertyMapAreaBoundaryLayerVisible,
+  setpropertyMapAssetLayerVisible,
+  setpropertyMapClaimLayerVisible,
+  setpropertyMapFpropLayerVisible,
+  setpropertyMapSyncClaimLinkLayerVisible,
+  setpropertyMapSyncPropLayerVisible,
+} from "@/store/properties-map/properties-map-slice";
+
 
 const PropertiesBottomSideComp = () => {
   let pathname = "";
   const dispatch = useDispatch();
+  const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)
+
   const router = useRouter();
   try {
     pathname = window.location.href;
@@ -48,6 +60,67 @@ const PropertiesBottomSideComp = () => {
     },
   ];
 
+
+  //layer visibility redux states
+  const propertyMapFpropLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapFpropLayerVisible
+  );
+  const propertyMapAssetLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetLayerVisible
+  );
+  const propertyMapSyncPropLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapSyncPropLayerVisible
+  );
+  const propertyMapSyncClaimLinkLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapSyncClaimLinkLayerVisible
+  );
+  const propertyMapClaimLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapClaimLayerVisible
+  );
+  const propertyMapAreaBoundaryLayerVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAreaBoundaryLayerVisible
+  );
+  //layer visibility functions
+  const setareaFpropLayerVisibility = (e) => {
+    dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
+  };
+  const setpropertyMapAssetLayerVisibility = (e) => {
+    dispatch(setpropertyMapAssetLayerVisible(!propertyMapAssetLayerVisible));
+  };
+  const setpropertyMapSyncPropLayerVisibility = (e) => {
+    dispatch(setpropertyMapSyncPropLayerVisible(!propertyMapSyncPropLayerVisible));
+  };
+  const setpropertyMapSyncClaimLinkLayerVisibility = (e) => {
+    dispatch(setpropertyMapSyncClaimLinkLayerVisible(!propertyMapSyncClaimLinkLayerVisible));
+  };
+  const setpropertyMapClaimLayerVisibility = (e) => {
+    dispatch(setpropertyMapClaimLayerVisible(!propertyMapClaimLayerVisible));
+  };
+  const setpropertyMapAreaBoundaryLayerVisibility = (e) => {
+    dispatch(setpropertyMapAreaBoundaryLayerVisible(!propertyMapAreaBoundaryLayerVisible));
+  };
+
+
+
+  useEffect(() => {
+    if (propertyMapSyncPropLayerVisible && propertyMapSyncClaimLinkLayerVisible) {
+      setproperty_claimLinkGroupVisible(true);
+    } else {
+      setproperty_claimLinkGroupVisible(false);
+    }
+  }, [propertyMapSyncPropLayerVisible, propertyMapSyncClaimLinkLayerVisible]);
+
+    //handle Properties Group Eye
+  const setPropertiesGroupEye = () => {
+    if (propertyMapSyncPropLayerVisible || propertyMapSyncClaimLinkLayerVisible) {
+      dispatch(setpropertyMapSyncPropLayerVisible(false));
+      dispatch(setpropertyMapSyncClaimLinkLayerVisible(false));
+    } else {
+      dispatch(setpropertyMapSyncPropLayerVisible(true));
+      dispatch(setpropertyMapSyncClaimLinkLayerVisible(true));
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
       <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
@@ -60,7 +133,8 @@ const PropertiesBottomSideComp = () => {
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
-                  onClick={() => console.log("Operating Mines")}
+                  onClick={setpropertyMapAssetLayerVisibility}
+                  eyeState={propertyMapAssetLayerVisible}
                 >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
@@ -84,22 +158,43 @@ const PropertiesBottomSideComp = () => {
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Properties">
+            <AccordionItemWithEye
+              title="Properties"
+              onClick={setPropertiesGroupEye}
+              eyeState={property_claimLinkGroupVisible}
+            >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Property Points">
+                <LayerVisibleDiv title="Property Points"
+                  onClick={setpropertyMapSyncPropLayerVisibility}
+                  eyeState={propertyMapSyncPropLayerVisible}
+                >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Property Outlines">
+                <LayerVisibleDiv
+                    onClick={setpropertyMapSyncClaimLinkLayerVisibility}
+                  title="Property Outlines"
+                  eyeState={propertyMapSyncClaimLinkLayerVisible}
+                >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Claims">
+            <AccordionItemWithEye title="Claims"
+              onClick={setpropertyMapClaimLayerVisibility}
+              eyeState={propertyMapClaimLayerVisible}
+            >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Claims">
+                <LayerVisibleDiv title="Claims"
+                 onClick={setpropertyMapClaimLayerVisibility}
+                  eyeState={propertyMapClaimLayerVisible}
+                >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Mining Areas">
+                <LayerVisibleDiv
+                  title="Mining Areas"
+                onClick={setpropertyMapAreaBoundaryLayerVisibility}
+                  eyeState={propertyMapAreaBoundaryLayerVisible}
+                >
                   <AiFillAppstore />
                 </LayerVisibleDiv>
               </div>

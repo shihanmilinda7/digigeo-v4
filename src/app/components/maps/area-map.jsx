@@ -101,6 +101,7 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
   resolution
 ) => {
+  console.log("featurexd:", feature);
   //console.log("feature:", feature);
   //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
   //  spanClaim1.textContent = "visibility";
@@ -384,16 +385,22 @@ export const AreaMap = () => {
   // const areaZoomMode = useSelector(
   //   (state) => state.areaMapReducer.areaZoomMode
   // );
-
+//set styles
   useEffect(() => {
-    // console.log("ue2")
-    //set style
+ 
     const style = new Style({});
     style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
 
+    useEffect(() => {
+ 
+    // const style = new Style({});
+    // style.setRenderer(areaMApPropertyVectorRendererFuncV2);
+      claimLinkVectorLayerRef.current?.setOpacity(0.2)
+    claimLinkVectorLayerRef.current?.setStyle(areaMap_tbl_sync_claimlink_VectorLayerStyleFunction);
+  }, [claimLinkVectorLayerRef.current]);
   // useEffect(() => {
   //   console.log("ue2")
   //   //set style
@@ -1275,7 +1282,7 @@ export const AreaMap = () => {
             {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               ></olSourceVector>
             )}
           </olLayerVector>
