@@ -93,7 +93,7 @@ const CompanySideNavbar = () => {
 
 
  
-  const [featuredProperties, setFeaturedProperties] = useState([]);
+  const [featuredPropertiesLocal, setFeaturedPropertiesLocal] = useState([]);
   //data load
   useEffect(() => {
     console.log("companyId",companyId)
@@ -117,7 +117,7 @@ const CompanySideNavbar = () => {
 
     const getFeaturedPropertyGeom = async () => {
     const f = async () => {
-       console.log("companyId", companyId);
+       console.log("companyId-comp", companyId);
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyId}`,
         { cache: "no-store" }
@@ -146,9 +146,24 @@ const CompanySideNavbar = () => {
   };
 
   useEffect(() => {
+    
+    console.log("loading f props -cmp",)
     if (featuredPropertyFeatures) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-      setFeaturedProperties(e);
+      
+      let blockno = 1
+      for (let index = 0; index < e.length; index++) {
+        const element = e[index];
+
+        if(!element.get("prop_name")){
+          element.set("prop_name","Block-" + blockno)
+          blockno++;
+
+        }
+        
+      }
+      console.log("loading f props -cmp2", e)
+      setFeaturedPropertiesLocal(e);
 
     }
   
@@ -287,7 +302,7 @@ const CompanySideNavbar = () => {
               <div className="flex flex-col gap-6">
                 <AccordionItemWithEye title="Featured Properties" onClick = {setFpropLayerVisibility} eyeState={companyFpropLayerVisible}>
                   <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                      {featuredProperties.map((i) => (
+                      {featuredPropertiesLocal.map((i) => (
                        i.get("prop_name") && (<FeaturedPropertyDetailDiv
                           key={i.get("id")}
                           title={i.get("prop_name")}

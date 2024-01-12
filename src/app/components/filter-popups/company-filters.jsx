@@ -173,7 +173,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
         <div className="bg-white rounded-lg ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Filters
+              Company Filters
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
@@ -184,10 +184,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
             <div className="mx-auto w-full max-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap mt-8">
                 <div className="w-full px-3 flex flex-col gap-3">
-                  <span className="text-base font-semibold leading-none text-gray-900 mt-3 w-fit">
-                    Filter By Name & Stoke Code 
-                  </span>
-                  {companyidLocal}
+                  {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 w-fit">
+                   
+                  </span> */}
+                  {/* {companyidLocal} */}
                   <div className="flex flex-col gap-2">
                     <Autocomplete
                       label="Company Name"
@@ -222,7 +222,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       ))}
                     </Autocomplete>
                     <Autocomplete
-                      label="Stoke Code"
+                      label="Stock Code"
                       className="max-w-xs"
                        selectedKey={companyidLocal}
                       onInputChange={(e) => {

@@ -77,7 +77,7 @@ const PropertiesSideNavbar = () => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
-  const propertyMapPropertyIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyIdCsv);
+  const propertyMapPropertyAssetIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyAssetIdCsv);
 
 
 
@@ -92,8 +92,8 @@ const PropertiesSideNavbar = () => {
  
 //data load
   useEffect(() => {
-    console.log("propertyMapPropertyIdCsv",propertyMapPropertyIdCsv)
-    if (propertyMapPropertyIdCsv) {
+    console.log("propertyMapPropertyAssetIdCsv",propertyMapPropertyAssetIdCsv)
+    if (propertyMapPropertyAssetIdCsv.propertyids.length>0) {
       getFeaturedPropertyGeom();
       getFeaturedCompanyDetails();
 
@@ -101,7 +101,7 @@ const PropertiesSideNavbar = () => {
       getClaimLinkPropertiesGeometry();
       // getAssetsGeometry();
     }
-  }, [propertyMapPropertyIdCsv]);
+  }, [propertyMapPropertyAssetIdCsv]);
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
@@ -117,7 +117,7 @@ const PropertiesSideNavbar = () => {
     const f = async () => {
         console.log("ppppp");
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor_prop/${propertyMapPropertyIdCsv}`,
+        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor_prop/${propertyMapPropertyAssetIdCsv.propertyids.join(",")}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -145,9 +145,9 @@ const PropertiesSideNavbar = () => {
 
  const getFeaturedCompanyDetails = async () => {
    const f = async () => {
-      console.log("propertyMapPropertyIdCsvxx",propertyMapPropertyIdCsv)
+      console.log("propertyMapPropertyIdCsvxx",propertyMapPropertyAssetIdCsv.propertyids.join(","))
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_prop/${propertyMapPropertyIdCsv}`,
+        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_prop/${propertyMapPropertyAssetIdCsv}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -165,7 +165,7 @@ const PropertiesSideNavbar = () => {
     const getSyncPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_prop/${propertyMapPropertyIdCsv}`,
+        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_prop/${propertyMapPropertyAssetIdCsv.propertyids.join(",")}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -226,7 +226,7 @@ const PropertiesSideNavbar = () => {
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_prop/${propertyMapPropertyIdCsv}`,
+        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_prop/${propertyMapPropertyAssetIdCsv.propertyids.join(",")}`,
         { cache: "no-store" }
       );
      const d = await res.json();

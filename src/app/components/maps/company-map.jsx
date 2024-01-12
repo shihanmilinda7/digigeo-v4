@@ -408,14 +408,9 @@ export const CompanyMap = () => {
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current])
   
-  // useEffect(() => {
-  //   console.log("ue2")
-  //   //set style
-  //   const style = new Style({});
-  //   style.setRenderer(areaMApPropertyVectorRendererFuncV2);
-
-  //   claimVectorImgLayerRef.current?.setStyle(style);
-  // }, [claimVectorImgLayerRef.current])
+  useEffect(() => {
+    claimVectorImgLayerRef.current?.setOpacity(0.6);
+  }, [claimVectorImgLayerRef.current])
 
 
     useEffect(() => {
@@ -885,7 +880,7 @@ export const CompanyMap = () => {
     // color: `rgba(${r},${g},${b},1)`,
 
     color: colour,
-    opacity: 1,
+    // opacity: 1,
   });
 
   // const stroke = new Stroke({

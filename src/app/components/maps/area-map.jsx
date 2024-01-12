@@ -401,14 +401,14 @@ export const AreaMap = () => {
       claimLinkVectorLayerRef.current?.setOpacity(0.2)
     claimLinkVectorLayerRef.current?.setStyle(areaMap_tbl_sync_claimlink_VectorLayerStyleFunction);
   }, [claimLinkVectorLayerRef.current]);
-  // useEffect(() => {
-  //   console.log("ue2")
-  //   //set style
-  //   const style = new Style({});
-  //   style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
-  //   claimVectorImgLayerRef.current?.setStyle(style);
-  // }, [claimVectorImgLayerRef.current])
+
+  
+  useEffect(() => {
+    
+
+    claimVectorImgLayerRef.current?.setOpacity(0.5);
+  }, [claimVectorImgLayerRef.current])
   
   
   useEffect(() => {

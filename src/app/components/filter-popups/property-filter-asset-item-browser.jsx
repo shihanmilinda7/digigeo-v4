@@ -6,22 +6,28 @@ import { Pagination, Button } from "@nextui-org/react";
 
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
-const PropertyFilterItemBrowser = ({properties,totalResultCount,curPageHandler,itemsPerPage}) => {
+const PropertyFilterAssetItemBrowser = ({properties,totalResultCount,curPageHandler,itemsPerPage,selectionHandler}) => {
      const [currentPage, setCurrentPage] =  useState(1);
 
-     const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
+     const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+
+     const selectedValue =  useMemo(
+    () => Array.from(selectedKeys),
+    [selectedKeys]
+    );
+  useEffect(() => {
+   selectionHandler(selectedValue)
+  }, [selectedKeys])
 
   useEffect(() => {
-    //console.log("currentPage",currentPage)
-     
+    console.log("currentPage-asset",currentPage)
+    //  propertyid,
+    // propsearchcol,country,state_prov, area,assetlist
     curPageHandler(currentPage)
    
   }, [currentPage])
   
-  const selectedValue =  useMemo(
-    () => Array.from(selectedKeys).join(", "),
-    [selectedKeys]
-    );
+  
     
     return (
       <div className="flex-col  "   >
@@ -31,23 +37,24 @@ const PropertyFilterItemBrowser = ({properties,totalResultCount,curPageHandler,i
             disallowEmptySelection
           selectionMode="multiple"
           selectedKeys={selectedKeys}
-                    onSelectionChange={setSelectedKeys}
-            className="overflow-hidden"
-            itemClasses={"width-[400px]"}
+            onSelectionChange={setSelectedKeys}
+            className="overflow-hidden w-[400px]"
+            // itemClasses={"w-[800px]"}
             >
-              <ListboxSection title="Property Details" showDivider>
-       {properties?.map(p=> {
+              <ListboxSection title="Property/Asset Details" showDivider>
+        {properties?.map(p=> {
         const pdesc = (p.prop_name ?? "") + (p.prop_alias ? "(" +p.prop_alias +")":"")
-        const adesc = (p.asset_name ?? "") + (p.assetalias ? "(" +p.assetalias +")":"")
+         const adesc = (p.asset_name ?? "") + (p.assetalias ? "/" +p.assetalias :"")
+       
         const stpdesc = p.state_prov ? ","+ p.state_prov:""
         const ardesc = p.area ? ","+ p.area:""
         // let alias = p.prop_alias ? "Alias:" + p.prop_alias + "," :"";
         // let assetDetails = (p.asset_name || p.assetalias) ? `/Asset:${p.asset_name}/${p.assetalias}`:""
         return (<ListboxItem
-          key={p.pid+"-"+p.aid }
-          description= {`${p.country} ${stpdesc}, ${ardesc}/Asset:${adesc}`}
+          key={p.keyid }
+          description= {`${p.country} ${stpdesc}, ${ardesc}`}
         >
-         {pdesc}
+         {`${pdesc}-(${adesc})`}
         </ListboxItem>)}) }
         </ListboxSection>
           </Listbox>
@@ -93,4 +100,4 @@ const PropertyFilterItemBrowser = ({properties,totalResultCount,curPageHandler,i
   )
 }
 
-export default PropertyFilterItemBrowser
+export default PropertyFilterAssetItemBrowser

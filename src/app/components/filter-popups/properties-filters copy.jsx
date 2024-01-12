@@ -20,7 +20,7 @@ import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
 import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
-import PropertyFilterItemBrowser from "./property-filter-item-browser";
+import PropertyFilterItemBrowser from "./property-filter-property-item-browser";
 
 const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 

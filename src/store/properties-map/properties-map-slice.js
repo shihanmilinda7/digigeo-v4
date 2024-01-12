@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   isPropertiesSideNavOpen: false,
-  propertyMapPropertyIdCsv: "",
+  propertyMapPropertyAssetIdCsv: {propertyids:[],assetids:[]},
   propertyMapAssetCsv: "",
   syncPropertyFeatures: undefined,
   featuredPropertyFeatures: undefined,
@@ -34,8 +34,8 @@ const propertiesMapSlice = createSlice({
     setIsPropertiesSideNavOpen: (state, action) => {
       state.isPropertiesSideNavOpen = action.payload;
     },
-     setpropertyMapPropertyIdCsv: (state, action) => {
-      state.propertyMapPropertyIdCsv = action.payload;
+    setpropertyMapPropertyAssetIdCsv: (state, action) => {
+      state.propertyMapPropertyAssetIdCsv = action.payload;
     },
     setpropertyMapAssetCsv: (state, action) => {
       state.propertyMapAssetCsv = action.payload;
@@ -111,7 +111,7 @@ const propertiesMapSlice = createSlice({
 
 export const {
   setIsPropertiesSideNavOpen,
-  setpropertyMapPropertyIdCsv,
+  setpropertyMapPropertyAssetIdCsv,
   setpropertyMapAssetCsv,
   setSyncPropertyFeatures,
   setFPropertyFeatures,
@@ -134,8 +134,6 @@ export const {
   setclickfPropertyObject,
   setclickassetObject,
   setclicksyncPropertyObject,
-
-
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

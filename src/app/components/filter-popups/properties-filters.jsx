@@ -18,14 +18,15 @@ import {
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
-import { setIsPropertiesSideNavOpen ,setpropertyMapPropertyIdCsv} from "@/store/properties-map/properties-map-slice";
+import { setIsPropertiesSideNavOpen ,setpropertyMapPropertyAssetIdCsv} from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
-import PropertyFilterItemBrowser from "./property-filter-item-browser";
+import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-browser";
 
 import {Badge, Avatar} from "@nextui-org/react";
  
 import {CheckIcon} from "../icons/checkicon";
 import {Input} from "@nextui-org/react";
+import PropertyFilterAssetItemBrowser from "./property-filter-asset-item-browser";
 
 const buildSqlWhereClause = (conditions) => {
 // const propName = {columnName:"propsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"like",stringCompareFunc:"lower" , wildcard:"%", wildcardPosition:"both"}
@@ -89,8 +90,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [propertyNameList, setpropertyNameList] = useState([]);
   const [propertyMasterNameList, setpropertyMasterNameList] = useState([]);
   const [propertyId, setpropertyId] = useState(0);
-  const [keyid, setkeyid] = useState("0");
+  // const [keyid, setkeyid] = useState("0");
   const [country, setCountry] = useState("");
+  const [countryTemp, setCountryTemp] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [stateProvList, setstateProvList] = useState([]);
   const [stateProv, setstateProv] = useState("");
@@ -105,9 +107,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [mineTypeSelections, setmineTypeSelections] =  useState([]);
   const [commoditySelections, setcommoditySelections] =  useState([]);
   const [showPropNameBadge, setshowPropNameBadge] =  useState(false);
-
-  const [searchAssetName, setSearchAssetName] = useState('')
-  const debouncedSearchAssetName = useDebounce(searchAssetName, 500)
+  const [searchType, setsearchType] =  useState("");
+  const [selectedItems, setselectedItems] = useState([]);
   
    
 
@@ -136,6 +137,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
+  useEffect(()=>{
+    console.log("selectedItems",selectedItems)
+
+  },[selectedItems]);
+
   //on init
   useEffect(() => {
     const f = async () => {
@@ -155,27 +161,50 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   //fetch results when search query changed
   useEffect(() => {
 
-    const f =async  () => {
-        // console.log("currentPage2",currentPage)
-        // console.log("searchQuery2",searchQuery)
-        const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage-1)*itemsPerPage}`,
-          {
-            cache: "no-store",
-          }
-        );
-        const d = await res.json();
-           console.log("d.data",d.data,)
-        setpropertyNameList(d.data);
-        settotalResultCount(d.count)
+    const fproperty = async () => {
+      // console.log("currentPage2",currentPage) assetlistuniversal
+       console.log("searchQuery2",searchQuery)
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+        {
+          cache: "no-store",
+        }
+      );
+      const d = await res.json();
+      console.log("d.data", d.data,)
+      setpropertyNameList(d.data);
+      settotalResultCount(d.count)
+         
+    }
+    const fasset = async () => {
+      // console.log("currentPage2",currentPage) assetlistuniversal
+      // console.log("searchQuery2",searchQuery)
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+        {
+          cache: "no-store",
+        }
+      );
+      const d = await res.json();
+      console.log("d.data", d.data,)
+      setpropertyNameList(d.data);
+      settotalResultCount(d.count)
          
     }
 
     if (searchQuery) {
-          f().catch(console.error);
+      if (searchType == "asset") {
+        console.log("searchType-asset->",searchType)
+        fasset().catch(console.error);
       } else {
-        setpropertyNameList([]);
+         console.log("searchType-prop->",searchType)
+        fproperty().catch(console.error);
       }
+    }
+    else {
+      setpropertyNameList([]);
+    }
+    
   }, [searchQuery,currentPage])
 
   //current page
@@ -248,8 +277,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
  
     const resetAction = async () => {
       setCountry("")
+      setCountryTemp("")
       setpropertyNameList([])
-      setkeyid("0")
+      // setkeyid("0")
       setSearchPropertyName("")
       setassetTypeList([])
       setcommodityList([])
@@ -262,15 +292,39 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
 
-     dispatch(setpropertyMapPropertyIdCsv(getPropertyIdCvs()));
+    dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
     closePopup();
   };
 
-  const getPropertyIdCvs = () => {
-   const csv =   propertyNameList.reduce((acc,cur)=> (acc ? acc + ",": "") + cur.propertyid,"") ?? ""
+  const getPropertyAssetIdCvs = () => {
+
+    if(searchType =="property"){
+      //const csv = selectedItems.reduce((acc, cur) => (acc ? acc + "," : "") + cur, "") ?? ""
+     // const csv = selectedItems.join(",")
+      console.log("pcsv", selectedItems)
+      return { propertyids: selectedItems, assetids: [] }
+    } else {
+      const pcsvs = []
+      const acsvs =[]
+      console.log("acsv", selectedItems)
+      selectedItems.forEach(i => {
+        const f = i.split("-")
+        console.log("asset search1",i)
+        console.log("asset search2",f)
+        f[0] && pcsvs.push(f[0])
+        f[1] && acsvs.push(f[1])
+      })
+      const pset = new Set(pcsvs);
+      const aset = new Set(acsvs);
+       
+       console.log("pcsv -xxx", pset)
+       console.log("acsv - xxx", aset)
+     return    {propertyids: Array.from(pset),assetids: Array.from(aset)}
+    }
+  //  const csv =   propertyNameList.reduce((acc,cur)=> (acc ? acc + ",": "") + cur.propertyid,"") ?? ""
    
-   return csv
+  
   }
 
   //debounced prop name
@@ -302,7 +356,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       setshowPropNameBadge(false)
     }
     // console.log("debouncedSearchPropertyName",debouncedSearchPropertyName)
-    if (searchPropertyName?.length > 2) {
+    if (searchPropertyName?.length > 1) {
        const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
 
@@ -345,21 +399,39 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   },[commodityList])
 
   const buildSearchQuery = (propNameLikeParam="",assetNameLikeParam="",countryParam="",stProvParam="",areaParam="",assetTypeListParam=[],commodityListParam=[]) => {
-    
-    const propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
-    const countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
-    const stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
-    const areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
-    const assetTypeList= {columnName:"asset_type", searchValue: assetTypeListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
-    const commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
-    
-    
-    const q = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
+     let propName;
+     let countryName;
+     let stProvName;
+     let areaName;
+     let assetTypeList;
+     let commodityList;
+    let query;
     setCurrentPage(1)
+    if (assetTypeListParam?.length > 0 || commodityListParam?.length > 0) {
+      console.log("asset search")
+      setsearchType("asset")
+      propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+     countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
+     stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
+     areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
+     assetTypeList= {columnName:"asset_type", searchValue: assetTypeListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
+     commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
+        query = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
+     
+    } else {
+       console.log("prop search")
+      setsearchType("property")
+     propName = {columnName:"searchtext" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+     countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
+     stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
+     areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
+       query = buildSqlWhereClause([propName, countryName,stProvName,areaName])
+      
+    }
    
-    return q
+    return query
   }
-  //country changed
+  //country changed setsearchType
   useEffect(() => {
 
     //set search Query
@@ -530,7 +602,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       <div className="flex-col justify-start bg-white rounded-lg">
         <section  className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Filters  
+              Property Filters  
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
@@ -543,8 +615,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
             <div className="mx-auto w-full max-w-[550px] min-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap ">
                 <div className="w-full px-3 flex flex-col gap-3">
-                  <div className="flex gap-2 border-b-2 w-full">
+                  <div className="flex-col gap-2 border-b-2 w-full mb-4">
                       {/* <span className="flex  "> */}
+                      <span className="text-sm font-semibold">Filter by Name</span>
                         {showPropNameBadge  && <Badge
                           isOneChar
                           content={<CheckIcon />}
@@ -552,8 +625,20 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           placement="top-left"
                         >
                            </Badge> }  
-                             {/* </span> */}
-                    <Autocomplete
+                    {/* </span> */}
+                       <Input
+                       isClearable
+                        label="Property/Asset Name"
+                        labelPlacement="inside"
+                      description="Enter part of property name or asset name.. "
+                      className="w-1/2"
+                      onValueChange={(e) => {
+                         setSearchPropertyName(e)
+                        // setpropertyMasterNameList(e)
+                      }}
+                      value={searchPropertyName}
+                      />
+                    {/* <Autocomplete
                       
                       allowsCustomValue
                       size={"sm"}
@@ -584,7 +669,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                           {prop.paname}
                         </AutocompleteItem>
                       )})}
-                    </Autocomplete>
+                    </Autocomplete> */}
                   
                     
                   </div>
@@ -599,7 +684,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         >
                            </Badge> }
                       <span className="text-sm font-semibold">
-                        Filter By Mine Type
+                        Filter by Asset Type
                       </span>
                       </span>
                       <div className="mb-4">
@@ -681,10 +766,16 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         label="Country"
                         className="w-1/2"
                         onSelectionChange={(e) => {
+                          console.log("onchange2",e)
                           setCountry(e);
+                           setCountryTemp(e)
                         }}
                         defaultSelectedKey={country}
-                        inputValue={country ?? ""}
+                        onValueChange={(e)=>{
+                          console.log("onchange",e)
+                          setCountryTemp(e)
+                        }} 
+                        inputValue={countryTemp ?? ""}
                       >
                         {countryList.map((countryObj) => (
                           <AutocompleteItem
@@ -782,8 +873,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       { 
             ( <div className="flex-col gap-32">
              
-              <div className="border-solid border  h-[625px]  w-[250px]   bg-white     rounded-lg m-2 ">
-                <PropertyFilterItemBrowser  properties={propertyNameList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage}  />
+              <div className="border-solid border  h-[625px]  w-[500px]   bg-white     rounded-lg m-2 ">
+                { searchType=="property" ?
+                <PropertyFilterPropertyItemBrowser properties={propertyNameList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={setselectedItems} />
+                  :
+                <PropertyFilterPropertyItemBrowser properties={propertyNameList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={setselectedItems} />
+
+                  }
               </div>
                {/* <div > 
                  <span className="ml-2 "  >{`Selected Properties- ${totalResultCount}`} </span>
