@@ -188,7 +188,8 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                    
                   </span> */}
                   {/* {companyidLocal} */}
-                  <div className="flex flex-col gap-2">
+                  <div className="flex-col gap-2">
+                      <span className="block">Filter By Company Name</span>
                     <Autocomplete
                       label="Company Name"
                       className="max-w-xs"
@@ -221,6 +222,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
+                      <span className="block">Filter By Stock Code</span>
                     <Autocomplete
                       label="Stock Code"
                       className="max-w-xs"

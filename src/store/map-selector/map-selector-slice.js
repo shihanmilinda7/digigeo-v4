@@ -9,9 +9,9 @@ const initialState = {
   areaZoomLevel: 2,
   companyZoomLevel: 2,
   propertiesZoomLevel: 2,
-  areaInitialCenter: [0, 0],
-  companyInitialCenter: [0, 0],
-  propertiesInitialCenter: [0, 0],
+  areaInitialCenter: [-10694872.010699773,7434223.337137634],
+  companyInitialCenter: [-10694872.010699773,7434223.337137634],
+  propertiesInitialCenter: [-10694872.010699773,7434223.337137634],
 };
 
 const mapSelectorSlice = createSlice({

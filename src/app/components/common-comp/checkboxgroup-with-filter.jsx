@@ -6,8 +6,9 @@ const CheckboxGroupWithFilter = ({ options, onChange,selectedValues }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isYesButton, setIsYesButton] = useState(false);
   const [filter, setFilter] = useState("");
-  const [filteredOptions, setFilteredOptions] = useState(options);
-
+  const [filteredOptions, setFilteredOptions] = useState([]);
+  const [uniqueOptions, setuniqueOptions] = useState([])
+  
     useEffect(() => {
        
       if(selectedValues){
@@ -37,15 +38,44 @@ const CheckboxGroupWithFilter = ({ options, onChange,selectedValues }) => {
 
   useEffect(() => {
     // Apply the filter when the filter state changes
-    const filtered = options.filter((option) =>
-      option.toLowerCase().includes(filter.toLowerCase())
-    );
-    setFilteredOptions(filtered);
+    if(filter){
+      const filtered = uniqueOptions.filter((option) =>{
+      //   const t =   filter.toLowerCase() ;
+      //   const r =  new RegExp(t) 
+      //   console.log("sss", r)
+      //  console.log(option) 
+      //  console.log(option.toLowerCase().search(r) != -1)
+      //    return  option.toLowerCase().search(r) != -1
 
+      return option.toLowerCase().includes(filter.toLowerCase())
+      });
+     // console.log(filtered)
+      setIsYesButton(selectedOptions.length === filtered.length);
+      setFilteredOptions(filtered);
+    }else{
+       setFilteredOptions(uniqueOptions);
+    }
+    // else {
+    //   setFilteredOptions(uniqueOptions);
+    // }
+    console.log("list",uniqueOptions)
+    // Update the 'isYesButton' state based on the selected uniqueOptions
+   
+  }, [filter,  selectedOptions]);
+
+
+    useEffect(() => {
+      // Apply the filter when the filter state changes
+       const s = new Set(options);
+      const uniqueOptions = Array.from(s);
+      setuniqueOptions(uniqueOptions)
+      setFilteredOptions(uniqueOptions);
+     
+ // console.log("list",options)
     // Update the 'isYesButton' state based on the selected options
-    setIsYesButton(selectedOptions.length === filtered.length);
-  }, [filter, options, selectedOptions]);
-
+     
+    }, [  options ]);
+  
   return (
     <div>
       <div className="flex gap-2">

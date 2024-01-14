@@ -104,6 +104,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [itemsPerPage, setitemsPerPage] =  useState(10);
   const [assetTypeList, setassetTypeList] =  useState([]);
   const [commodityList, setcommodityList] =  useState([]);
+  const [commodityMasterList, setcommodityMasterList] =  useState([]);
   const [mineTypeSelections, setmineTypeSelections] =  useState([]);
   const [commoditySelections, setcommoditySelections] =  useState([]);
   const [showPropNameBadge, setshowPropNameBadge] =  useState(false);
@@ -156,6 +157,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     };
 
     f().catch(console.error);
+
+    //load commodity master setcommodityMasterList
+ const fcommo = async () => {
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/commoditylist`,
+        {
+          cache: "no-store",
+        }
+      );
+      const d = await res.json();
+      const c = d.data.map(c=> c.name)
+      setcommodityMasterList(c);
+    };
+
+    fcommo().catch(console.error);
   }, []);
 
   //fetch results when search query changed
@@ -730,7 +746,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                       <div className="mb-4 max-h-[210px] overflow-y-auto">
                         <CheckboxGroupWithFilter
                          selectedValues={commoditySelections}
-                          options={filterByCommodityOptions}
+                          options={commodityMasterList}
                           onChange={handleFilterByCommodityChange}
                         />
                       </div>

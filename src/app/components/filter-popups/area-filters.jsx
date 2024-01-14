@@ -129,7 +129,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         <div className="bg-white rounded-lg ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Filters
+              Exploration Area Filters
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
@@ -140,11 +140,31 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
             <div className="mx-auto w-full max-w-[550px] min-w-[550px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap mt-8">
                 <div className="w-full px-3 flex flex-col gap-3">
-                  <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
+                  {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
                     Exploration Areas
-                  </span>
-                  <div className="flex gap-2">
+                  </span> */}
+                  <div className="flex-col gap-2">
+                
+                  <span className="block">Filter By Exploration Area Name</span>
                     <Autocomplete
+                      label="Exploration Area Name"
+                      className="max-w-xs"
+                      defaultSelectedKey={miningArea}
+                      onInputChange={(e) => {
+                        setMiningArea(e);
+                      }}
+                    >
+                      {areaList.map((areaObj) => (
+                        <AutocompleteItem
+                          key={areaObj.area_name}
+                          value={areaObj.area_name}
+                        >
+                          {areaObj.area_name}
+                        </AutocompleteItem>
+                      ))}
+                    </Autocomplete>
+                        <span className="block">Filter By Country</span>
+                        <Autocomplete
                       label="Select a country"
                       className="max-w-xs"
                       onInputChange={(e) => {
@@ -161,38 +181,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-
-                    <Autocomplete
-                      label="Select a mining area"
-                      className="max-w-xs"
-                      defaultSelectedKey={miningArea}
-                      onInputChange={(e) => {
-                        setMiningArea(e);
-                      }}
-                    >
-                      {areaList.map((areaObj) => (
-                        <AutocompleteItem
-                          key={areaObj.area_name}
-                          value={areaObj.area_name}
-                        >
-                          {areaObj.area_name}
-                        </AutocompleteItem>
-                      ))}
-                    </Autocomplete>
-                    {/* <NextTextInputField
-                      label="Country"
-                      value={country}
-                      onChange={(e) => setCountry(e.target.value)}
-                      className="w-full rounded-lg border border-blue-700"
-                      variant="bordered"bbb
-                    /> */}
-                    {/* <NextTextInputField
-                      label="Mining Area"
-                      value={miningArea}
-                      onChange={(e) => setMiningArea(e.target.value)}
-                      className="w-full rounded-lg border border-blue-700"
-                      variant="bordered"
-                    /> */}
+                    
                   </div>
                 </div>
               </div>
