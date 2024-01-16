@@ -45,8 +45,11 @@ const PropertyFilterPropertyItemBrowser = ({properties,totalResultCount,curPageH
         const pdesc = (p.prop_name ?? "") + (p.prop_alias ? "(" +p.prop_alias +")":"")
          const alist = (p.assetlist ?? "")  
        // const adesc = (p.asset_name ?? "") + (p.assetalias ? "(" +p.assetalias +")":"")
-        const stpdesc = p.state_prov ? ","+ p.state_prov:""
-        const ardesc = p.area ? ","+ p.area:""
+        let stpdesc = p.state_prov ?  p.state_prov:""
+         let ardesc = p.area ? p.area : ""
+         if(stpdesc===ardesc){
+          ardesc=""
+         }
         // let alias = p.prop_alias ? "Alias:" + p.prop_alias + "," :"";
         // let assetDetails = (p.asset_name || p.assetalias) ? `/Asset:${p.asset_name}/${p.assetalias}`:""
         return (<ListboxItem

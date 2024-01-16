@@ -56,7 +56,7 @@ const buildSqlWhereClause = (conditions) => {
     }else if(cur.matchType == "~*"){
        inList = cur.searchValue.reduce((acc,cur) => { return (acc ? cur+"|"+acc:cur)} ,"" )
     }
-    console.log("inList",inList)
+    // console.log("inList",inList)
     let clause = ""
     if (cur.matchType == "in") {
       clause = cur.searchValue?.length>0 ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} (${inList})` : "";

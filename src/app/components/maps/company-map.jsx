@@ -1339,6 +1339,8 @@ export const CompanyMap = () => {
             <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
+             minResolution={0}
+            maxResolution={150}
           >
             
               <olSourceVector

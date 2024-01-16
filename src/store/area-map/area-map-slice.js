@@ -21,11 +21,10 @@ const initialState = {
   areaAssetHistoricalVisible: true,
   areaAssetOccurrenceVisible: true,
   areaFlyToLocation: [],
-  clickclaimObject:undefined,
-  clickfPropertyObject:undefined,
-  clickassetObject:undefined,
-  clicksyncPropertyObject:undefined,
-
+  clickclaimObject: undefined,
+  clickfPropertyObject: undefined,
+  clickassetObject: undefined,
+  clicksyncPropertyObject: undefined,
 };
 
 const areaMapSlice = createSlice({

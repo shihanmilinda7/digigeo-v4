@@ -66,11 +66,13 @@ const CheckboxGroupWithFilter = ({ options, onChange,selectedValues }) => {
 
     useEffect(() => {
       // Apply the filter when the filter state changes
-       const s = new Set(options);
-      const uniqueOptions = Array.from(s);
-      setuniqueOptions(uniqueOptions)
-      setFilteredOptions(uniqueOptions);
+      //  const s = new Set(options);
+      // const uniqueOptions = Array.from(s);
+      // setuniqueOptions(uniqueOptions)
+      // setFilteredOptions(uniqueOptions);
      
+      setuniqueOptions(options)
+      setFilteredOptions(options);
  // console.log("list",options)
     // Update the 'isYesButton' state based on the selected options
      

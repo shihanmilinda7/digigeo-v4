@@ -57,7 +57,7 @@ const buildSqlWhereClause = (conditions) => {
     }else if(cur.matchType == "~*"){
        inList = cur.searchValue.reduce((acc,cur) => { return (acc ? cur+"|"+acc:cur)} ,"" )
     }
-    console.log("inList",inList)
+    // console.log("inList",inList)
     let clause = ""
     if (cur.matchType == "in") {
       clause = cur.searchValue?.length>0 ?  ` ${stringCompareFunc}${openBracket}${cur.columnName}${closeBracket} ${cur.matchType} (${inList})` : "";
@@ -307,7 +307,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const searchAction = async () => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
-
+  
     dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
     closePopup();

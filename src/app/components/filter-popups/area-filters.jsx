@@ -22,11 +22,11 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   // const [country, setCountry] = useState("");
-  const [country, setCountry] = useState("Canada");
+  const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [areaList, setAreaList] = useState([]);
   // const [miningArea, setMiningArea] = useState("");
-  const [miningArea, setMiningArea] = useState("Timmins");
+  const [miningArea, setMiningArea] = useState("");
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -144,7 +144,24 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     Exploration Areas
                   </span> */}
                   <div className="flex-col gap-2">
-                
+                 <span className="block">Filter By Country</span>
+                        <Autocomplete
+                      label="Select a country"
+                      className="max-w-xs"
+                      onInputChange={(e) => {
+                        setCountry(e);
+                      }}
+                      defaultSelectedKey={country}
+                    >
+                      {countryList.map((countryObj) => (
+                        <AutocompleteItem
+                          key={countryObj.country}
+                          value={countryObj.country}
+                        >
+                          {countryObj.country}
+                        </AutocompleteItem>
+                      ))}
+                    </Autocomplete>
                   <span className="block">Filter By Exploration Area Name</span>
                     <Autocomplete
                       label="Exploration Area Name"
@@ -163,24 +180,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                        <span className="block">Filter By Country</span>
-                        <Autocomplete
-                      label="Select a country"
-                      className="max-w-xs"
-                      onInputChange={(e) => {
-                        setCountry(e);
-                      }}
-                      defaultSelectedKey={country}
-                    >
-                      {countryList.map((countryObj) => (
-                        <AutocompleteItem
-                          key={countryObj.country}
-                          value={countryObj.country}
-                        >
-                          {countryObj.country}
-                        </AutocompleteItem>
-                      ))}
-                    </Autocomplete>
+                       
                     
                   </div>
                 </div>

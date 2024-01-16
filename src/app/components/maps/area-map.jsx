@@ -474,7 +474,7 @@ export const AreaMap = () => {
     if (assetFeatures?.features) {
       assetSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(assetFeatures);
-
+       
       assetSourceRef?.current?.addFeatures(e);
     }
 
@@ -1307,8 +1307,14 @@ export const AreaMap = () => {
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
+               minResolution={0}
+            maxResolution={150}
           >
-            <olSourceVector ref={assetSourceRef}></olSourceVector>
+            <olSourceVector ref={assetSourceRef}
+         
+            >
+
+            </olSourceVector>
           </olLayerVector>
           <olLayerVector
             ref={syncPropVectorLayerRef}
