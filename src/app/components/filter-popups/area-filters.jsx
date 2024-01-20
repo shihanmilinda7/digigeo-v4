@@ -16,6 +16,7 @@ import {
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-browser";
 
 const AreaFilter = ({ isOpenIn, closePopup }) => {
   const dispatch = useDispatch();
@@ -27,6 +28,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [areaList, setAreaList] = useState([]);
   // const [miningArea, setMiningArea] = useState("");
   const [miningArea, setMiningArea] = useState("");
+  const [areaInfo, setareaInfo] = useState("Select a country first..");
+  const [propertyList, setpropertyList] = useState([]);
+  const [totalResultCount, settotalResultCount] = useState(0); 
+  const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setitemsPerPage] =  useState(10);
+      const [searchQuery, setsearchQuery] = useState(""); 
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -64,16 +71,76 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     },
   };
 
+   useEffect(() => {
+
+    const fproperty = async () => {
+ 
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+        {
+          cache: "no-store",
+        }
+      );
+      const d = await res.json();
+       
+      setpropertyList(d.data);
+      settotalResultCount(d.count)
+         
+    }
+    console.log("searchQuery",searchQuery)
+
+    if (searchQuery) {
+    
+        fproperty().catch(console.error);
+     
+    }
+    else {
+      setpropertyList([]);
+    }
+    
+  }, [searchQuery,currentPage])
+  
+  const getSearchQuery= (country="", areaName="")=>{
+    let s=""
+    if(country==""){
+      s=""
+      return s
+    } else if (areaName == "") {
+        s="country='"+country +"'"
+      return s
+    } else {
+      s = "country='" + country + "' and area='" + areaName +"'" 
+      
+      return s
+    }
+
+    
+  }
+  
+
   useEffect(() => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
 
   useEffect(() => {
-    setCountry(areaCountry);
-    setMiningArea(areaName);
-  }, [areaName, areaCountry]);
-  //areal load
+    //setCountry(areaCountry);
+    // setMiningArea(areaName);
+    const s = getSearchQuery(country, miningArea)
+     console.log("searchQuery-area",s)
+    setsearchQuery(s)
+
+  }, [miningArea]);
+
+  //areal load country
   useEffect(() => {
+    if(country ==""){
+      setAreaList([])
+       setpropertyList([]);
+      setareaInfo("Select a country first..")
+      return
+    }
+
+    //load areas
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/areas/${country}`,
@@ -81,10 +148,59 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
       );
       const d = await res.json();
       setAreaList(d.data);
+      if(d.data.length>0){
+         setareaInfo(`Select an Area-(${d.data.length} areas)`)
+      }else{
+         setareaInfo(`No areas for ${country}`)
+      }
     };
 
     f().catch(console.error);
+
+    //load results
+    //   const fproperty = async () => {
+       
+    //   const res = await fetch(
+    //     `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+    //     {
+    //       cache: "no-store",
+    //     }
+    //   );
+    //   const d = await res.json();
+ 
+    //   setpropertyList(d.data);
+    //   settotalResultCount(d.count)
+         
+     
+    // }
+    // fproperty().catch(console.error);
+
+    const s = getSearchQuery(country, areaName)
+    setsearchQuery(s)
   }, [country]);
+
+  // useEffect(() => {
+
+
+  //   const fproperty = async () => {
+       
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+  //       {
+  //         cache: "no-store",
+  //       }
+  //     );
+  //     const d = await res.json();
+ 
+  //     setpropertyList(d.data);
+  //     settotalResultCount(d.count)
+         
+     
+  //   }
+  //   fproperty().catch(console.error);
+ 
+  // }, [miningArea])
+  
 
   const searchAction = async () => {
     if (country && miningArea) {
@@ -126,7 +242,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="bg-white rounded-lg ">
+        <div className="bg-white rounded-lg overflow-y-hidden">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               Exploration Area Filters
@@ -136,19 +252,19 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
           </div>
-          <div className="flex items-center justify-center pl-8 pr-8">
-            <div className="mx-auto w-full max-w-[550px] min-w-[550px] min-h-[350px]">
-              <div className="-mx-3 flex flex-wrap mt-8">
-                <div className="w-full px-3 flex flex-col gap-3">
+          <div className="flex items-center justify-center pl-8   overflow-x-hidden">
+            <div className="mx-auto w-full max-w-[950px] min-w-[550px] min-h-[350px]">
+              <div className="-mx-3 flex flex-wrap">
+                <div className="w-full flex  first-line: gap-3 space-between ">
                   {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
                     Exploration Areas
                   </span> */}
-                  <div className="flex-col gap-2">
-                 <span className="block">Filter By Country</span>
-                        <Autocomplete
+                  <div className="flex-col gap-2   w-1/3">
+                    <span className="block">Filter By Country</span>
+                    <Autocomplete
                       label="Select a country"
                       className="max-w-xs"
-                      onInputChange={(e) => {
+                      onSelectionChange={(e) => {
                         setCountry(e);
                       }}
                       defaultSelectedKey={country}
@@ -162,16 +278,17 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                  <span className="block">Filter By Exploration Area Name</span>
+                    <span className="block">Filter By Exploration Area Name</span>
                     <Autocomplete
-                      label="Exploration Area Name"
+                      isDisabled={areaList.length==0}
+                      allowsCustomValue
+                      label={areaInfo}
                       className="max-w-xs"
                       defaultSelectedKey={miningArea}
                       onInputChange={(e) => {
-                        setMiningArea(e);
-                      }}
+                      setMiningArea(e); }}
                     >
-                      {areaList.map((areaObj) => (
+                       {areaList.map((areaObj) => (
                         <AutocompleteItem
                           key={areaObj.area_name}
                           value={areaObj.area_name}
@@ -180,31 +297,46 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                       
+                    <section className="flex items-center justify-between mt-3 fixed bottom-8 border-t-2 border-gray-300 ">
+                            <div className="mt-2">
+                              <Chip
+                                color="default"
+                                variant="light"
+                                className="cursor-pointer"
+                              >
+                                Reset
+                              </Chip>
+                            </div>
+                            <div className="mt-2">
+                              <Chip
+                                color="primary"
+                                className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
+                                onClick={searchAction}
+                              >
+                                Search
+                              </Chip>
+                            </div>
+                    </section>`
+                  </div>
+                  <div className="w-2/3" >
+                  { 
+                    ( <div className="flex-col gap-32">
                     
+                      <div className="border-solid border  last: w-[500px] bg-white rounded-lg m-2  ">
+              
+                        <PropertyFilterPropertyItemBrowser properties={propertyList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={()=>{}} />
+                        
+                      </div>
+                      
+                      </div>
+                    )
+                  } 
+
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between mt-3 fixed bottom-8 border-t-2 border-gray-300 min-w-[550px]">
-                <div className="mt-2">
-                  <Chip
-                    color="default"
-                    variant="light"
-                    className="cursor-pointer"
-                  >
-                    Reset
-                  </Chip>
-                </div>
-                <div className="mt-2">
-                  <Chip
-                    color="primary"
-                    className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
-                    onClick={searchAction}
-                  >
-                    Search
-                  </Chip>
-                </div>
-              </div>
+            
+           
             </div>
           </div>
         </div>

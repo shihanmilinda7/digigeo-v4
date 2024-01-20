@@ -33,7 +33,8 @@ const PropertyFilterPropertyItemBrowser = ({properties,totalResultCount,curPageH
          <div className="overflow-y-auto max-h-[455px] min-h-[455px]">
          <ListboxWrapper>
             <Listbox variant="flat" aria-label="Listbox menu with descriptions"
-            disallowEmptySelection
+            // hideEmptyContent="false"
+            // disallowEmptySelection
           selectionMode="multiple"
           selectedKeys={selectedKeys}
                     onSelectionChange={setSelectedKeys}
@@ -63,7 +64,7 @@ const PropertyFilterPropertyItemBrowser = ({properties,totalResultCount,curPageH
           
         </ListboxWrapper>
         </div>
-        <div className="text-white">essential place </div>
+        {/* <div className="text-white">essential place </div> */}
         {properties?.length != 0 && (<div className="flex-col mt-4">
           <Pagination
         isCompact
@@ -72,25 +73,25 @@ const PropertyFilterPropertyItemBrowser = ({properties,totalResultCount,curPageH
         page={currentPage}
         onChange={setCurrentPage}
         />
-              <div className="flex gap-2 items-center mt-2">
-        <Button
-          size="sm"
-          variant="flat"
-          color="secondary"
-          onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
-        >
-          Previous
-        </Button>
-        <Button
-          size="sm"
-          variant="flat"
-          color="secondary"
-          onPress={() => setCurrentPage((prev) => (prev < 10 ? prev + 1 : prev))}
-        >
-          Next
-        </Button>
-            <Chip color="success">{ ((currentPage-1)*itemsPerPage)+1 + "-" + ( currentPage*itemsPerPage < totalResultCount? currentPage*itemsPerPage:totalResultCount    ) + "/" + totalResultCount}</Chip>
-      </div>
+              <div className="flex gap-2 items-center mt-2 w-full">
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  onPress={() => setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev))}
+                >
+                  Previous
+                </Button>
+                <Button
+                  size="sm"
+                  variant="flat"
+                  color="secondary"
+                  onPress={() => setCurrentPage((prev) => (prev < 10 ? prev + 1 : prev))}
+                >
+                  Next
+                </Button>
+                    <Chip color="success">{ ((currentPage-1)*itemsPerPage)+1 + "-" + ( currentPage*itemsPerPage < totalResultCount? currentPage*itemsPerPage:totalResultCount    ) + "/" + totalResultCount}</Chip>
+              </div>
         
          </div>)}
         
