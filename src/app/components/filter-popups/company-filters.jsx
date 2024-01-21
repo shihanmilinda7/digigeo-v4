@@ -8,22 +8,22 @@ import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setAreaCompany,
-  setAreaMiningArea,
-  setAreaZoomMode,
-  setIsAreaSideNavOpen,
-} from "../../../store/area-map/area-map-slice";
+// import {
+//   setAreaCompany,
+//   setAreaMiningArea,
+//   setAreaZoomMode,
+//   setIsAreaSideNavOpen,
+// } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import { setIsCompanySideNavOpen, setcompanyId, setcompanyName } from "@/store/company-map/company-map-slice";
+import { setIsCompanySideNavOpen, setcompanyId, setcompanyName ,setcompanyStockcode,setcompanyZoomMode} from "@/store/company-map/company-map-slice";
 import useDebounce from "./useDebounce";
 
 const CompanyFilter = ({ isOpenIn, closePopup }) => {
    const [search, setSearch] = useState('')
-  const debouncedSearch = useDebounce(search, 500)
+  const debouncedSearch = useDebounce(search, 300)
    const [searchStockcode, setSearchStockcode] = useState('')
-  const debouncedSearchStockcode = useDebounce(searchStockcode, 500)
+  const debouncedSearchStockcode = useDebounce(searchStockcode, 300)
 
   const dispatch = useDispatch();
 
@@ -115,10 +115,11 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
 
   const searchAction = async () => {
     // if (company && miningArea) {
-    dispatch(setAreaZoomMode("extent"));
+    dispatch(setcompanyZoomMode("extent"));
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
     dispatch(setIsCompanySideNavOpen(true));
+    dispatch(setcompanyStockcode(stockcode));
     closePopup();
     // }
   };
@@ -148,7 +149,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/stockcodelist/${searchStockcode}`,
         {
-          cache: "force-cache",
+          cache: "no-store",
         }
       );
       const d = await res.json();
@@ -228,12 +229,12 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                        selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                        
+                         console.log("s code",e)
                          setSearchStockcode(e)
                          setStockcode(e);
                       }}
                       onSelectionChange={(e) => {
-                       
+                         
                          setCompanyidLocal(e)
                       
                       }}

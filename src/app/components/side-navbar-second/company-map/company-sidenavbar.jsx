@@ -289,15 +289,25 @@ const CompanySideNavbar = () => {
                 : "hidden"
             }`}
           >
-            <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
-              <span className="font-bold">Property Info </span>
-              <AiOutlineCloseCircle
+              <div className="flex-col "> 
+              <div className="flex justify-between mx-2"> 
+                <span className="font-bold block">Property Info</span>
+                <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
-                className="h-6 w-6 text-blue-700 cursor-pointer absolute right-0"
-              />
-            </div>
+                className="h-6 w-6 text-blue-700 cursor-pointer right-0"
+                />
+                </div>
+                <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
+                
+                  <div className="flex-col">
+                  {companyName && (<span className="font-bold block">{companyName}</span>)}
+                  {companyStockcode && (<span className="font-bold block">Stock Code:{companyStockcode} </span>)}
+                  
+                  </div>
+                </div>
+              </div>
           </div>
-          <div className="mt-4 flex flex-col gap-4 relative">
+          <div className=" flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
                 <AccordionItemWithEye title="Featured Properties" onClick = {setFpropLayerVisibility} eyeState={companyFpropLayerVisible}>

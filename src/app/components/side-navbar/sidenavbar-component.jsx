@@ -139,7 +139,7 @@ const SideNavbar = () => {
               <span className="font-bold">Overview</span>
             </div>
             <div className="m-2">
-              <Input
+              {/* <Input
                 // list={list}
                 isClearable
                 type="text"
@@ -149,7 +149,7 @@ const SideNavbar = () => {
                 onClear={() => console.log("input cleared")}
                 className="w-full rounded-lg border border-blue-700"
                 startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
-              />
+              /> */}
             </div>
             <div className="flex flex-col gap-2 p-2">
               <AreaMapButton onClick={() => selectMapHandler("area")} />
