@@ -18,7 +18,7 @@ import {
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
-import { setIsPropertiesSideNavOpen ,setpropertySearchQuery} from "@/store/properties-map/properties-map-slice";
+import { setIsPropertiesSideNavOpen ,setpropertyMapPropertyAssetIdCsv,setpropertySearchQuery} from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
 import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-browser";
 
@@ -108,7 +108,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   const [mineTypeSelections, setmineTypeSelections] =  useState([]);
   const [commoditySelections, setcommoditySelections] =  useState([]);
   const [showPropNameBadge, setshowPropNameBadge] =  useState(false);
-  const [searchType, setsearchType] =  useState("");
+  // const [searchType, setsearchType] =  useState("");
   const [selectedItems, setselectedItems] = useState([]);
   
    
@@ -138,10 +138,10 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
-  // useEffect(()=>{
-  //   console.log("selectedItems",selectedItems)
+  useEffect(()=>{
+    console.log("selectedItems",selectedItems)
 
-  // },[selectedItems]);
+  },[selectedItems]);
 
   //on init
   useEffect(() => {
@@ -179,9 +179,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
 
     const fproperty = async () => {
       // console.log("currentPage2",currentPage) assetlistuniversal
-       console.log("searchQuery2",searchQuery)
+       console.log("searchQuery2",searchQuery,itemsPerPage,currentPage)
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+        `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
         {
           cache: "no-store",
         }
@@ -192,30 +192,30 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       settotalResultCount(d.count)
          
     }
-    const fasset = async () => {
-      // console.log("currentPage2",currentPage) assetlistuniversal
-      // console.log("searchQuery2",searchQuery)
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
-        {
-          cache: "no-store",
-        }
-      );
-      const d = await res.json();
-      console.log("d.data", d.data,)
-      setpropertyNameList(d.data);
-      settotalResultCount(d.count)
+    // const fasset = async () => {
+    //   // console.log("currentPage2",currentPage) assetlistuniversal
+    //   // console.log("searchQuery2",searchQuery)
+    //   const res = await fetch(
+    //     `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+    //     {
+    //       cache: "no-store",
+    //     }
+    //   );
+    //   const d = await res.json();
+    //   console.log("d.data", d.data,)
+    //   setpropertyNameList(d.data);
+    //   settotalResultCount(d.count)
          
-    }
+    // }
 
     if (searchQuery) {
-      if (searchType == "asset") {
-        console.log("searchType-asset->",searchType)
-        fasset().catch(console.error);
-      } else {
-         console.log("searchType-prop->",searchType)
+      // if (searchType == "asset") {
+      //   console.log("searchType-asset->",searchType)
+      //   fasset().catch(console.error);
+      // } else {
+      //    console.log("searchType-prop->",searchType)
         fproperty().catch(console.error);
-      }
+      // }
     }
     else {
       setpropertyNameList([]);
@@ -308,41 +308,41 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
   
-   // dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
+    dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
-     dispatch(setpropertySearchQuery(searchQuery));
+    dispatch(setpropertySearchQuery(searchQuery));
     closePopup();
   };
 
-  // const getPropertyAssetIdCvs = () => {
+  const getPropertyAssetIdCvs = () => {
 
-  //   if(searchType =="property"){
-  //     //const csv = selectedItems.reduce((acc, cur) => (acc ? acc + "," : "") + cur, "") ?? ""
-  //    // const csv = selectedItems.join(",")
-  //     console.log("pcsv", selectedItems)
-  //     return { propertyids: selectedItems, assetids: [] }
-  //   } else {
-  //     const pcsvs = []
-  //     const acsvs =[]
-  //     console.log("acsv", selectedItems)
-  //     selectedItems.forEach(i => {
-  //       const f = i.split("-")
-  //       console.log("asset search1",i)
-  //       console.log("asset search2",f)
-  //       f[0] && pcsvs.push(f[0])
-  //       f[1] && acsvs.push(f[1])
-  //     })
-  //     const pset = new Set(pcsvs);
-  //     const aset = new Set(acsvs);
+    // if(searchType =="property"){
+    //   //const csv = selectedItems.reduce((acc, cur) => (acc ? acc + "," : "") + cur, "") ?? ""
+    //  // const csv = selectedItems.join(",")
+    //   console.log("pcsv", selectedItems)
+      return { propertyids: selectedItems, assetids: [] }
+    // } else {
+    //   const pcsvs = []
+    //   const acsvs =[]
+    //   console.log("acsv", selectedItems)
+    //   selectedItems.forEach(i => {
+    //     const f = i.split("-")
+    //     console.log("asset search1",i)
+    //     console.log("asset search2",f)
+    //     f[0] && pcsvs.push(f[0])
+    //     f[1] && acsvs.push(f[1])
+    //   })
+    //   const pset = new Set(pcsvs);
+    //   const aset = new Set(acsvs);
        
-  //      console.log("pcsv -xxx", pset)
-  //      console.log("acsv - xxx", aset)
-  //    return    {propertyids: Array.from(pset),assetids: Array.from(aset)}
-  //   }
-  // //  const csv =   propertyNameList.reduce((acc,cur)=> (acc ? acc + ",": "") + cur.propertyid,"") ?? ""
+    //    console.log("pcsv -xxx", pset)
+    //    console.log("acsv - xxx", aset)
+    //  return    {propertyids: Array.from(pset),assetids: Array.from(aset)}
+    // }
+  //  const csv =   propertyNameList.reduce((acc,cur)=> (acc ? acc + ",": "") + cur.propertyid,"") ?? ""
    
   
-  // }
+  }
 
   //debounced prop name
   useEffect(() => {
@@ -424,10 +424,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
      let commodityList;
     let query;
     setCurrentPage(1)
-    if (assetTypeListParam?.length > 0 || commodityListParam?.length > 0) {
-      console.log("asset search")
-      setsearchType("asset")
-      propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+
+       propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
      countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
      stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
      areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
@@ -435,16 +433,28 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
      commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
         query = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
      
-    } else {
-       console.log("prop search")
-      setsearchType("property")
-     propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
-     countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
-     stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
-     areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
-       query = buildSqlWhereClause([propName, countryName,stProvName,areaName])
+
+    // if (assetTypeListParam?.length > 0 || commodityListParam?.length > 0) {
+    //   console.log("asset search")
+    //   setsearchType("asset")
+    //   propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+    //  countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
+    //  stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
+    //  areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
+    //  assetTypeList= {columnName:"asset_type", searchValue: assetTypeListParam, dataType: "string", matchType: "in", stringCompareFunc:"" }
+    //  commodityList= {columnName:"commodities", searchValue: commodityListParam, dataType: "string", matchType: "~*", stringCompareFunc:"" }
+    //     query = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
+     
+    // } else {
+    //    console.log("prop search")
+    //   setsearchType("property")
+    //  propName = {columnName:"searchtext" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
+    //  countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
+    //  stProvName = {columnName:"state_prov", searchValue: stProvParam, dataType: "string", matchType: "=" }
+    //  areaName = {columnName:"area", searchValue: areaParam, dataType: "string", matchType: "=" }
+    //    query = buildSqlWhereClause([propName, countryName,stProvName,areaName])
       
-    }
+    // }
    
     return query
   }
@@ -891,16 +901,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
             ( <div className="flex-col gap-32">
              
               <div className="border-solid border  h-[625px]  w-[500px]   bg-white     rounded-lg m-2 ">
-                { searchType=="property" ?
+               
                 <PropertyFilterPropertyItemBrowser properties={propertyNameList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={setselectedItems} />
-                  :
-                <PropertyFilterPropertyItemBrowser properties={propertyNameList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={setselectedItems} />
-
-                  }
+                 
               </div>
-               {/* <div > 
-                 <span className="ml-2 "  >{`Selected Properties- ${totalResultCount}`} </span>
-              </div> */}
+              
               </div>
             )}  
           {/* {(propertyNameList?.length ? true:null) &&

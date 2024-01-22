@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   isPropertiesSideNavOpen: false,
+  propertySearchQuery: "",
   propertyMapPropertyAssetIdCsv: {propertyids:[],assetids:[]},
   propertyMapAssetCsv: "",
   syncPropertyFeatures: undefined,
@@ -33,6 +34,9 @@ const propertiesMapSlice = createSlice({
   reducers: {
     setIsPropertiesSideNavOpen: (state, action) => {
       state.isPropertiesSideNavOpen = action.payload;
+    },
+    setpropertySearchQuery: (state, action) => {
+      state.propertySearchQuery = action.payload;
     },
     setpropertyMapPropertyAssetIdCsv: (state, action) => {
       state.propertyMapPropertyAssetIdCsv = action.payload;
@@ -111,6 +115,7 @@ const propertiesMapSlice = createSlice({
 
 export const {
   setIsPropertiesSideNavOpen,
+  setpropertySearchQuery,
   setpropertyMapPropertyAssetIdCsv,
   setpropertyMapAssetCsv,
   setSyncPropertyFeatures,

@@ -77,6 +77,10 @@ const PropertiesSideNavbar = () => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
+    const propertySearchQuery = useSelector(
+    (state) => state.propertiesMapReducer.propertySearchQuery
+  );
+
   const propertyMapPropertyAssetIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyAssetIdCsv);
 
 
@@ -93,15 +97,15 @@ const PropertiesSideNavbar = () => {
 //data load
   useEffect(() => {
     console.log("propertyMapPropertyAssetIdCsv",propertyMapPropertyAssetIdCsv)
-    if (propertyMapPropertyAssetIdCsv.propertyids.length>0) {
-      getFeaturedPropertyGeom();
-      getFeaturedCompanyDetails();
+    if (propertySearchQuery) {
+      // getFeaturedPropertyGeom();
+      // getFeaturedCompanyDetails();
 
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
       // getAssetsGeometry();
     }
-  }, [propertyMapPropertyAssetIdCsv]);
+  }, [propertySearchQuery]);
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
@@ -162,14 +166,15 @@ const PropertiesSideNavbar = () => {
     f().catch(console.error);
   };
 
-    const getSyncPropertiesGeometry = async () => {
+  const getSyncPropertiesGeometry = async () => {
+      console.log("lop")
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_prop/${propertyMapPropertyAssetIdCsv.propertyids.join(",")}`,
+        `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-      // console.log("fps", d);
+      // console.log("fps", d); propertySearchQuery
       // console.log("fps", d.data);
 
       // setFeaturedCompanies(d.data);
@@ -188,7 +193,7 @@ const PropertiesSideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
       dispatch(setSyncPropertyFeatures(gj));
-      console.log("gj-clink", gj);
+      console.log("gj-suncp", gj);
     };
     f().catch(console.error);
   };

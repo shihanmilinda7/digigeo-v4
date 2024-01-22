@@ -240,7 +240,7 @@ export const PropertiesMap = () => {
     // }
   }, [syncClaimLinkPropertyFeatures]);
   useEffect(() => {
-   
+    console.log("PPP")
     if (syncPropertyFeatures) {
       syncPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
