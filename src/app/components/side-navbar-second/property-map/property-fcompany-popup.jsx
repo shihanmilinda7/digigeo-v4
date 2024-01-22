@@ -114,8 +114,8 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState([]);
 
-  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+  // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
   const customStyles = {
     overlay: {

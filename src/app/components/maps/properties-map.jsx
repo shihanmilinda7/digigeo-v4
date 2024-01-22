@@ -161,7 +161,7 @@ export const PropertiesMap = () => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
-   const syncPropSourceRef = useRef(null);
+  const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
@@ -222,8 +222,9 @@ export const PropertiesMap = () => {
 
   useEffect(() => {
  console.log("eee1",syncClaimLinkPropertyFeatures )
-    if (syncClaimLinkPropertyFeatures) {
-      claimLinkSourceRef?.current?.clear();
+    claimLinkSourceRef?.current?.clear();
+    if (syncClaimLinkPropertyFeatures?.features) {
+      
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
       console.log("eee",e )
       claimLinkSourceRef?.current?.addFeatures(e);

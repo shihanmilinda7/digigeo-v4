@@ -82,7 +82,7 @@ const PropertiesSideNavbar = () => {
     (state) => state.propertiesMapReducer.propertySearchQuery
   );
 
-  const propertyMapPropertyAssetIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyAssetIdCsv);
+  // const propertyMapPropertyAssetIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyAssetIdCsv);
 
 
 
@@ -100,7 +100,7 @@ const PropertiesSideNavbar = () => {
     // console.log("propertyMapPropertyAssetIdCsv",propertyMapPropertyAssetIdCsv)
     if (propertySearchQuery) {
       
-      // getFeaturedCompanyDetails();
+       getFeaturedCompanyDetails();
 
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
@@ -151,9 +151,8 @@ const PropertiesSideNavbar = () => {
 
  const getFeaturedCompanyDetails = async () => {
    const f = async () => {
-      console.log("propertyMapPropertyIdCsvxx",propertyMapPropertyAssetIdCsv.propertyids.join(","))
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_prop/${propertyMapPropertyAssetIdCsv}`,
+        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
         { cache: "no-store" }
       );
       const d = await res.json();
