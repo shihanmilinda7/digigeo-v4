@@ -101,7 +101,7 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
   resolution
 ) => {
-  console.log("featurexd:", feature);
+  // console.log("featurexd:", feature);
   //console.log("feature:", feature);
   //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
   //  spanClaim1.textContent = "visibility";

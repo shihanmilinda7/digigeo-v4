@@ -104,7 +104,7 @@ const PropertiesSideNavbar = () => {
 
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
-      // getAssetsGeometry();
+      getAssetsGeometry();
     }
   }, [propertySearchQuery]);
 
@@ -201,7 +201,7 @@ const PropertiesSideNavbar = () => {
   const getAssetsGeometry = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
+        `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -230,13 +230,14 @@ const PropertiesSideNavbar = () => {
   };
 
   const getClaimLinkPropertiesGeometry = async () => {
+     console.log("fps-clink1" );
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink_prop/${propertyMapPropertyAssetIdCsv.propertyids.join(",")}`,
+        `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
         { cache: "no-store" }
       );
      const d = await res.json();
-      //  console.log("fps-1", d);
+        console.log("fps-clink", d);
 
       const gj = {
         type: "FeatureCollection",

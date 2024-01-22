@@ -21,7 +21,13 @@ import {
   setpropertyMapFpropLayerVisible,
   setpropertyMapSyncClaimLinkLayerVisible,
   setpropertyMapSyncPropLayerVisible,
+  setpropertyMapAssetOpMineVisible,
+  setpropertyMapAssetDepositsVisible,
+  setpropertyMapAssetZoneVisible,
+  setpropertyMapAssetHistoricalVisible,
+  setpropertyMapAssetOccurrenceVisible,
 } from "@/store/properties-map/properties-map-slice";
+import Image from "next/image";
 
 
 const PropertiesBottomSideComp = () => {
@@ -100,6 +106,39 @@ const PropertiesBottomSideComp = () => {
     dispatch(setpropertyMapAreaBoundaryLayerVisible(!propertyMapAreaBoundaryLayerVisible));
   };
 
+//asset visibility redux states 
+    const propertyMapAssetOpMineVisible = useSelector(
+      (state) => state.propertiesMapReducer.propertyMapAssetOpMineVisible
+    );
+    const propertyMapAssetDepositsVisible = useSelector(
+      (state) => state.propertiesMapReducer.propertyMapAssetDepositsVisible
+    );
+    const propertyMapAssetZoneVisible = useSelector(
+      (state) => state.propertiesMapReducer.propertyMapAssetZoneVisible
+    );
+    const propertyMapAssetHistoricalVisible = useSelector(
+      (state) => state.propertiesMapReducer.propertyMapAssetHistoricalVisible
+    );
+    const propertyMapAssetOccurrenceVisible = useSelector(
+      (state) => state.propertiesMapReducer.propertyMapAssetOccurrenceVisible
+    );
+
+    //asset type visibility functions
+    const setpropertyMapAssetOpMineVisibility = (e) => {
+      dispatch(setpropertyMapAssetOpMineVisible(!propertyMapAssetOpMineVisible));
+    }
+    const setpropertyMapAssetDepositVisibility = (e) => {
+      dispatch(setpropertyMapAssetDepositsVisible(!propertyMapAssetDepositsVisible));
+    }
+    const setpropertyMapAssetZoneVisibility = (e) => {
+      dispatch(setpropertyMapAssetZoneVisible(!propertyMapAssetZoneVisible));
+    }
+    const setpropertyMapAssetHistoricalVisibility = (e) => {
+      dispatch(setpropertyMapAssetHistoricalVisible(!propertyMapAssetHistoricalVisible));
+    }
+    const setpropertyMapAssetOccurrenceVisibility = (e) => {
+      dispatch(setpropertyMapAssetOccurrenceVisible(!propertyMapAssetOccurrenceVisible));
+    }
 
 
   useEffect(() => {
@@ -129,32 +168,60 @@ const PropertiesBottomSideComp = () => {
       <div className="overflow-y-auto max-h-[40vh]">
         <Accordion>
           <div className="flex flex-col gap-6">
-            <AccordionItemWithEye title="Assets">
+            <AccordionItemWithEye title="Assets" onClick={setpropertyMapAssetLayerVisibility} eyeState={propertyMapAssetLayerVisible}>
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
-                  onClick={setpropertyMapAssetLayerVisibility}
-                  eyeState={propertyMapAssetLayerVisible}
+                 onClick={setpropertyMapAssetOpMineVisibility}   eyeState={propertyMapAssetOpMineVisible}
                 >
-                  <AiFillAppstore />
+                   <Image
+                          src="./asset-opmine.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Deposits"
-                  onClick={() => console.log("Deposits")}
+                  onClick={setpropertyMapAssetDepositVisibility}   eyeState={propertyMapAssetDepositsVisible}
                 >
-                  <AiFillAppstore />
+                   <Image
+                          src="./asset-deposit.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Zone"
-                  onClick={() => console.log("Zone")}
+                  onClick={setpropertyMapAssetZoneVisibility}   eyeState={propertyMapAssetZoneVisible}
                 >
-                  <AiFillAppstore />
+                  <Image
+                          src="./asset-zone.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Historical Mines">
-                  <AiFillAppstore />
+                <LayerVisibleDiv title="Historical Mines"
+                onClick={setpropertyMapAssetHistoricalVisibility}   eyeState={propertyMapAssetHistoricalVisible}
+                >
+                  <Image
+                          src="./asset-historical.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Occurrences">
-                  <AiFillAppstore />
+                <LayerVisibleDiv title="Occurrences"
+                onClick={setpropertyMapAssetOccurrenceVisibility}   eyeState={propertyMapAssetOccurrenceVisible}
+                >
+                  <Image
+                          src="./asset-occurrence.svg"
+                          width={25}
+                          height={10}
+                          alt="prop"
+                     />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>

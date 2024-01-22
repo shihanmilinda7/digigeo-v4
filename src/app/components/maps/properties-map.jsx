@@ -21,7 +21,6 @@ import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 
 import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
 import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
  
 import {
@@ -259,6 +258,28 @@ export const PropertiesMap = () => {
     }
   }, [syncPropertyFeatures]);
 
+   useEffect(() => {
+    console.log("assetFeatures", assetFeatures,)
+    if (assetFeatures?.features) {
+      assetSourceRef?.current?.clear()
+      const e = new GeoJSON().readFeatures(assetFeatures)
+        console.log("assetFeatures added" )
+      assetSourceRef?.current?.addFeatures(e);
+    }
+        
+     
+    // if (assetSourceRef.current) {
+    //   const p1 = assetSourceRef.current?.getExtent()[0]
+    //   if (p1 != Infinity) {
+    //     mapRef.current?.getView()?.fit(assetSourceRef.current?.getExtent(), {
+    //       padding: [200, 200, 200, 200],
+    //       duration: 3000,
+    //     });
+    //   }
+       
+    // }
+  }, [assetFeatures]);
+
 
   useEffect(() => {
     mouseScrollEvent();
@@ -391,7 +412,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
   resolution
 ) => {
-  console.log("featurexd:", feature);
+  // console.log("featurexd:", feature);
   //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
   //  spanClaim1.textContent = "visibility";
   // const r = Math.random() * 255;
@@ -663,6 +684,123 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
     areaBoundaryImgLayerRef?.current?.setVisible(propertyMapAreaBoundaryLayerVisible);
   }, [propertyMapAreaBoundaryLayerVisible]);
 
+    //asset type visibilty redux states
+    const propertyMapAssetOpMineVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetOpMineVisible
+    );
+    const propertyMapAssetDepositsVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetDepositsVisible
+    );
+    const propertyMapAssetZoneVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetZoneVisible
+    );
+    const propertyMapAssetHistoricalVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetHistoricalVisible
+    );
+    const propertyMapAssetOccurrenceVisible = useSelector(
+    (state) => state.propertiesMapReducer.propertyMapAssetOccurrenceVisible
+    );
+      //asset type visibility useEffects
+  useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (propertyMapAssetOpMineVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Operating Mine") {
+           f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Operating Mine") {
+           
+              f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [propertyMapAssetOpMineVisible]);
+
+    useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (propertyMapAssetDepositsVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Deposit") {
+           f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Deposit") {
+            
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [propertyMapAssetDepositsVisible]);
+
+      useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (propertyMapAssetZoneVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Zone") {
+             f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Zone") {
+           f.setStyle(new Style({}))
+            
+          }
+        })
+      }
+    }
+  }, [propertyMapAssetZoneVisible]);
+
+        useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (propertyMapAssetHistoricalVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Historical Mine") {
+            f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Historical Mine") {
+           
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [propertyMapAssetHistoricalVisible]);
+
+    useEffect(() => {
+    const fs = assetSourceRef?.current?.getFeatures();
+    if (fs) {
+      if (propertyMapAssetOccurrenceVisible) {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Occurrence") {
+            f.setStyle(null)
+          }
+        })
+      } else {
+        fs.forEach(f => {
+          if (f.get("asset_type") == "Occurrence") {
+           
+             f.setStyle(new Style({}))
+          }
+        })
+      }
+    }
+  }, [propertyMapAssetOccurrenceVisible]);
+
 
   const styleFunctionAreaBoundary = (feature) => {
     console.log("sf");
@@ -801,6 +939,8 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
     return style;
   };
+
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
@@ -925,6 +1065,21 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
           
            <olLayerVector ref={fPropVectorLayerRef}>
             <olSourceVector ref={fPropSourceRef}></olSourceVector>
+          </olLayerVector>
+          <olLayerVector
+            ref={assetLayerRef}
+            style={areaMapAssetVectorLayerStyleFunction}
+             minResolution={0}
+            maxResolution={150}
+          >
+            
+              <olSourceVector
+                ref={assetSourceRef}
+                 
+              >
+               
+              </olSourceVector>
+            
           </olLayerVector>
            <olLayerVector
             ref={syncPropVectorLayerRef}
