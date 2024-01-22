@@ -197,7 +197,8 @@ export const PropertiesMap = () => {
     }, [fPropVectorLayerRef.current]);
   
 
-    useEffect(() => {
+  useEffect(() => {
+       console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
        fPropSourceRef?.current?.clear();
       if (featuredPropertyFeatures?.features) {
        console.log("featuredPropertyFeatures",featuredPropertyFeatures)
