@@ -137,7 +137,7 @@ const PropertiesSideNavbar = () => {
         features: d.data[0].json_build_object.features,
       };
       
-      console.log("llll", d.data[0].json_build_object.features)
+      ///console.log("llll", d.data[0].json_build_object.features)
       dispatch(setFPropertyFeatures(gj));
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
@@ -175,7 +175,7 @@ const PropertiesSideNavbar = () => {
       );
       const d = await res.json();
       // console.log("fps", d); propertySearchQuery
-      // console.log("fps", d.data);
+       console.log("fps11", d.data);
 
       // setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>

@@ -136,7 +136,7 @@ const SideNavbar = () => {
             className={`${isSideNavOpen ? "py-0.1 flex flex-col " : "hidden"}`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
-              <span className="font-bold">Overview</span>
+              {/* <span className="font-bold">Overview</span> */}
             </div>
             <div className="m-2">
               {/* <Input

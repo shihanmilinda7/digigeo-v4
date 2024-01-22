@@ -345,15 +345,18 @@ export const PropertiesMap = () => {
     scale: 1,
   });
 
-    const styleFunctionSyncProperties = (feature) => {
-     const t = feature.get("propertyid") ?? ""
+  const styleFunctionSyncProperties = (feature, resolution) => {
+      //console.log("resolution",resolution)
+      let t=""
+      if( resolution< 1850)
+       t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
       const s = new Style({
       text:new Text({
         text: t.toString(),
-        // text: feature.get("propertyid") ??"",
+        // text: feature.get("propertyid") ??"", prop_name, prop_alias
         offsetX: 0,
-        offsetY: -5,
-        font :  "20px serif",
+        offsetY: -10,
+        font :  "14px serif",
       }),
       image,
       stroke: new Stroke({
@@ -926,6 +929,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
            <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
+           
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>

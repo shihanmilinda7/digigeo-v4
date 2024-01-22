@@ -177,21 +177,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   //fetch results when search query changed
   useEffect(() => {
 
-    const fproperty = async () => {
-      // console.log("currentPage2",currentPage) assetlistuniversal
-       console.log("searchQuery2",searchQuery)
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
-        {
-          cache: "no-store",
-        }
-      );
-      const d = await res.json();
-      console.log("d.data", d.data,)
-      setpropertyNameList(d.data);
-      settotalResultCount(d.count)
+    // const fproperty = async () => {
+    //   // console.log("currentPage2",currentPage) assetlistuniversal
+    //    console.log("searchQuery2",searchQuery)
+    //   const res = await fetch(
+    //     `https://atlas.ceyinfo.cloud/matlas/assetlistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+    //     {
+    //       cache: "no-store",
+    //     }
+    //   );
+    //   const d = await res.json();
+    //   console.log("d.data", d.data,)
+    //   setpropertyNameList(d.data);
+    //   settotalResultCount(d.count)
          
-    }
+    // }
     const fasset = async () => {
       // console.log("currentPage2",currentPage) assetlistuniversal
       // console.log("searchQuery2",searchQuery)
@@ -209,13 +209,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     }
 
     if (searchQuery) {
-      if (searchType == "asset") {
-        console.log("searchType-asset->",searchType)
+      //if (searchType == "asset") {
+       // console.log("searchType-asset->",searchType)
         fasset().catch(console.error);
-      } else {
-         console.log("searchType-prop->",searchType)
-        fproperty().catch(console.error);
-      }
+      // } else {
+      //    console.log("searchType-prop->",searchType)
+      //   fproperty().catch(console.error);
+      // }
     }
     else {
       setpropertyNameList([]);
