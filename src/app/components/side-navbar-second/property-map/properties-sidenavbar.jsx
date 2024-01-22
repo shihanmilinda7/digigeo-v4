@@ -34,6 +34,7 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "../area-map/area-tree-view";
 import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail-div";
+import PropertyTreeView from "./property-tree-view";
 
 
 
@@ -316,7 +317,7 @@ const PropertiesSideNavbar = () => {
                 </AccordionItemWithEye>
                 <AccordionItemWithEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
-                    
+                     <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />
                   </div>
                 </AccordionItemWithEye>
               </div>
