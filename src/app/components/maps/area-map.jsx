@@ -382,6 +382,8 @@ export const AreaMap = () => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
+
+
   // const areaZoomMode = useSelector(
   //   (state) => state.areaMapReducer.areaZoomMode
   // );
@@ -431,7 +433,7 @@ export const AreaMap = () => {
   }, [syncPropertyFeatures]);
 
   useEffect(() => {
-    if (featuredPropertyFeatures) {
+    if (featuredPropertyFeatures?.features) {
       fPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
 
@@ -451,7 +453,7 @@ export const AreaMap = () => {
   }, [featuredPropertyFeatures]);
 
   useEffect(() => {
-    if (syncClaimLinkPropertyFeatures) {
+    if (syncClaimLinkPropertyFeatures?.features) {
       claimLinkSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
 

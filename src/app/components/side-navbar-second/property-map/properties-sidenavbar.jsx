@@ -289,7 +289,7 @@ const PropertiesSideNavbar = () => {
             }`}
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
-              <span className="font-bold">Company List </span>
+              <span className="font-bold">Property List </span>
               <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
                 className="h-6 w-6 text-blue-700 cursor-pointer absolute right-0"

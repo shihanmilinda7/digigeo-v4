@@ -290,8 +290,8 @@ const CompanySideNavbar = () => {
             }`}
           >
               <div className="flex-col "> 
-              <div className="flex justify-between mx-2"> 
-                <span className="font-bold block">Property Info</span>
+              <div className="flex justify-end mx-2"> 
+                {/* <span className="font-bold block">Property Info</span> */}
                 <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
                 className="h-6 w-6 text-blue-700 cursor-pointer right-0"

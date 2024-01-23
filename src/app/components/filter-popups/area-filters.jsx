@@ -2,7 +2,7 @@
 
 import Modal from "react-modal";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Button, Chip } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -16,7 +16,7 @@ import {
 } from "../../../store/area-map/area-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
-import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-browser";
+import AreaFilterAreaListItemBrowser from "./area-filter-arealist-item-browser";
 
 const AreaFilter = ({ isOpenIn, closePopup }) => {
   const dispatch = useDispatch();
@@ -26,14 +26,17 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
   const [areaList, setAreaList] = useState([]);
+  const [allAreaList, setallAreaList] = useState([]);
+  const [filteredAreaList, setfilteredAreaList] = useState([]);
   // const [miningArea, setMiningArea] = useState("");
   const [miningArea, setMiningArea] = useState("");
-  const [areaInfo, setareaInfo] = useState("Select a country first..");
+  const [areaInfo, setareaInfo] = useState("Type an Area Name...");
   const [propertyList, setpropertyList] = useState([]);
   const [totalResultCount, settotalResultCount] = useState(0); 
   const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setitemsPerPage] =  useState(10);
-      const [searchQuery, setsearchQuery] = useState(""); 
+  const [searchQuery, setsearchQuery] = useState(""); 
+ 
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -71,35 +74,46 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     },
   };
 
-   useEffect(() => {
+  //  useEffect(() => {
 
-    const fproperty = async () => {
+  //   const fproperty = async () => {
  
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
-        {
-          cache: "no-store",
-        }
-      );
-      const d = await res.json();
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
+  //       {
+  //         cache: "no-store",
+  //       }
+  //     );
+  //     const d = await res.json();
        
-      setpropertyList(d.data);
-      settotalResultCount(d.count)
+  //     setpropertyList(d.data);
+  //     settotalResultCount(d.count)
          
-    }
-    console.log("searchQuery",searchQuery)
+  //   }
+  //   console.log("searchQuery",searchQuery)
 
-    if (searchQuery) {
+  //   if (searchQuery) {
     
-        fproperty().catch(console.error);
+  //       fproperty().catch(console.error);
      
-    }
-    else {
-      setpropertyList([]);
-    }
+  //   }
+  //   else {
+  //     setpropertyList([]);
+  //   }
     
-  }, [searchQuery,currentPage])
+  // }, [searchQuery,currentPage])   
   
+  useEffect(() => {
+    setMiningArea(areaName)
+
+  },[areaName])
+  
+
+  useEffect(() => {
+    setCountry(areaCountry)
+  }, [areaCountry])
+  
+
   const getSearchQuery= (country="", areaName="")=>{
     let s=""
     if(country==""){
@@ -133,10 +147,13 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   //areal load country
   useEffect(() => {
-    if(country ==""){
+    console.log("c",country)
+    if(country ==null){
       setAreaList([])
        setpropertyList([]);
-      setareaInfo("Select a country first..")
+      setareaInfo("Type an Area name...")
+      console.log("alist",allAreaList)
+       setfilteredAreaList(allAreaList)
       return
     }
 
@@ -177,6 +194,18 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
     const s = getSearchQuery(country, areaName)
     setsearchQuery(s)
+
+    //filterAllrea by country
+     
+    if(country){
+      const fa =    allAreaList.filter(a=> a.country==country)
+      setfilteredAreaList(fa)
+    }else{
+      setfilteredAreaList(allAreaList)
+    }
+    
+    
+    
   }, [country]);
 
   // useEffect(() => {
@@ -219,19 +248,48 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //const animals = [{value:"qqq", label:"q1"},{value:"qqq2", label:"q2"},{value:"qqq3", label:"q3"}]
 //init use effect
   useEffect(() => {
-    const f = async () => {
+    // const f = async () => {
+    //   const res = await fetch(
+    //     `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+    //     {
+    //       cache: "force-cache",
+    //     }
+    //   );
+    //   const d = await res.json();
+    //   setCountryList(d.data);
+    // };
+
+    // f().catch(console.error);
+
+    //load area list   
+ const fareas = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/countrylist`,
+        `https://atlas.ceyinfo.cloud/matlas/allarealist`,
         {
           cache: "force-cache",
         }
       );
       const d = await res.json();
-      setCountryList(d.data);
+      setallAreaList(d.data);
     };
 
-    f().catch(console.error);
+    fareas().catch(console.error);
+
+   
+
+    
+
   }, []);
+
+  useEffect(() => {
+     const result = Object.groupBy(allAreaList, ({ country }) => country);
+    const cs = Object.keys(result) 
+    
+    setCountryList(cs.map(c => { return { country: c } }));
+    setfilteredAreaList(allAreaList)
+ 
+  }, [allAreaList])
+  
 
   return (
     <div>
@@ -262,12 +320,19 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                   <div className="flex-col gap-2   w-1/3">
                     <span className="block">Filter By Country</span>
                     <Autocomplete
+                    
+                      allowsEmptyCollection={true}
+                      allowsCustomValue={true}
                       label="Select a country"
                       className="max-w-xs"
-                      onSelectionChange={(e) => {
-                        setCountry(e);
+                      onInputChange={(e) => {
+                      
+                          setCountry(e);
+                       
+
                       }}
-                      defaultSelectedKey={country}
+                      inputValue={country}
+                       defaultSelectedKey={country}
                     >
                       {countryList.map((countryObj) => (
                         <AutocompleteItem
@@ -280,12 +345,16 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     </Autocomplete>
                     <span className="block">Filter By Exploration Area Name</span>
                     <Autocomplete
-                      isDisabled={areaList.length==0}
+                       inputValue={miningArea}
                       allowsCustomValue
                       label={areaInfo}
                       className="max-w-xs"
                       defaultSelectedKey={miningArea}
                       onInputChange={(e) => {
+                        console.log(e)
+                         const r =  new RegExp(e, "i") 
+                         const fa =    allAreaList.filter(a=> a.area_name.search(r)!=-1)
+                          setfilteredAreaList(fa)
                       setMiningArea(e); }}
                     >
                        {areaList.map((areaObj) => (
@@ -324,7 +393,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     
                       <div className="border-solid border  last: w-[500px] bg-white rounded-lg m-2  ">
               
-                        <PropertyFilterPropertyItemBrowser properties={propertyList} totalResultCount={totalResultCount} curPageHandler={setCurrentPage} itemsPerPage={itemsPerPage} selectionHandler={()=>{}} />
+                        <AreaFilterAreaListItemBrowser areaList={filteredAreaList } countryHandler={setCountry} areaHandler={setMiningArea}     />
                         
                       </div>
                       
