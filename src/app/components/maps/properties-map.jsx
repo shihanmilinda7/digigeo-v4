@@ -13,14 +13,21 @@ import {
   setIsSideNavOpen,
   setPropertiesLyrs,
 } from "../../../store/map-selector/map-selector-slice";
+
+import {
+  setIsPropertiesSideNavOpen,
+  setclickassetObject,
+  setclickclaimObject,
+  setclickfPropertyObject,
+  setclicksyncPropertyObject,
+} from "../../../store/properties-map/properties-map-slice";
+
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
+import PropertyMapClickPopup from "./property-map-popup/property-map-click-popup";
 
 
-
-import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
-import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import GeoJSON from "ol/format/GeoJSON";
  
 import {
@@ -113,6 +120,7 @@ export const PropertiesMap = () => {
   
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
+  const [clickedOnFeature, setclickedOnFeature] = useState(false);
 
   const mapRef = useRef();
   const mapViewRef = useRef();
@@ -943,6 +951,181 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   };
 
 
+    useEffect( () => {
+
+    const fetchData = async()=>{
+      console.log("qqq1")
+       setclickedOnFeature(false)
+     let assetObject, fPropertyObject,syncPropertyObject,claimObject
+    
+  let extentDim;
+  const viewResolution = mapViewRef?.current?.getResolution()
+  if (viewResolution < 15) {
+    extentDim = 100;
+  } else if (viewResolution < 50) {
+    extentDim = 500;
+  } else if (viewResolution < 150) {
+    extentDim = 1000;
+  } else if (viewResolution < 250) {
+    extentDim = 1500;
+  } else if (viewResolution < 400) {
+    extentDim = 2500;
+  } else {
+    extentDim = 3000;
+    }
+    
+    const ext = [
+    coordinates[0] - extentDim,
+    coordinates[1] - extentDim,
+    coordinates[0] + extentDim,
+    coordinates[1] + extentDim,
+    ];
+  //first look for asset features
+    const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+  console.log("qqq2")
+    if (selAssetFeatures.length > 0) {
+       setclickedOnFeature(true)
+      let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
+      let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
+      let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
+      let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
+      let area = selAssetFeatures?.[0]?.get("area") ?? "";
+      let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+      let country = selAssetFeatures?.[0]?.get("country") ?? "";
+      let region = selAssetFeatures?.[0]?.get("region") ?? "";
+      assetObject = {
+        asset_name,
+        assetalias,
+        asset_type,
+        commodities,
+        area,
+        stateProv,
+        country,
+        region,
+      }
+
+       dispatch(setclickassetObject(assetObject))
+    } else {
+       dispatch(setclickassetObject(undefined))
+    }
+  const selFPropertyFeatures =
+    fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+    if(selFPropertyFeatures.length>0){
+      setclickedOnFeature(true)
+        console.log("selFPropertyFeatures",selFPropertyFeatures)
+  let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
+  let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
+  let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
+  let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
+  let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
+  let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
+  let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
+  let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+  let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
+  let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
+
+  // const sponsoredowners = await getSponsorListFromRESTAPI(
+  //   features[0].get("id")
+      // );
+
+      const getData = async (hotplayid) => {
+        const url = "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
+        //load data from api - changed to return array
+
+        let sponsors = await fetch(url, {
+          method: "GET", // *GET, POST, PUT, DELETE, etc.
+          mode: "cors", // no-cors, *cors, same-origin
+          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: "same-origin", // include, *same-origin, omit
+          headers: {
+            "Content-Type": "application/json",
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+          .then((response) => response.json())
+          .then((res) => {
+            // let sponsors = "";
+            // res.data.forEach((element) => {
+            //   sponsors += element.sponsor + "/";
+            // });
+            return res.data;
+          });
+
+        // sponsors = sponsors.slice(0, -1);
+        // console.log("sponsors", sponsors);
+        return sponsors;
+      }
+      
+
+  const sponsoredowners = (await getData(hotplayid).data?.[0]?.sponsor) ?? ""
+   fPropertyObject =  {
+    sponsoredowners,
+    prop_name,
+    commo_ref,
+    assets,
+    resources,
+    map_area,
+    owners,
+    prop_exturl,
+    sale_name,
+    propertyid,
+      }
+      
+  dispatch(setclickfPropertyObject(fPropertyObject))
+
+    }else{
+      dispatch(setclickfPropertyObject(undefined))
+    }
+  // const selBoundaryFeatures =
+  //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+
+  const selSyncPropFeatures =
+      syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+
+      console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
+    if(selSyncPropFeatures.length>0){ 
+      setclickedOnFeature(true)
+     const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
+    const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
+    let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
+    const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+    const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
+    const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
+  // const selSynClaimLinkFeatures =
+  //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+    syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
+    
+    dispatch(setclicksyncPropertyObject(syncPropertyObject))
+    }else{
+    dispatch(setclicksyncPropertyObject(undefined))
+    }
+  const claimFeatures =
+      claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+     if(claimFeatures.length>0){ 
+      setclickedOnFeature(true)
+     let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
+    const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
+    claimObject = {ownerref,claimno}
+   
+    dispatch(setclickclaimObject(claimObject))
+     }else{
+       dispatch(setclickclaimObject(undefined))
+     }
+    
+     console.log("111")
+  //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
+    }
+console.log("qqq11")
+    if(coordinates){
+      fetchData();
+       if( clickedOnFeature){
+          setclickDataLoaded(true);
+       }
+    //  console.log("222")
+    }
+     
+  }, [coordinates])
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
@@ -1009,6 +1192,41 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
             Terrain
           </Button>
         </ButtonGroup>
+
+        <div
+          ref={setPopup}
+          style={{
+            backgroundColor: "white",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            padding: "15px",
+            borderRadius: "10px",
+            border: "1px solid #cccccc",
+            minWidth: "280px",
+            color: "black",
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              setCoordinates(undefined);
+              e.target.blur();
+              return false;
+            }}
+            style={{
+              textDecoration: "none",
+              position: "absolute",
+              top: "2px",
+              right: "8px",
+            }}
+          >
+            ✖
+          </button>
+          <div id="popup-content">
+            <p>Info:</p>
+            {clickDataLoaded && <PropertyMapClickPopup />}
+          </div>
+        </div>
+
         <Map
           ref={mapRef}
           style={{
@@ -1016,7 +1234,18 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
             height: "90vh",
           }}
           controls={[]}
+          onSingleclick={onSingleclick}
         >
+            {(popup && clickedOnFeature ) ? (
+            <olOverlay
+              element={popup}
+              position={coordinates}
+              autoPan
+              autoPanAnimation={{
+                duration: 250,
+              }}
+            />
+          ) : null}
           <olView
              ref={mapViewRef}
             initialCenter={[0, 0]}

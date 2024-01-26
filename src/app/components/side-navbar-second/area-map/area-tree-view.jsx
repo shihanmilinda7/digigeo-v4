@@ -102,6 +102,8 @@ const AreaTreeView = ({ syncPropFeatues }) => {
       // ];
       setTreeViewData(nodes)
     
+    } else {
+      setTreeViewData([])
     }
   }
   return (

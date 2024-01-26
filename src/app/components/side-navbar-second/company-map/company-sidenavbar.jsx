@@ -97,12 +97,12 @@ const CompanySideNavbar = () => {
   //data load
   useEffect(() => {
     console.log("companyId",companyId)
-    if (companyId) {
+   
       getFeaturedPropertyGeom();
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
       getAssetsGeometry();
-    }
+    
   }, [companyId]);
 
   const closeSecondNavBar = () => {
@@ -141,14 +141,18 @@ const CompanySideNavbar = () => {
       //   console.log("i", i.properties.colour)
       // );
     };
-
-    f().catch(console.error);
+    if(companyId==0){
+      dispatch(setFPropertyFeatures({}));
+    }else {
+      f().catch(console.error);
+      
+    }
   };
 
   useEffect(() => {
     
     console.log("loading f props -cmp",)
-    if (featuredPropertyFeatures) {
+    if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
       
       let blockno = 1
@@ -165,6 +169,8 @@ const CompanySideNavbar = () => {
       console.log("loading f props -cmp2", e)
       setFeaturedPropertiesLocal(e);
 
+    } else {
+          setFeaturedPropertiesLocal([]);
     }
   
   
@@ -199,8 +205,13 @@ const CompanySideNavbar = () => {
       dispatch(setSyncPropertyFeatures(gj));
       // console.log("gj", gj);
       };
-      
-    f().catch(console.error);
+      if (companyName == "") {
+        
+         dispatch(setSyncPropertyFeatures({}));
+      } else {
+        
+        f().catch(console.error);
+      }
   };
 
    const getAssetsGeometry = async () => {
@@ -231,7 +242,12 @@ const CompanySideNavbar = () => {
       dispatch(setAssetFeatures(gj));
       //console.log("gj", gj);
     };
-    f().catch(console.error);
+      if(companyName==""){
+         dispatch(setAssetFeatures({}));
+      } else {
+        
+        f().catch(console.error);
+      }
   };
 
   const getClaimLinkPropertiesGeometry = async () => {
@@ -256,7 +272,12 @@ const CompanySideNavbar = () => {
       dispatch(setsyncClaimLinkPropertyFeatures(gj));
     };
 
-    f().catch(console.error);
+      if(companyName==""){
+         dispatch(setsyncClaimLinkPropertyFeatures({}));
+      } else {
+        
+        f().catch(console.error);
+      }
   };
 
     const companyFpropLayerVisible = useSelector(

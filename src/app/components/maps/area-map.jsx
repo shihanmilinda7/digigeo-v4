@@ -17,7 +17,6 @@ import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
-import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import {
   setIsAreaSideNavOpen,
   setclickassetObject,
@@ -316,6 +315,7 @@ export const AreaMap = () => {
   //
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
+  const [clickedOnFeature, setclickedOnFeature] = useState(false);
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
     setCoordinates(coordinate);
@@ -414,8 +414,9 @@ export const AreaMap = () => {
   
   
   useEffect(() => {
-    if (syncPropertyFeatures) {
-      syncPropSourceRef?.current?.clear();
+     syncPropSourceRef?.current?.clear();
+    if (syncPropertyFeatures?.features) {
+      
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
       syncPropSourceRef?.current?.addFeatures(e);
@@ -433,8 +434,9 @@ export const AreaMap = () => {
   }, [syncPropertyFeatures]);
 
   useEffect(() => {
+    fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
-      fPropSourceRef?.current?.clear();
+      
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
 
       fPropSourceRef?.current?.addFeatures(e);
@@ -453,8 +455,9 @@ export const AreaMap = () => {
   }, [featuredPropertyFeatures]);
 
   useEffect(() => {
+     claimLinkSourceRef?.current?.clear();
     if (syncClaimLinkPropertyFeatures?.features) {
-      claimLinkSourceRef?.current?.clear();
+     
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
 
       claimLinkSourceRef?.current?.addFeatures(e);
@@ -472,9 +475,9 @@ export const AreaMap = () => {
   }, [syncClaimLinkPropertyFeatures]);
 
   useEffect(() => {
-    console.log("assetFeatures", assetFeatures);
+     assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
-      assetSourceRef?.current?.clear();
+     
       const e = new GeoJSON().readFeatures(assetFeatures);
        
       assetSourceRef?.current?.addFeatures(e);
@@ -941,10 +944,12 @@ export const AreaMap = () => {
       });
   }, []);
 
+  //single click -  
   useEffect(() => {
+    
     const fetchData = async () => {
+      setclickedOnFeature(false)
       let assetObject, fPropertyObject, syncPropertyObject, claimObject;
-      // console.log("coordinates",coordinates,)
 
       let extentDim;
       const viewResolution = mapViewRef?.current?.getResolution();
@@ -973,6 +978,8 @@ export const AreaMap = () => {
         assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
       if (selAssetFeatures.length > 0) {
+        console.log("asset found")
+        setclickedOnFeature(true)
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
         let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
         let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -999,7 +1006,9 @@ export const AreaMap = () => {
       const selFPropertyFeatures =
         fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
       if (selFPropertyFeatures.length > 0) {
-        console.log("selFPropertyFeatures", selFPropertyFeatures);
+        console.log("fprop found")
+        setclickedOnFeature(true)
+        // console.log("selFPropertyFeatures", selFPropertyFeatures);
         let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
         let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
         let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
@@ -1070,8 +1079,10 @@ export const AreaMap = () => {
       const selSyncPropFeatures =
         syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-      console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
+      // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
+        console.log("sync prop found")
+         setclickedOnFeature(true)
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
         let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1098,6 +1109,8 @@ export const AreaMap = () => {
           coordinates
         ) ?? [];
       if (claimFeatures.length > 0) {
+        console.log("claim found")
+         setclickedOnFeature(true)
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
         claimObject = { ownerref, claimno };
@@ -1110,17 +1123,16 @@ export const AreaMap = () => {
       console.log("111");
       //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
     };
-
-    if (coordinates) {
+ 
+    if (coordinates ) {
       fetchData();
-      setclickDataLoaded(true);
+      if( clickedOnFeature){
+        setclickDataLoaded(true);
+      }
       //  console.log("222")
     }
   }, [coordinates]);
-
-  // const handleClickPopup = useCallback(   (coordinates) =>  {
-
-  // },[coordinates])
+ 
 
   return (
     <div className="flex">
@@ -1184,7 +1196,7 @@ export const AreaMap = () => {
                 : "bg-blue-700 text-white"
             } `}
           >
-            Satelite
+            Satellite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
@@ -1242,7 +1254,7 @@ export const AreaMap = () => {
           controls={[]}
           onSingleclick={onSingleclick}
         >
-          {popup ? (
+          {(popup && clickedOnFeature ) ? (
             <olOverlay
               element={popup}
               position={coordinates}

@@ -93,6 +93,13 @@ const AreaSideNavbar = () => {
       getClaimLinkPropertiesGeometry();
       getAssetsGeometry();
     }
+    else {
+      setFeaturedCompanies([]);
+      dispatch(setSyncPropertyFeatures({}));
+      dispatch(setFPropertyFeatures({}));
+       dispatch(setAssetFeatures({}));
+        dispatch(setsyncClaimLinkPropertyFeatures({}));
+    }
   }, [areaName]);
 
   const closeSecondNavBar = () => {

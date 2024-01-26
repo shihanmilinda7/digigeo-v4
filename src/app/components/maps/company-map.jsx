@@ -309,7 +309,7 @@ export const CompanyMap = () => {
   const [claimObject, setclaimObject] = useState(undefined);
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
-
+  const [clickedOnFeature, setclickedOnFeature] = useState(false);
 
 
 
@@ -414,9 +414,9 @@ export const CompanyMap = () => {
 
 
     useEffect(() => {
-      
+       syncPropSourceRef?.current?.clear()
     if (syncPropertyFeatures?.features?.length>0) {
-      syncPropSourceRef?.current?.clear()
+     
       const e = new GeoJSON().readFeatures(syncPropertyFeatures)
        
       syncPropSourceRef?.current?.addFeatures(e);
@@ -436,10 +436,10 @@ export const CompanyMap = () => {
     }, [syncPropertyFeatures]);
   
     useEffect(() => {
+       fPropSourceRef?.current?.clear()
+    if (featuredPropertyFeatures?.features) {
       
-    if (featuredPropertyFeatures) {
-      
-      fPropSourceRef?.current?.clear()
+     
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
        
       fPropSourceRef?.current?.addFeatures(e);
@@ -461,9 +461,9 @@ export const CompanyMap = () => {
   }, [featuredPropertyFeatures]);
 
     useEffect(() => {
-      
-    if (syncClaimLinkPropertyFeatures) {
       claimLinkSourceRef?.current?.clear()
+    if (syncClaimLinkPropertyFeatures?.features) {
+      
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures)
        
       claimLinkSourceRef?.current?.addFeatures(e);
@@ -481,9 +481,9 @@ export const CompanyMap = () => {
   }, [syncClaimLinkPropertyFeatures]);
   
     useEffect(() => {
-    console.log("assetFeatures", assetFeatures,)
+    assetSourceRef?.current?.clear()
     if (assetFeatures?.features) {
-      assetSourceRef?.current?.clear()
+      
       const e = new GeoJSON().readFeatures(assetFeatures)
         console.log("assetFeatures added" )
       assetSourceRef?.current?.addFeatures(e);
@@ -965,6 +965,7 @@ export const CompanyMap = () => {
   useEffect( () => {
 
     const fetchData = async()=>{
+       setclickedOnFeature(false)
      let assetObject, fPropertyObject,syncPropertyObject,claimObject
     // console.log("coordinates",coordinates,)
     
@@ -994,6 +995,7 @@ export const CompanyMap = () => {
     const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
   
     if (selAssetFeatures.length > 0) {
+       setclickedOnFeature(true)
       let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
       let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
       let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -1020,6 +1022,7 @@ export const CompanyMap = () => {
   const selFPropertyFeatures =
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
     if(selFPropertyFeatures.length>0){
+      setclickedOnFeature(true)
         console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
@@ -1092,6 +1095,7 @@ export const CompanyMap = () => {
 
       console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
     if(selSyncPropFeatures.length>0){ 
+      setclickedOnFeature(true)
      const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
     const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
     let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1109,6 +1113,7 @@ export const CompanyMap = () => {
   const claimFeatures =
       claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
      if(claimFeatures.length>0){ 
+      setclickedOnFeature(true)
      let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
     const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
     claimObject = {ownerref,claimno}
@@ -1123,8 +1128,10 @@ export const CompanyMap = () => {
     }
 
     if(coordinates){
-        fetchData();
-    setclickDataLoaded(true);
+      fetchData();
+       if( clickedOnFeature){
+          setclickDataLoaded(true);
+       }
     //  console.log("222")
     }
      
@@ -1256,7 +1263,7 @@ export const CompanyMap = () => {
            onSingleclick={onSingleclick}
         >
 
-            {popup ? (
+            {(popup && clickedOnFeature ) ? (
           <olOverlay
             element={popup}
             position={coordinates}

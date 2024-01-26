@@ -147,12 +147,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   //areal load country
   useEffect(() => {
-    console.log("c",country)
+    // console.log("c",country)
     if(country ==null){
       setAreaList([])
        setpropertyList([]);
       setareaInfo("Type an Area name...")
-      console.log("alist",allAreaList)
+      // console.log("alist",allAreaList)
        setfilteredAreaList(allAreaList)
       return
     }
@@ -200,8 +200,11 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     if(country){
       const fa =    allAreaList.filter(a=> a.country==country)
       setfilteredAreaList(fa)
+
     }else{
       setfilteredAreaList(allAreaList)
+      setAreaList([])
+      setareaInfo("Type An Area Name...")
     }
     
     
@@ -291,6 +294,13 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   }, [allAreaList])
   
 
+  const resetHandler = ()=>{
+     setCountry("")
+     setMiningArea("")
+     setAreaList([])
+       dispatch(setAreaCountry(country));
+      dispatch(setAreaMiningArea(miningArea));
+  }
   return (
     <div>
       <Modal
@@ -371,13 +381,15 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                               <Chip
                                 color="default"
                                 variant="light"
-                                className="cursor-pointer"
+                          className="cursor-pointer"
+                          onClick={resetHandler}
                               >
                                 Reset
                               </Chip>
                             </div>
                             <div className="mt-2">
-                              <Chip
+                                 <Chip
+                                 isDisabled ={!(country && miningArea)}
                                 color="primary"
                                 className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
                                 onClick={searchAction}

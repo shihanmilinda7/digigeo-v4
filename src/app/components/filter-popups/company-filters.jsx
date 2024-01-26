@@ -57,6 +57,35 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
+
+    const companyName = useSelector(
+    (state) => state.companyMapReducer.companyName
+  );
+    const companyId = useSelector(
+    (state) => state.companyMapReducer.companyId
+  );
+    const companyStockcode = useSelector(
+    (state) => state.companyMapReducer.companyStockcode
+  );
+
+  useEffect(()=>{
+    setCompany(companyName)
+
+  },[companyName])
+
+  useEffect(() => {
+      console.log("companyStockcode",companyStockcode)
+    setStockcode(companyStockcode)
+
+  },[companyStockcode])
+
+    useEffect(()=>{
+      console.log("companyIdqq",companyId)
+    setCompanyidLocal(companyId)
+     
+      
+  },[companyId])
+
   // const areaCompany = "Test";
   // const areaState = "Test";
 
@@ -87,11 +116,23 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
   useEffect(() => {
-    dispatch(setcompanyId(companyidLocal));
+     console.log("set companyidLocal to",companyidLocal )
+    // dispatch(setcompanyId(companyidLocal));
     const c = companyList.find(c=> c.companyid==companyidLocal)
     if(c){
-      dispatch(setcompanyName(c.name));
+      // dispatch(setcompanyName(c.name));
+      console.log("set stockcode to",c.stockcode)
+      setStockcode(c.stockcode)
+      setCompany(c.name)
     }
+
+    // if(companyId==0){
+    //    console.log("set stockcode to 0 an d other-",companyId )
+    //   setStockcode("")
+    // }
+    // else{
+    //    setStockcode("")
+    // }
   }, [companyidLocal]);
 
   // useEffect(() => {
@@ -115,6 +156,8 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
 
   const searchAction = async () => {
     // if (company && miningArea) {
+       dispatch(setcompanyId(companyidLocal));
+        dispatch(setcompanyName(company));
     dispatch(setcompanyZoomMode("extent"));
     const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
@@ -155,13 +198,22 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
       const d = await res.json();
       setStockcodeList(d.data);
       setCompanyList(d.data);
-      console.log("clist",d.data)
+       
     };
     if (debouncedSearchStockcode) {
       f().catch(console.error);
     }
   }, [debouncedSearchStockcode]);
 
+  const resetHandler = ()=>{
+     setStockcode("")
+      setCompany("")
+      setCompanyidLocal(0)
+     dispatch(setcompanyId(0));
+        dispatch(setcompanyName(""));
+    dispatch(setcompanyStockcode(""));
+    
+  }
   return (
     <div>
       <Modal
@@ -192,17 +244,19 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                   <div className="flex-col gap-2">
                       <span className="block">Filter By Company Name</span>
                     <Autocomplete
+                      allowsEmptyCollection={true}
+                      allowsCustomValue={true}
                       label="Company Name"
                       className="max-w-xs"
                       selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                      
+                           console.log("onInputChange-> ",e)
                          setSearch(e)
-                        // setCompany(e);
+                         setCompany(e);
                         
                       }}
                       onSelectionChange={(e) => {
-                       
+                         console.log("onSelectionChange-> ",e)
                          setCompanyidLocal(e)
                          const c = companyList.find(c=> c.companyid==e)
                          if(c){
@@ -213,6 +267,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       
                       }}
                       defaultSelectedKey={company}
+                      inputValue={company}
                     >
                       {companyList.map((companyObj) => (
                         <AutocompleteItem
@@ -225,20 +280,23 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                     </Autocomplete>
                       <span className="block">Filter By Stock Code</span>
                     <Autocomplete
+                      allowsEmptyCollection={true}
+                      allowsCustomValue={true}
                       label="Stock Code"
                       className="max-w-xs"
                        selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                         console.log("s code",e)
+                          console.log("s code",e)
                          setSearchStockcode(e)
                          setStockcode(e);
                       }}
                       onSelectionChange={(e) => {
-                         
+                         console.log("sel sel-ch",e)
                          setCompanyidLocal(e)
                       
                       }}
-                      defaultSelectedKey={stockcode}
+                      // defaultSelectedKey={stockcode}
+                      inputValue={stockcode}
                     >
                       {StockcodeList.map((companyObj) => (
                         <AutocompleteItem
@@ -273,6 +331,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                     color="default"
                     variant="light"
                     className="cursor-pointer"
+                    onClick={resetHandler}
                   >
                     Reset
                   </Chip>
@@ -282,6 +341,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                     color="primary"
                     className="cursor-pointer hover:bg-blue-600 custom-button-1 right-0 bg-blue-700"
                     onClick={searchAction}
+                    isDisabled={!(company && stockcode)}
                   >
                     Search
                   </Chip>

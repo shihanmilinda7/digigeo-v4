@@ -24,9 +24,13 @@ const dispatch = useDispatch();
   };
 
 
-    useEffect(() => {
+  useEffect(() => {
+    if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
       setfeaturesObjects(e)
+    }else{
+      setfeaturesObjects([])
+    }
        
     }, [featuredPropertyFeatures])
   
