@@ -204,8 +204,10 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   if(searchParamPropertyName){
     setSearchPropertyName(searchParamPropertyName);
   }
+    
   if(searchParamCountry){
     setCountryTemp(searchParamCountry);
+    // setCountry(searchParamCountry);
   }
   if(searchParamStateProv){
     setstateProv(searchParamStateProv);
@@ -840,7 +842,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <span className="flex gap-2">
-                       {country && <Badge
+                       {(country ||countryTemp )&& <Badge
                           isOneChar
                           content={<CheckIcon />}
                           color="danger"

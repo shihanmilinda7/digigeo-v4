@@ -112,7 +112,8 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const [title, setTitle] = useState("");
   const [logoPath, setlogoPath] = useState("");
   const [sponsorData, setsponsorData] = useState([]);
-  const [profile, setprofile] = useState([]);
+  const [profile, setprofile] = useState("");
+  const [url, seturl] = useState("");
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
@@ -154,10 +155,15 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
+      if(d?.data?.length>0){
       const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
       setsponsorData(sponsorData)
 
       setprofile(d.data[0]?.profile ?? "")
+      }else{
+        setprofile("")
+        setsponsorData("")
+      }
     };
     f().catch(console.error);
   };
@@ -168,15 +174,20 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
-         let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
-          
-        const logo = d.data[0]?.logo;
-        const logoext = d.data[0]?.logoext ?? "png";
-        let urlimg =
-        `data:image/${logoext};base64,` +
-        btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
- 
-setlogoPath(urlimg)
+          if(d?.data?.length>0){  
+                let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
+              seturl(url)
+              const logo = d.data[0]?.logo;
+              const logoext = d.data[0]?.logoext ?? "png";
+              let urlimg =
+              `data:image/${logoext};base64,` +
+              btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+      
+              setlogoPath(urlimg)
+         }else{
+             setlogoPath("")
+             seturl("")
+         }
 
     };
     f().catch(console.error);
@@ -206,23 +217,26 @@ setlogoPath(urlimg)
             />
           </div>
           <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem"}}>
-             <div> <Image
+             <div> {logoPath && (<Image
               src={logoPath}
               width={200}
               height={100}
               alt="Logo"
-              /></div>
+              />)}</div>
             <span>{title}</span>
             <span>
             {sponsorData && sponsorData.map(sd =>(  
               <span key={sd.text} style={sd.style}>{sd.text}</span>))
             } 
             </span>
-            <span>{profile}</span>
-            <Link href={profile} target="_blank" className="rounded-lg border border-solid" >
+          
+            {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid" >
              
+              {"View Profile"} 
+            </Link>)}
+            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid" >
               {"Read More"} 
-            </Link>
+            </Link>)}
             <AreaFCompanyFProperties companyid={companyid} />
 
           </div>
