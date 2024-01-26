@@ -9,11 +9,13 @@ import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../common-comp/next-text-input-fields";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setAreaCountry,
-  setAreaMiningArea,
-  setAreaZoomMode,
-  setIsAreaSideNavOpen,
-} from "../../../store/area-map/area-map-slice";
+  setsearchParamPropertyName,
+  setsearchParamStateProv,
+  setsearchParamCountry,
+  setsearchParamMiningArea,
+  setsearchParamAssetTypeList,
+  setsearchParamCommodityList,
+} from "../../../store/properties-map/properties-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
@@ -138,10 +140,33 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
-  // useEffect(()=>{
-  //   console.log("selectedItems",selectedItems)
+  
+  //searchParam Redux
 
-  // },[selectedItems]);
+  const searchParamPropertyName = useSelector(
+    (state) => state.propertiesMapReducer.searchParamPropertyName
+  );
+  const searchParamCountry = useSelector(
+    (state) => state.propertiesMapReducer.searchParamCountry
+  );
+  const searchParamStateProv = useSelector(
+    (state) => state.propertiesMapReducer.searchParamStateProv
+  );
+  const searchParamMiningArea = useSelector(
+    (state) => state.propertiesMapReducer.searchParamMiningArea
+  );
+  const searchParamAssetTypeList = useSelector(
+    (state) => state.propertiesMapReducer.searchParamAssetTypeList
+  );
+  const searchParamCommodityList = useSelector(
+    (state) => state.propertiesMapReducer.searchParamCommodityList
+  );
+
+  // useEffect(()=>{
+  //   //console.log("selectedItems",selectedItems)
+  //   setSearchPropertyName(searchParamPropertyName);
+
+  // },[searchParamPropertyName]);
 
   //on init
   useEffect(() => {
@@ -172,7 +197,46 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     };
 
     fcommo().catch(console.error);
+
+    //load searchParams
+
+  // console.log("searchParamPropertyNamex",searchParamPropertyName)
+  if(searchParamPropertyName){
+    setSearchPropertyName(searchParamPropertyName);
+  }
+  if(searchParamCountry){
+    setCountryTemp(searchParamCountry);
+  }
+  if(searchParamStateProv){
+    setstateProv(searchParamStateProv);
+  }
+
+  if(searchParamMiningArea){ //
+    setarea(searchParamMiningArea);
+    } 
+
+  if(searchParamAssetTypeList){
+    setmineTypeSelections(searchParamAssetTypeList)
+    setassetTypeList(searchParamAssetTypeList)
+  } 
+
+    
+  if(searchParamCommodityList){
+    setcommoditySelections(searchParamCommodityList)
+    setcommodityList(searchParamCommodityList)
+  } 
+
+
+
+
   }, []);
+
+  useEffect(() => {
+      setstateProv(searchParamStateProv);
+  }, [searchParamStateProv])
+    useEffect(() => {
+      setarea(searchParamMiningArea);
+  }, [searchParamMiningArea])
 
   //fetch results when search query changed
   useEffect(() => {
@@ -301,6 +365,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       setcommodityList([])
       setmineTypeSelections([])
       setcommoditySelections([])
+
+      dispatch(setsearchParamPropertyName(""));
+      dispatch(setsearchParamCountry(""));
+      dispatch(setsearchParamStateProv(""));
+      dispatch(setsearchParamMiningArea(""));
+      dispatch(setsearchParamAssetTypeList([]));
+      dispatch(setsearchParamCommodityList([]));
        
     }
 
@@ -311,6 +382,13 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
    // dispatch(setpropertyMapPropertyAssetIdCsv(getPropertyAssetIdCvs()));
     dispatch(setIsPropertiesSideNavOpen(true));
      dispatch(setpropertySearchQuery(searchQuery));
+     dispatch(setsearchParamPropertyName(searchPropertyName));
+     dispatch(setsearchParamCountry(country));
+     dispatch(setsearchParamStateProv(stateProv));
+     dispatch(setsearchParamMiningArea(area));
+     dispatch(setsearchParamAssetTypeList(assetTypeList));
+     dispatch(setsearchParamCommodityList(commodityList));
+
     closePopup();
   };
 
@@ -348,7 +426,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   useEffect(() => {
       
     const fGetPropertyAssetNameBasedOnSearchParams = async () => {
-     
+
          if(searchPropertyName){
               const res = await fetch(
                 `https://atlas.ceyinfo.cloud/matlas/propertylist/${searchPropertyName}`,
@@ -372,7 +450,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       setpropertyMasterNameList([]);
       setshowPropNameBadge(false)
     }
-    // console.log("debouncedSearchPropertyName",debouncedSearchPropertyName)
     if (searchPropertyName?.length > 1) {
        const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
         setsearchQuery(q)
@@ -562,7 +639,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   
   
   useEffect(() => {
-  //  buildSearchQuery(debouncedSearchPropertyName,"",country,stateProv,area)
 
      const q =  buildSearchQuery(searchPropertyName, "", country, stateProv, area,assetTypeList,commodityList)
        setsearchQuery(q)
@@ -779,6 +855,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                     <div className="flex gap-2">
                    
                      <Autocomplete
+                        allowsEmptyCollection={true}
+                        allowsCustomValue={true}
                         size={"sm"}
                         label="Country"
                         className="w-1/2"
@@ -811,14 +889,21 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                            
                         >
                            </Badge> }
-                   <Autocomplete
+                      <Autocomplete
+                         allowsEmptyCollection={true}
+                      allowsCustomValue={true}
                         size={"sm"}
                         label="State/Province"
                         className="w-1/2"
                         onInputChange={(e) => {
                           setstateProv(e);
                         }}
+                         onSelectionChange={(e) => {
+                         setstateProv(e);
+                         }}
+                        
                         defaultSelectedKey={stateProv}
+                        inputValue={stateProv ?? ""}
                       >
                         {stateProvList.map((spObj) => (
                           <AutocompleteItem
@@ -841,6 +926,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         >
                            </Badge> }
                      <Autocomplete
+                      allowsEmptyCollection={true}
+                      allowsCustomValue={true}
                       size={"sm"}
                       label="Mining Area"
                       className="w-1/2"
@@ -848,6 +935,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         setarea(e);
                       }}
                       defaultSelectedKey={area}
+                      inputValue={area ?? ""}
                     >
                       {areaList.map((ao) => (
                         <AutocompleteItem

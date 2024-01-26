@@ -205,8 +205,6 @@ const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
 
          
           <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center"}}>
-          
-
              <div> {logoPath && (<Image
               src={logoPath}
               width={200}

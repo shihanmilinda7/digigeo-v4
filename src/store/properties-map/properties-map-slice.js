@@ -26,6 +26,12 @@ const initialState = {
   clickfPropertyObject: undefined,
   clickassetObject: undefined,
   clicksyncPropertyObject: undefined,
+  searchParamPropertyName:"",
+  searchParamCountry:"",
+  searchParamStateProv:"",
+  searchParamMiningArea:"",
+  searchParamAssetTypeList:[],
+  searchParamCommodityList:[],
 };
 
 const propertiesMapSlice = createSlice({
@@ -38,12 +44,12 @@ const propertiesMapSlice = createSlice({
     setpropertySearchQuery: (state, action) => {
       state.propertySearchQuery = action.payload;
     },
-    setpropertyMapPropertyAssetIdCsv: (state, action) => {
-      state.propertyMapPropertyAssetIdCsv = action.payload;
-    },
-    setpropertyMapAssetCsv: (state, action) => {
-      state.propertyMapAssetCsv = action.payload;
-    },
+    // setpropertyMapPropertyAssetIdCsv: (state, action) => {
+    //   state.propertyMapPropertyAssetIdCsv = action.payload;
+    // },
+    // setpropertyMapAssetCsv: (state, action) => {
+    //   state.propertyMapAssetCsv = action.payload;
+    // },
     setSyncPropertyFeatures: (state, action) => {
       state.syncPropertyFeatures = action.payload;
     },
@@ -110,6 +116,25 @@ const propertiesMapSlice = createSlice({
     setclicksyncPropertyObject: (state, action) => {
       state.clicksyncPropertyObject = action.payload;
     },
+ 
+    setsearchParamPropertyName: (state, action) => {
+      state.searchParamPropertyName = action.payload;
+    },
+    setsearchParamCountry: (state, action) => {
+      state.searchParamCountry = action.payload;
+    },
+    setsearchParamStateProv: (state, action) => {
+      state.searchParamStateProv = action.payload;
+    },
+    setsearchParamMiningArea: (state, action) => {
+      state.searchParamMiningArea = action.payload;
+    },
+    setsearchParamAssetTypeList: (state, action) => {
+      state.searchParamAssetTypeList = action.payload;
+    },
+    setsearchParamCommodityList: (state, action) => {
+      state.searchParamCommodityList = action.payload;
+    },
   },
 });
 
@@ -139,6 +164,12 @@ export const {
   setclickfPropertyObject,
   setclickassetObject,
   setclicksyncPropertyObject,
+  setsearchParamPropertyName,
+  setsearchParamStateProv,
+  setsearchParamCountry,
+  setsearchParamMiningArea,
+  setsearchParamAssetTypeList,
+  setsearchParamCommodityList,
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;
