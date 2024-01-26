@@ -4,13 +4,13 @@ import Modal from "react-modal";
 
 import { useEffect, useState } from "react";
 import { Button, Chip } from "@nextui-org/react";
-import { FaFilter } from "react-icons/fa";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+// import { FaFilter } from "react-icons/fa";
+// import { AiOutlineCloseCircle } from "react-icons/ai";
 import NextTextInputField from "../../common-comp/next-text-input-fields";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image'
 import Link from "next/link";
-import AreaFCompanyFProperties from "./company-fcompany-popup-properties";
+// import AreaFCompanyFProperties from "./company-fcompany-popup-properties";
 
 
 const formatUrl = (url) => {
@@ -105,17 +105,18 @@ const getStyledTexts = (name) => {
 };
 
 
-const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
-  const dispatch = useDispatch();
+const CMapFCompanyAddlock = ({    titleIn,companyid }) => {
+  // const dispatch = useDispatch();
   
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [logoPath, setlogoPath] = useState("");
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState([]);
+  const [url, seturl] = useState([]);
 
-  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+  // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
   const customStyles = {
     overlay: {
@@ -135,17 +136,19 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
     },
   };
 
-  useEffect(() => {
-    setIsOpen(isOpenIn);
-  }, [isOpenIn]);
-  useEffect(() => {
-  }, [sponsorData]);
+  // useEffect(() => {
+  //   setIsOpen(isOpenIn);
+  // }, [isOpenIn]);
+  // useEffect(() => {
+  // }, [sponsorData]);
 
   useEffect(() => {
-    setTitle(titleIn);
-    getCompanyDetails();
-    getSponsorDetails();
-  }, [titleIn]);
+    if (companyid != 0) {
+      setTitle(titleIn);
+      getCompanyDetails();
+      getSponsorDetails();
+    }
+  }, [companyid]);
 
  const getSponsorDetails = async () => {
     const f = async () => {
@@ -154,11 +157,18 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-      setsponsorData(sponsorData)
+     //console.log("d", d)
+      if (d.data.length > 0) {
+        const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
+        setsponsorData(sponsorData)
 
-      setprofile(d.data[0]?.profile ?? "")
-    };
+        setprofile(d.data[0]?.profile ?? "")
+      } else {
+         setprofile("")
+         setsponsorData("")
+      }
+   };
+   
     f().catch(console.error);
   };
  const getCompanyDetails = async () => {
@@ -167,16 +177,20 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
         { cache: "no-store" }
       );
-      const d = await res.json();
-         let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
-          
-        const logo = d.data[0]?.logo;
+        const d = await res.json();
+        let { url, urlPrefix,profile } = formatUrl(d.data[0]?.url ?? "");
+        seturl(url)
+      const logo = d.data[0]?.logo;
+      if (logo) {
         const logoext = d.data[0]?.logoext ?? "png";
         let urlimg =
-        `data:image/${logoext};base64,` +
-        btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+          `data:image/${logoext};base64,` +
+          btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
  
-setlogoPath(urlimg)
+        setlogoPath(urlimg)
+      }else{
+         setlogoPath("")
+      }
 
     };
     f().catch(console.error);
@@ -185,55 +199,44 @@ setlogoPath(urlimg)
 
 
   return (
-    <div>
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={closePopup}
-        // shouldCloseOnOverlayClick={false} [220px]
-        style={customStyles}
-        ariaHideApp={false}
-      >
-        <div className="bg-white rounded-lg min-w-[300px] flex-col justify-center items-center">
+    <div className = {companyid==0 ? "hidden":"block" } >
+     
+        <div className="bg-white rounded-lg   flex-col justify-center items-center">
 
-          <div className="flex items-center justify-center bg-blue-200  h-12 rounded-lg">
-
-            {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              
-            </span> */}
-            <AiOutlineCloseCircle
-              onClick={closePopup}
-              className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
-            />
-          </div>
-          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem"}}>
+         
+          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center"}}>
           
 
-             <div> <Image
+             <div> {logoPath && (<Image
               src={logoPath}
               width={200}
               height={100}
               
               alt="Logo"
                
-              /></div>
+              />)} </div>
             <span>{title}</span>
             <span>
             {sponsorData && sponsorData.map(sd =>(  
               <span key={sd.text} style={sd.style}>{sd.text}</span>))
             } 
             </span>
-            <span>{profile}</span>
-            <Link href={profile} target="_blank" className="rounded-lg border border-solid" >
+            {/* <div className="w-64 whitespace-nowrap text-ellipsis  "></div> */}
+            { profile && ( <Link href={profile} target="_blank" className="rounded-lg border border-solid" >
+             
+              See Profile..
+            </Link>)}
+            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid" >
              
               {"Read More"} 
-            </Link>
-            <AreaFCompanyFProperties companyid={companyid} />
+            </Link>)}
+            {/* <AreaFCompanyFProperties companyid={companyid} /> */}
 
           </div>
          
         </div>
-      </Modal>
+      
     </div>
   );
 };
-export default AreaFCompanyPopup;
+export default CMapFCompanyAddlock;

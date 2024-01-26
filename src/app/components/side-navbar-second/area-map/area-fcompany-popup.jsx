@@ -206,15 +206,11 @@ setlogoPath(urlimg)
             />
           </div>
           <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem"}}>
-          
-
              <div> <Image
               src={logoPath}
               width={200}
               height={100}
-              
               alt="Logo"
-               
               /></div>
             <span>{title}</span>
             <span>

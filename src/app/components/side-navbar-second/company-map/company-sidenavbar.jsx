@@ -39,6 +39,7 @@ import FeaturedPropertyDetailDiv from "./featured-property-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
 import  Image  from 'next/image';
 import CompanyTreeView from "./company-tree-view";
+import CMapFCompanyAddlock from './company-fcompany-popup';
 
 const CompanySideNavbar = () => {
   let pathname = "";
@@ -318,13 +319,13 @@ const CompanySideNavbar = () => {
                 className="h-6 w-6 text-blue-700 cursor-pointer right-0"
                 />
                 </div>
-                <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
-                
-                  <div className="flex-col">
+                <div className="flex items-center justify-center border-b-2 relative">
+                  <CMapFCompanyAddlock titleIn={companyName} companyid={companyId} ></CMapFCompanyAddlock>
+                  {/* <div className="flex-col">
                   {companyName && (<span className="font-bold block">{companyName}</span>)}
                   {companyStockcode && (<span className="font-bold block">Stock Code:{companyStockcode} </span>)}
                   
-                  </div>
+                  </div> */}
                 </div>
               </div>
           </div>
