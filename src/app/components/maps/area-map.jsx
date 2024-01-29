@@ -43,6 +43,7 @@ import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 import { flyTo } from "./fly"
  
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
+import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -362,6 +363,8 @@ export const AreaMap = () => {
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
+  const fPropSourceLabelRef = useRef(null);
+  const fPropVectorLayerLabelRef = useRef(null);
   const assetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
@@ -403,6 +406,13 @@ export const AreaMap = () => {
 
     fPropVectorLayerRef.current?.setStyle(style);
   }, [fPropVectorLayerRef.current]);
+
+  useEffect(() => {
+    const style = new Style({});
+    style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
+    fPropVectorLayerLabelRef.current?.setStyle(style);
+  }, [fPropVectorLayerLabelRef.current]);
+
 
     useEffect(() => {
  
@@ -448,7 +458,12 @@ export const AreaMap = () => {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
 
       fPropSourceRef?.current?.addFeatures(e);
+      fPropSourceLabelRef?.current?.addFeatures(e);
     }
+
+    
+
+
 
     //  if (fPropSourceRef.current) {
     //    const p1= fPropSourceRef.current?.getExtent()[0]
@@ -610,9 +625,35 @@ export const AreaMap = () => {
     scale: 1,
   });
 
-  const styleFunctionSyncProperties = (feature) => {
-    // console.log("s");
-    const s = new Style({
+  // const styleFunctionSyncProperties = (feature) => {
+  //   // console.log("s");
+  //   const s = new Style({
+  //     image,
+  //     stroke: new Stroke({
+  //       color: "red",
+  //       width: 2,
+  //     }),
+  //     fill: new Fill({
+  //       color: "rgba(255,23,0,0.2)",
+  //     }),
+  //   });
+
+  //   return s;
+  // };
+
+    const styleFunctionSyncProperties = (feature, resolution) => {
+      //console.log("resolution",resolution)
+      let t=""
+      if( resolution< 1850)
+       t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
+      const s = new Style({
+      text:new Text({
+        text: t.toString(),
+        // text: feature.get("propertyid") ??"", prop_name, prop_alias
+        offsetX: 0,
+        offsetY: -10,
+        font :  "14px serif",
+      }),
       image,
       stroke: new Stroke({
         color: "red",
@@ -1343,6 +1384,9 @@ export const AreaMap = () => {
 
           <olLayerVector ref={fPropVectorLayerRef}>
             <olSourceVector ref={fPropSourceRef}></olSourceVector>
+          </olLayerVector>
+          <olLayerVector ref={fPropVectorLayerLabelRef}>
+            <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
           </olLayerVector>
 
           <olLayerVector

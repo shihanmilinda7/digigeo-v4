@@ -127,7 +127,7 @@ const PropertiesSideNavbar = () => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      // console.log("fps", d);
+       console.log("fps-pmap", d);
        const gj = {
         type: "FeatureCollection",
         crs: {

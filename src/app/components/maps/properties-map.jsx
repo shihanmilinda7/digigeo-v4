@@ -46,6 +46,7 @@ import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import PropertiesSideNavbar from "../side-navbar-second/property-map/properties-sidenavbar";
 import { flyTo } from "./fly"
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
+import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
 
 
 
@@ -173,6 +174,10 @@ export const PropertiesMap = () => {
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
+
+  const fPropSourceLabelRef = useRef(null);
+  const fPropVectorLayerLabelRef = useRef(null);
+
   const assetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
@@ -204,16 +209,21 @@ export const PropertiesMap = () => {
     fPropVectorLayerRef.current?.setStyle(style);
     }, [fPropVectorLayerRef.current]);
   
+     useEffect(() => {
+    const style = new Style({});
+    style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
+    fPropVectorLayerLabelRef.current?.setStyle(style);
+  }, [fPropVectorLayerLabelRef.current]);
+  
 
   useEffect(() => {
-       console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
        fPropSourceRef?.current?.clear();
       if (featuredPropertyFeatures?.features) {
-       console.log("featuredPropertyFeatures",featuredPropertyFeatures)
       // fPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      console.log("featuredPropertyFeatures",e.length)
-      fPropSourceRef?.current?.addFeatures(e);
+        fPropSourceRef?.current?.addFeatures(e);
+        fPropSourceLabelRef?.current?.addFeatures(e);
+
     }
 
     //  if (fPropSourceRef.current) {
@@ -1014,13 +1024,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
        clickedOnFeatureTmp = true
         console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
-  let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
-  let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
-  let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
-  let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
-  let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
-  let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
-  let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+ 
   let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
   let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
@@ -1052,12 +1056,25 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
           });
 
         // sponsors = sponsors.slice(0, -1);
-        // console.log("sponsors", sponsors);
+      
         return sponsors;
       }
+       const dd = await getData(hotplayid) 
+         console.log("hotplayid-pmap", hotplayid);
+        //console.log("dd",dd)
+        const d= dd?.[0] 
+
+        const sponsoredowners = d?.sponsor ?? "";
+        let commo_ref = d?.commo_ref ?? "";
+        let assets = d?.assets ?? "";
+        let resources = d?.resources ?? "";
+        let map_area = d?.map_area ?? "";
+        let owners = d?.owners ?? "";
+        let prop_exturl = d?.prop_exturl ?? "";
+        let sale_name = d?.sale_name ?? "";
       
 
-  const sponsoredowners = (await getData(hotplayid).data?.[0]?.sponsor) ?? ""
+  
    fPropertyObject =  {
     sponsoredowners,
     prop_name,
@@ -1307,6 +1324,10 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
            <olLayerVector ref={fPropVectorLayerRef}>
             <olSourceVector ref={fPropSourceRef}></olSourceVector>
           </olLayerVector>
+           <olLayerVector ref={fPropVectorLayerLabelRef}>
+            <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
+          </olLayerVector>
+
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}

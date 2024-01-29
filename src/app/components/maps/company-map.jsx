@@ -28,7 +28,7 @@ import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
 import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
-import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Text } from "ol/style";
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Text,  Circle, } from "ol/style";
 import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
@@ -39,6 +39,7 @@ import { flyTo } from "./fly"
 import { setclickassetObject, setclickclaimObject, setclickfPropertyObject, setclicksyncPropertyObject } from "@/store/company-map/company-map-slice";
 import CompanyMapClickPopup from "./company-map-popup/company-map-click-popup";
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
+import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
 
 
 const fill = new Fill();
@@ -367,6 +368,10 @@ export const CompanyMap = () => {
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
+  
+  const fPropSourceLabelRef = useRef(null);
+  const fPropVectorLayerLabelRef = useRef(null);
+  
   const assetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
@@ -443,6 +448,7 @@ export const CompanyMap = () => {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
        
       fPropSourceRef?.current?.addFeatures(e);
+      fPropSourceLabelRef?.current?.addFeatures(e);
 
 
     }
@@ -523,6 +529,14 @@ export const CompanyMap = () => {
     });
     
   }, [fPropVectorLayerRef?.current]);
+
+
+    useEffect(() => {
+    const style = new Style({});
+    style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
+    fPropVectorLayerLabelRef.current?.setStyle(style);
+  }, [fPropVectorLayerLabelRef.current]);
+
 
 
   useEffect(() => {
@@ -609,9 +623,35 @@ export const CompanyMap = () => {
     scale: 1,
   });
 
-  const styleFunctionSyncProperties = (feature) => {
-    // console.log("s");
-    const s = new Style({
+  // const styleFunctionSyncProperties = (feature) => {
+  //   // console.log("s");
+  //   const s = new Style({
+  //     image,
+  //     stroke: new Stroke({
+  //       color: "red",
+  //       width: 2,
+  //     }),
+  //     fill: new Fill({
+  //       color: "rgba(255,23,0,0.2)",
+  //     }),
+  //   });
+
+  //   return s;
+  // };
+
+  const styleFunctionSyncProperties = (feature, resolution) => {
+      //console.log("resolution",resolution)
+      let t=""
+      if( resolution< 1850)
+       t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
+      const s = new Style({
+      text:new Text({
+        text: t.toString(),
+        // text: feature.get("propertyid") ??"", prop_name, prop_alias
+        offsetX: 0,
+        offsetY: -10,
+        font :  "14px serif",
+      }),
       image,
       stroke: new Stroke({
         color: "red",
@@ -625,8 +665,10 @@ export const CompanyMap = () => {
     return s;
   };
 
-
-
+      useEffect(() => {
+      claimLinkVectorLayerRef.current?.setOpacity(0.2)
+      claimLinkVectorLayerRef.current?.setStyle(companyMap_tbl_sync_claimlink_VectorLayerStyleFunction);
+  }, [claimLinkVectorLayerRef.current]);
 
   
   //layer visibilty redux states
@@ -1025,13 +1067,7 @@ export const CompanyMap = () => {
       clickedOnFeatureTmp = true
         console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
-  let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
-  let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
-  let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
-  let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
-  let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
-  let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
-  let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+  
   let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
   let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
@@ -1067,8 +1103,19 @@ export const CompanyMap = () => {
         return sponsors;
       }
       
+        const dd = await getData(hotplayid) 
+        //console.log("dd",dd)
+        const d= dd?.[0] 
 
-  const sponsoredowners = (await getData(hotplayid).data?.[0]?.sponsor) ?? ""
+        const sponsoredowners = d?.sponsor ?? "";
+        let commo_ref = d?.commo_ref ?? "";
+        let assets = d?.assets ?? "";
+        let resources = d?.resources ?? "";
+        let map_area = d?.map_area ?? "";
+        let owners = d?.owners ?? "";
+        let prop_exturl = d?.prop_exturl ?? "";
+        let sale_name = d?.sale_name ?? "";
+  
    fPropertyObject =  {
     sponsoredowners,
     prop_name,
@@ -1123,7 +1170,6 @@ export const CompanyMap = () => {
        dispatch(setclickclaimObject(undefined))
      }
     
-     console.log("111")
   //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
     }
 
@@ -1323,7 +1369,7 @@ export const CompanyMap = () => {
             {syncClaimLinkPropertyFeatures  && (
               <olSourceVector
                 ref={claimLinkSourceRef}
-                 style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+                //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
               >
               
               </olSourceVector>
@@ -1354,7 +1400,9 @@ export const CompanyMap = () => {
               </olSourceVector>
              
           </olLayerVector>
-          
+          <olLayerVector ref={fPropVectorLayerLabelRef}>
+            <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
+          </olLayerVector>
             <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
