@@ -316,10 +316,18 @@ export const AreaMap = () => {
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
+   
+
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
     setCoordinates(coordinate);
   }, []);
+
+    // const onSingleclick = (evt) => {
+    // const { coordinate } = evt;
+    // setCoordinates(coordinate);
+    // } 
+  
 
 
   useEffect(() => {
@@ -946,9 +954,9 @@ export const AreaMap = () => {
 
   //single click -  
   useEffect(() => {
-    
+    let clickedOnFeatureTmp = false;
     const fetchData = async () => {
-      setclickedOnFeature(false)
+    
       let assetObject, fPropertyObject, syncPropertyObject, claimObject;
 
       let extentDim;
@@ -979,7 +987,7 @@ export const AreaMap = () => {
 
       if (selAssetFeatures.length > 0) {
         console.log("asset found")
-        setclickedOnFeature(true)
+        clickedOnFeatureTmp = true
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
         let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
         let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -1006,17 +1014,11 @@ export const AreaMap = () => {
       const selFPropertyFeatures =
         fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
       if (selFPropertyFeatures.length > 0) {
-        console.log("fprop found")
-        setclickedOnFeature(true)
-        // console.log("selFPropertyFeatures", selFPropertyFeatures);
+        //console.log("fprop found")
+         clickedOnFeatureTmp = true
+       // console.log("selFPropertyFeatures", selFPropertyFeatures);
         let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
-        let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
-        let assets = selFPropertyFeatures?.[0]?.get("assets") ?? "";
-        let resources = selFPropertyFeatures?.[0]?.get("resources") ?? "";
-        let map_area = selFPropertyFeatures?.[0]?.get("map_area") ?? "";
-        let owners = selFPropertyFeatures?.[0]?.get("owners") ?? "";
-        let prop_exturl = selFPropertyFeatures?.[0]?.get("prop_exturl") ?? "";
-        let sale_name = selFPropertyFeatures?.[0]?.get("sale_name") ?? "";
+
         let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
         let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
 
@@ -1053,9 +1055,20 @@ export const AreaMap = () => {
           // console.log("sponsors", sponsors);
           return sponsors;
         };
+        //console.log("hotplayid",hotplayid)
+        const dd = await getData(hotplayid) 
+        //console.log("dd",dd)
+        const d= dd?.[0] 
 
-        const sponsoredowners =
-          (await getData(hotplayid).data?.[0]?.sponsor) ?? "";
+        const sponsoredowners = d?.sponsor ?? "";
+        let commo_ref = d?.commo_ref ?? "";
+        let assets = d?.assets ?? "";
+        let resources = d?.resources ?? "";
+        let map_area = d?.map_area ?? "";
+        let owners = d?.owners ?? "";
+        let prop_exturl = d?.prop_exturl ?? "";
+        let sale_name = d?.sale_name ?? "";
+         
         fPropertyObject = {
           sponsoredowners,
           prop_name,
@@ -1082,7 +1095,7 @@ export const AreaMap = () => {
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
         console.log("sync prop found")
-         setclickedOnFeature(true)
+          clickedOnFeatureTmp = true
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
         let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1110,7 +1123,7 @@ export const AreaMap = () => {
         ) ?? [];
       if (claimFeatures.length > 0) {
         console.log("claim found")
-         setclickedOnFeature(true)
+          clickedOnFeatureTmp = true
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
         claimObject = { ownerref, claimno };
@@ -1126,8 +1139,10 @@ export const AreaMap = () => {
  
     if (coordinates ) {
       fetchData();
-      if( clickedOnFeature){
+       setclickedOnFeature(clickedOnFeatureTmp)
+      if( clickedOnFeatureTmp){
         setclickDataLoaded(true);
+       
       }
       //  console.log("222")
     }
@@ -1213,13 +1228,24 @@ export const AreaMap = () => {
         <div
           ref={setPopup}
           style={{
+            textDecoration: "none",
+            position: "absolute",
+            top: "2px",
+            right: "8px",
             backgroundColor: "white",
             boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            padding: "15px",
+             padding: "15px",
             borderRadius: "10px",
             border: "1px solid #cccccc",
             minWidth: "280px",
             color: "black",
+            // backgroundColor: "white",
+            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            // padding: "15px",
+            // borderRadius: "10px",
+            // border: "1px solid #cccccc",
+            // minWidth: "280px",
+            // color: "black",
           }}
         >
           <button
@@ -1234,12 +1260,13 @@ export const AreaMap = () => {
               position: "absolute",
               top: "2px",
               right: "8px",
+             
             }}
           >
             ✖
           </button>
-          <div id="popup-content">
-            <p>Info:</p>
+          <div id="popup-contenta" >
+            {/* <p>Info:</p> */}
             {clickDataLoaded && <AreaMapClickPopup />}
           </div>
         </div>

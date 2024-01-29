@@ -963,7 +963,7 @@ export const CompanyMap = () => {
     }, []);
   
   useEffect( () => {
-
+ let clickedOnFeatureTmp = false;
     const fetchData = async()=>{
        setclickedOnFeature(false)
      let assetObject, fPropertyObject,syncPropertyObject,claimObject
@@ -995,7 +995,7 @@ export const CompanyMap = () => {
     const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
   
     if (selAssetFeatures.length > 0) {
-       setclickedOnFeature(true)
+       clickedOnFeatureTmp = true
       let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
       let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
       let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -1022,7 +1022,7 @@ export const CompanyMap = () => {
   const selFPropertyFeatures =
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
     if(selFPropertyFeatures.length>0){
-      setclickedOnFeature(true)
+      clickedOnFeatureTmp = true
         console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
@@ -1095,7 +1095,7 @@ export const CompanyMap = () => {
 
       console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
     if(selSyncPropFeatures.length>0){ 
-      setclickedOnFeature(true)
+      clickedOnFeatureTmp = true
      const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
     const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
     let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1113,7 +1113,7 @@ export const CompanyMap = () => {
   const claimFeatures =
       claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
      if(claimFeatures.length>0){ 
-      setclickedOnFeature(true)
+      clickedOnFeatureTmp = true
      let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
     const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
     claimObject = {ownerref,claimno}
@@ -1129,7 +1129,8 @@ export const CompanyMap = () => {
 
     if(coordinates){
       fetchData();
-       if( clickedOnFeature){
+      setclickedOnFeature(clickedOnFeatureTmp)
+       if( clickedOnFeatureTmp){
           setclickDataLoaded(true);
        }
     //  console.log("222")
@@ -1221,13 +1222,24 @@ export const CompanyMap = () => {
        <div
         ref={setPopup}
         style={{
-          backgroundColor: "white",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-          padding: "15px",
-          borderRadius: "10px",
-          border: "1px solid #cccccc",
-          minWidth: "280px",
-          color: "black",
+            textDecoration: "none",
+            position: "absolute",
+            top: "2px",
+            right: "8px",
+            backgroundColor: "white",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+             padding: "15px",
+            borderRadius: "10px",
+            border: "1px solid #cccccc",
+            minWidth: "280px",
+            color: "black",
+          // backgroundColor: "white",
+          // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+          // padding: "15px",
+          // borderRadius: "10px",
+          // border: "1px solid #cccccc",
+          // minWidth: "280px",
+          // color: "black",
         }}
       >
         <button
@@ -1246,8 +1258,8 @@ export const CompanyMap = () => {
         >
           ✖
         </button>
-        <div id="popup-content">
-          <p>Info:</p>
+        <div id="popup-contentc">
+          {/* <p>Info:</p> */}
           { clickDataLoaded && (<CompanyMapClickPopup  />)}
         
         </div>

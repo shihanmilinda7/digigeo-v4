@@ -952,7 +952,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
 
     useEffect( () => {
-
+ let clickedOnFeatureTmp = false;
     const fetchData = async()=>{
       console.log("qqq1")
        setclickedOnFeature(false)
@@ -984,7 +984,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
     const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
   console.log("qqq2")
     if (selAssetFeatures.length > 0) {
-       setclickedOnFeature(true)
+        clickedOnFeatureTmp = true
       let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
       let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
       let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -1011,7 +1011,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   const selFPropertyFeatures =
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
     if(selFPropertyFeatures.length>0){
-      setclickedOnFeature(true)
+       clickedOnFeatureTmp = true
         console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   let commo_ref = selFPropertyFeatures?.[0]?.get("commo_ref") ?? "";
@@ -1084,7 +1084,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
       console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
     if(selSyncPropFeatures.length>0){ 
-      setclickedOnFeature(true)
+       clickedOnFeatureTmp = true
      const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
     const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
     let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1102,7 +1102,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   const claimFeatures =
       claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
      if(claimFeatures.length>0){ 
-      setclickedOnFeature(true)
+       clickedOnFeatureTmp = true
      let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
     const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
     claimObject = {ownerref,claimno}
@@ -1112,13 +1112,12 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
        dispatch(setclickclaimObject(undefined))
      }
     
-     console.log("111")
   //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
     }
-console.log("qqq11")
     if(coordinates){
       fetchData();
-       if( clickedOnFeature){
+       setclickedOnFeature(clickedOnFeatureTmp)
+       if( clickedOnFeatureTmp){
           setclickDataLoaded(true);
        }
     //  console.log("222")
@@ -1196,6 +1195,10 @@ console.log("qqq11")
         <div
           ref={setPopup}
           style={{
+            textDecoration: "none",
+            position: "absolute",
+            top: "2px",
+            right: "8px",
             backgroundColor: "white",
             boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
             padding: "15px",
@@ -1203,6 +1206,13 @@ console.log("qqq11")
             border: "1px solid #cccccc",
             minWidth: "280px",
             color: "black",
+            // backgroundColor: "white",
+            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            // padding: "15px",
+            // borderRadius: "10px",
+            // border: "1px solid #cccccc",
+            // minWidth: "280px",
+            // color: "black",
           }}
         >
           <button
@@ -1221,8 +1231,8 @@ console.log("qqq11")
           >
             ✖
           </button>
-          <div id="popup-content">
-            <p>Info:</p>
+          <div id="popup-contentp">
+            {/* <p>Info:</p> */}
             {clickDataLoaded && <PropertyMapClickPopup />}
           </div>
         </div>
