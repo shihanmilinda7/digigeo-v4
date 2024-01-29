@@ -117,8 +117,8 @@ const CompanySideNavbar = () => {
 
 
     const getFeaturedPropertyGeom = async () => {
-    const f = async () => {
-       console.log("companyId-comp", companyId);
+      const f = async () => {
+      
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/view_hotplay_company/${companyId}`,
         { cache: "no-store" }
