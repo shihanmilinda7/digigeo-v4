@@ -1335,6 +1335,8 @@ export const AreaMap = () => {
         let owners = d?.owners ?? "";
         let prop_exturl = d?.prop_exturl ?? "";
         let sale_name = d?.sale_name ?? "";
+        let profile = d?.profile ?? "";
+        
          
         fPropertyObject = {
           sponsoredowners,
@@ -1347,6 +1349,7 @@ export const AreaMap = () => {
           prop_exturl,
           sale_name,
           propertyid,
+          profile
         };
 
         dispatch(setclickfPropertyObject(fPropertyObject));

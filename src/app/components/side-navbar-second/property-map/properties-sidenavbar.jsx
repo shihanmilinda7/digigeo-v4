@@ -35,7 +35,7 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "../area-map/area-tree-view";
 import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail-div";
 import PropertyTreeView from "./property-tree-view";
-
+import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 
 
 
@@ -78,13 +78,11 @@ const PropertiesSideNavbar = () => {
     (state) => state.mapSelectorReducer.propertiesInitialCenter
   );
 
-    const propertySearchQuery = useSelector(
+  const propertySearchQuery = useSelector(
     (state) => state.propertiesMapReducer.propertySearchQuery
   );
 
   // const propertyMapPropertyAssetIdCsv = useSelector((state) => state.propertiesMapReducer.propertyMapPropertyAssetIdCsv);
-
-
 
   const syncPropertyFeatures = useSelector(
     (state) => state.propertiesMapReducer.syncPropertyFeatures
@@ -92,15 +90,52 @@ const PropertiesSideNavbar = () => {
   // const companyId = useSelector((state) => state.companyMapReducer.companyId);
   // const companyStockcode = useSelector((state) => state.companyMapReducer.companyStockcode);
 
-   const [featuredCompanies, setFeaturedCompanies] = useState([]);
+  const [featuredCompanies, setFeaturedCompanies] = useState([]);
+  const [selectedAssetTypes, setselectedAssetTypes] = useState("");
+  const [selectedCommodities, setselectedCommodities] = useState("");
 
- 
-//data load
+  //searchParam Redux
+
+  const searchParamPropertyName = useSelector(
+    (state) => state.propertiesMapReducer.searchParamPropertyName
+  );
+  const searchParamCountry = useSelector(
+    (state) => state.propertiesMapReducer.searchParamCountry
+  );
+  const searchParamStateProv = useSelector(
+    (state) => state.propertiesMapReducer.searchParamStateProv
+  );
+  const searchParamMiningArea = useSelector(
+    (state) => state.propertiesMapReducer.searchParamMiningArea
+  );
+  const searchParamAssetTypeList = useSelector(
+    (state) => state.propertiesMapReducer.searchParamAssetTypeList
+  );
+  const searchParamCommodityList = useSelector(
+    (state) => state.propertiesMapReducer.searchParamCommodityList
+  );
+
+  useEffect(()=>{
+
+    if(searchParamAssetTypeList?.length>0){
+      setselectedAssetTypes(searchParamAssetTypeList.join(","))
+    }
+
+  },[searchParamAssetTypeList])
+
+  useEffect(()=>{
+
+    if(searchParamCommodityList?.length>0){
+
+      setselectedCommodities(searchParamCommodityList.join(","))
+    }
+
+  },[searchParamCommodityList])
+  //data load
   useEffect(() => {
     // console.log("propertyMapPropertyAssetIdCsv",propertyMapPropertyAssetIdCsv)
     if (propertySearchQuery) {
-      
-       getFeaturedCompanyDetails();
+      getFeaturedCompanyDetails();
 
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
@@ -118,17 +153,16 @@ const PropertiesSideNavbar = () => {
     dispatch(setIsPropertiesSideNavOpen(false));
   };
 
-
-      const getFeaturedPropertyGeom = async () => {
+  const getFeaturedPropertyGeom = async () => {
     const f = async () => {
-        // console.log("ppppp");
+      // console.log("ppppp");
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
         { cache: "no-store" }
       );
       const d = await res.json();
-       console.log("fps-pmap", d);
-       const gj = {
+      console.log("fps-pmap", d);
+      const gj = {
         type: "FeatureCollection",
         crs: {
           type: "name",
@@ -138,7 +172,7 @@ const PropertiesSideNavbar = () => {
         },
         features: d.data[0].json_build_object.features,
       };
-      
+
       ///console.log("llll", d.data[0].json_build_object.features)
       dispatch(setFPropertyFeatures(gj));
       // d.data[0].json_build_object.features.map((i) =>
@@ -149,15 +183,15 @@ const PropertiesSideNavbar = () => {
     f().catch(console.error);
   };
 
- const getFeaturedCompanyDetails = async () => {
-   const f = async () => {
+  const getFeaturedCompanyDetails = async () => {
+    const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       //  console.log("fps", d.data);
-      
+
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
       //   console.log("i", i.properties.colour)
@@ -168,7 +202,7 @@ const PropertiesSideNavbar = () => {
   };
 
   const getSyncPropertiesGeometry = async () => {
-      console.log("lop")
+    console.log("lop");
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
@@ -176,7 +210,7 @@ const PropertiesSideNavbar = () => {
       );
       const d = await res.json();
       // console.log("fps", d); propertySearchQuery
-       console.log("fps11", d.data);
+      console.log("fps11", d.data);
 
       // setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
@@ -230,14 +264,14 @@ const PropertiesSideNavbar = () => {
   };
 
   const getClaimLinkPropertiesGeometry = async () => {
-     console.log("fps-clink1" );
+    console.log("fps-clink1");
     const f = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
         { cache: "no-store" }
       );
-     const d = await res.json();
-        console.log("fps-clink", d);
+      const d = await res.json();
+      console.log("fps-clink", d);
 
       const gj = {
         type: "FeatureCollection",
@@ -255,15 +289,14 @@ const PropertiesSideNavbar = () => {
     f().catch(console.error);
   };
 
-    const propertyMapFpropLayerVisible = useSelector(
+  const propertyMapFpropLayerVisible = useSelector(
     (state) => state.propertiesMapReducer.propertyMapFpropLayerVisible
   );
 
   const setareaFpropLayerVisibility = (e) => {
-      console.log("zzzzzzz")
-      dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
-  }
-
+    console.log("zzzzzzz");
+    dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
+  };
 
   return (
     <section className="flex gap-6">
@@ -296,29 +329,50 @@ const PropertiesSideNavbar = () => {
               />
             </div>
           </div>
+          <div>
+            <span>Filters Applied:</span>
+            <Breadcrumbs
+              separator="/"
+              itemClasses={{
+                separator: "px-2",
+              }}
+            >
+              {(searchParamPropertyName !="" && searchParamPropertyName !=null ) && <BreadcrumbItem>{"Property Name Like:" + searchParamPropertyName}</BreadcrumbItem> }
+              {searchParamCountry !="" && <BreadcrumbItem>{"Country:" + searchParamCountry}</BreadcrumbItem> }
+              {searchParamStateProv !="" && <BreadcrumbItem>{"State/Province:" + searchParamStateProv}</BreadcrumbItem> }
+              {searchParamMiningArea !="" && <BreadcrumbItem>{"Area:" + searchParamMiningArea}</BreadcrumbItem> }
+              {selectedAssetTypes !="" && <BreadcrumbItem>{"Asset Types:" + selectedAssetTypes}</BreadcrumbItem> }
+              {selectedCommodities !="" && <BreadcrumbItem>{"Commodities:" + selectedCommodities}</BreadcrumbItem> }
+               
+            </Breadcrumbs>
+          </div>
           <div className="mt-4 flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
-                <AccordionItemWithEye title="Featured Companies" onClick = {setareaFpropLayerVisibility} eyeState={propertyMapFpropLayerVisible}>
-                      <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                      {featuredCompanies?.map((i) => (
-                        <PropertyFeaturedCompanyDetailDiv
-                          key={i.colour}
-                          title={i.company2}
-                          companyid={i.companyid}
-                          // onClick={() => console.log(featuredCompanies)}
-                        >
-                          <div
-                            className={`w-4 h-4`}
-                            style={{ backgroundColor: `${i.colour}` }}
-                          ></div>
-                        </PropertyFeaturedCompanyDetailDiv>
-                      ))}
-                    </div>
+                <AccordionItemWithEye
+                  title="Featured Companies"
+                  onClick={setareaFpropLayerVisibility}
+                  eyeState={propertyMapFpropLayerVisible}
+                >
+                  <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
+                    {featuredCompanies?.map((i) => (
+                      <PropertyFeaturedCompanyDetailDiv
+                        key={i.colour}
+                        title={i.company2}
+                        companyid={i.companyid}
+                        // onClick={() => console.log(featuredCompanies)}
+                      >
+                        <div
+                          className={`w-4 h-4`}
+                          style={{ backgroundColor: `${i.colour}` }}
+                        ></div>
+                      </PropertyFeaturedCompanyDetailDiv>
+                    ))}
+                  </div>
                 </AccordionItemWithEye>
                 <AccordionItemWithEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
-                     <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />
+                    <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />
                   </div>
                 </AccordionItemWithEye>
               </div>
