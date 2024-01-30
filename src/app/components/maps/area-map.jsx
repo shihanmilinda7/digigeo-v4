@@ -44,6 +44,8 @@ import { flyTo } from "./fly"
  
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
 import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
+import { toLonLat } from "ol/proj";
+import { METERS_PER_UNIT } from "ol/proj/Units";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -285,8 +287,19 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   // console.log("st", st);
   return st;
 };
+const DOTS_PER_INCH = 72;
+const INCHES_PER_METRE = 39.37;
 
- 
+function inchesPreUnit(unit) {
+  return METERS_PER_UNIT[unit] * INCHES_PER_METRE;
+}
+ function mapRatioScale({ map, toRound = true }) {
+  const resolution = map.getView().getResolution();
+  const unit = map.getView().getProjection().getUnits();
+
+  let scale = resolution * inchesPreUnit(unit) * DOTS_PER_INCH;
+  return toRound ? Math.round(scale) : scale;
+}
 
 
 export const AreaMap = () => {
@@ -317,6 +330,9 @@ export const AreaMap = () => {
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
+  const [mapScale, setmapScale] = useState(0);
+  const [lat, setlat] = useState(0);
+  const [long, setlong] = useState(0);
    
 
   const onSingleclick = useCallback((evt) => {
@@ -324,21 +340,24 @@ export const AreaMap = () => {
     setCoordinates(coordinate);
   }, []);
 
-  // map.on("pointermove", function (e) {
- const onPointerMove = useCallback((evt) => {
+  
+ const onPointerMove = useCallback((e) => {
 
-    console.log("pm-1",evt)
+    //console.log("pm-1",evt)
 
     
  
     
     // curAMapResolution = areaView.getResolution();
 
-    const coordinate1 = map.getCoordinateFromPixel(e.pixel);
+    const coordinate1 = mapRef.current.getCoordinateFromPixel(e.pixel);
     const c = toLonLat(coordinate1);
-    araemap_status_bar_lon.innerHTML = c[0].toFixed(4);
-    araemap_status_bar_lat.innerHTML = c[1].toFixed(4);
+    // araemap_status_bar_lon.innerHTML = c[0].toFixed(4);
+    // araemap_status_bar_lat.innerHTML = c[1].toFixed(4);
+    setlong( c[0].toFixed(4))
+    setlat( c[1].toFixed(4))
 
+    return
     if (curAMapResolution == prevAMapResolution) {
       // console.log("pmov-zoom end-cal started-1");
       if (selectedFProp !== null) {
@@ -516,6 +535,13 @@ export const AreaMap = () => {
     // console.log("pmove- end fun",)
 
     prevAMapResolution = curAMapResolution;
+ });
+  
+    
+   const onViewChange = useCallback((e) => {
+     const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
+ 
   });
   
 
@@ -1457,38 +1483,26 @@ export const AreaMap = () => {
 
           <ButtonGroup
           variant="faded"
-          className="absolute right-72 bottom-0 z-50 m-2"
+          className="fixed right-0 bottom-0 z-50 "
           color="primary"
         >
           <Button
-            onClick={() => setLyrs("m")}
-            className={`${
-              mapLyrs == "m"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            } `}
+            
+           className={`w-36 bg-blue-700 text-white`}
           >
-            Scale
+            {`Scale:${mapScale}`}
           </Button>
           <Button
-            onClick={() => setLyrs("s")}
-            className={`${
-              mapLyrs == "s"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            } `}
+            
+            className={`w-36 bg-blue-700 text-white`}
           >
-            Lat
+           { `Lat:${lat}` }
           </Button>
           <Button
-            onClick={() => setLyrs("p")}
-            className={`${
-              mapLyrs == "p"
-                ? "bg-blue-900 text-white"
-                : "bg-blue-700 text-white"
-            } `}
+          
+           className={`w-36 bg-blue-700 text-white`}
           >
-            Long
+                { `Long:${long}` }
           </Button>
         </ButtonGroup>
 
@@ -1565,6 +1579,7 @@ export const AreaMap = () => {
             center={areaInitialCenter}
             initialZoom={2}
             zoom={areaZoomLevel}
+            onchange={onViewChange}
           />
 
           <olLayerTile preload={Infinity}>

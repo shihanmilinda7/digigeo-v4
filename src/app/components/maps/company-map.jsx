@@ -41,6 +41,9 @@ import CompanyMapClickPopup from "./company-map-popup/company-map-click-popup";
 import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
 
+import { toLonLat } from "ol/proj";
+import { METERS_PER_UNIT } from "ol/proj/Units";
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -287,7 +290,19 @@ const stroke = new Stroke({
 
 
 
+const DOTS_PER_INCH = 72;
+const INCHES_PER_METRE = 39.37;
 
+function inchesPreUnit(unit) {
+  return METERS_PER_UNIT[unit] * INCHES_PER_METRE;
+}
+ function mapRatioScale({ map, toRound = true }) {
+  const resolution = map.getView().getResolution();
+  const unit = map.getView().getProjection().getUnits();
+
+  let scale = resolution * inchesPreUnit(unit) * DOTS_PER_INCH;
+  return toRound ? Math.round(scale) : scale;
+}
 
 
 
@@ -311,7 +326,9 @@ export const CompanyMap = () => {
 
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
   const [clickedOnFeature, setclickedOnFeature] = useState(false);
-
+  const [mapScale, setmapScale] = useState(0);
+  const [lat, setlat] = useState(0);
+  const [long, setlong] = useState(0);
 
 
 
@@ -334,6 +351,208 @@ export const CompanyMap = () => {
     setCoordinates(coordinate);
   }, []);
 
+   const onPointerMove = useCallback((e) => {
+
+    //console.log("pm-1",evt)
+
+    
+ 
+    
+    // curAMapResolution = areaView.getResolution();
+
+    const coordinate1 = mapRef.current.getCoordinateFromPixel(e.pixel);
+    const c = toLonLat(coordinate1);
+    // araemap_status_bar_lon.innerHTML = c[0].toFixed(4);
+    // araemap_status_bar_lat.innerHTML = c[1].toFixed(4);
+    setlong( c[0].toFixed(4))
+    setlat( c[1].toFixed(4))
+
+    return
+    if (curAMapResolution == prevAMapResolution) {
+      // console.log("pmov-zoom end-cal started-1");
+      if (selectedFProp !== null) {
+        // console.log("pmov-remove applied style-4-1-x1");
+        selectedFProp.setStyle(undefined);
+        selectedFProp = null;
+      }
+      if (selectedArea !== null) {
+        selectedArea.setStyle(undefined);
+        selectedArea = null;
+      }
+      if (selectedAsset !== null) {
+        selectedAsset.setStyle(undefined);
+        selectedAsset = null;
+      }
+
+      if (selectedSynProp !== null) {
+        selectedSynProp.setStyle(undefined);
+        selectedSynProp = null;
+      }
+      if (selectedSynOutLine !== null) {
+        selectedSynOutLine.setStyle(undefined);
+        selectedSynOutLine = null;
+      }
+     // let fcount = 0;
+      map.forEachFeatureAtPixel(e.pixel, function (f, layer) {
+      //  fcount++;
+
+        //  console.log("pmov-features@pixel-loop-init-2");
+        // console.log("layer", layer.get("id1"));
+        let fill; //
+
+        // if (layer.get("id1") == "boundary") {
+        if (f.get("ft") == 0) {
+          //   console.log("bo");
+          //  fill = new Fill({
+          //    color: "rgba(255, 255, 255, 0)",
+          //  });
+
+          const selectStyleArea = new Style({
+            text: new Text({
+              text: f.get("area_name"),
+              fill: new Fill({ color: "#0000FF" }),
+              offsetX: 0,
+              offsetY: 0,
+            }),
+            fill,
+            stroke: new Stroke({
+              color: "rgba(0, 0,255, 1.0)",
+              width: 5,
+            }),
+          });
+
+          selectedArea = f;
+          //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)"); f.get("ft"== 1
+          //layer.get("id1") == "fproperty_areamap"
+          f.setStyle(selectStyleArea);
+          // } else if (layer.get("id1") == "fproperty_areamap") {
+        } else if (f.get("ft") == 1) {
+          // console.log("pmov-fp found-3-0");
+          //f is a area boundary
+          //  console.log("qwerty");
+          //  if (selectedFProp && !(selectedFProp === f)) {
+          //    console.log("pmov-remove applied style-4-2");
+          //   //  console.log("a");
+          //    if (selectedFProp !== null) {
+          //      selectedFProp.setStyle(undefined);
+          //      selectedFProp = null;
+          //    }
+          //  } else {
+          //console.log("pmov-apply new style-4-1");
+          //  console.log("b");
+          const selectStyle = new Style({zIndex:1});
+          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+          f.setStyle(selectStyle);
+          selectedFProp = f;
+          // }
+        } else if (f.get("ft") == 2) {
+          // console.log("pmov-sync prop found-3-1");
+
+          f.setStyle(
+            areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
+          );
+          selectedSynProp = f;
+
+          //  if (selectedFProp !== null) {
+          //       console.log("pmov-remove applied style-4-1-x1");
+          //      selectedFProp.setStyle(undefined);
+          //      selectedFProp = null;
+          //    }
+          //  console.log("spt");
+        } else if (f.get("ft") == 3) {
+             f.setStyle(
+               areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight
+             );
+             selectedSynOutLine = f;
+          //  if (selectedFProp !== null) { 
+          //       console.log("pmov-remove applied style-4-1-x1");
+          //      selectedFProp.setStyle(undefined);
+          //      selectedFProp = null;
+          //    }
+          // console.log("spo");
+        } else if (f.get("ft") == 4) {
+          //  if (selectedFProp !== null) {
+          //       console.log("pmov-remove applied style-4-1-x1");
+          //      selectedFProp.setStyle(undefined);
+          //      selectedFProp = null;
+          //  }
+
+          // console.log("assetf");
+          //  const selectStyle = new Style({});
+          //  selectStyle.setRenderer(
+          //    areaMapAssetVectorLayerStyleFunctionHighlited
+          //  );
+          f.setStyle(areaMapAssetVectorLayerStyleFunctionHighlited);
+          selectedAsset = f;
+          // const selectStyle = new Style({}); areaMapAssetVectorLayerStyleFunctionHighlited
+          // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+          // f.setStyle(selectStyle);
+          // selectedFProp = f;
+        } else {
+          // console.log("pmov-other layer found-5");
+          // console.log("layer", layer.get("id1"));
+          // console.log("xx");
+          //fproperty_areamap_labels
+          //  if (layer.get("id1") != "fproperty_areamap_labels") {
+          //    if (selectedFProp !== null) {
+          //      console.log("pmov-remove applied style-4-1-x1");
+          //      selectedFProp.setStyle(undefined);
+          //      selectedFProp = null;
+          //    }
+          //  }
+        }
+
+        //      const selectStyle = new Style({
+        //        stroke: new Stroke({
+        //          color: "rgba(0, 0,255, 1.0)",
+        //          width: 5,
+        //        }),
+        //      });
+        //      selectedFProp = f;
+        //      //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)");
+        //      f.setStyle(selectStyle);
+        //   selectedFProp = f;
+
+        // change cursor
+        // var viewport = map.getViewport();
+
+        //  if (f && f.getGeometry().getType() === "Polygon") {
+        //    // console.log("ffff",f.get("area_name"));
+        //    if (areaSearchInput.value != f.get("area_name")) {
+        //      // Check if the mouse pointer is inside the polygon
+        //      const coordinate = map.getCoordinateFromPixel(e.pixel);
+        //      const geometry = f.getGeometry();
+        //      if (geometry.intersectsCoordinate(coordinate)) {
+        //        // Add the 'inside-polygon-cursor' class to the viewport
+        //        viewport.classList.add("inside-polygon-cursor");
+        //        return;
+        //      } else {
+        //        viewport.classList.remove("inside-polygon-cursor");
+        //      }
+        //    } else {
+        //      // console.log("f.id_.slice(0, 5) ",f.id_.slice(0, 5)  )
+        //      viewport.classList.remove("inside-polygon-cursor");
+        //    }
+        //  } else {
+        //    // console.log("dddddd-f.id_.slice", f.id_.slice(0, 5));
+        //    viewport.classList.add("inside-polygon-cursor");
+        //  }
+
+        return true;
+      });
+      //console.log("fcount", fcount);
+    }
+    // console.log("pmove- end fun",)
+
+    prevAMapResolution = curAMapResolution;
+ });
+  
+    
+   const onViewChange = useCallback((e) => {
+     const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
+ 
+  });
 
     useEffect(() => {
     if(companyFlyToLocation?.length>0)
@@ -1265,6 +1484,30 @@ export const CompanyMap = () => {
           </Button>
         </ButtonGroup>
         
+          <ButtonGroup
+          variant="faded"
+          className="fixed right-0 bottom-0 z-50 "
+          color="primary"
+        >
+          <Button
+            
+           className={`w-36 bg-blue-700 text-white`}
+          >
+            {`Scale:${mapScale}`}
+          </Button>
+          <Button
+            
+            className={`w-36 bg-blue-700 text-white`}
+          >
+           { `Lat:${lat}` }
+          </Button>
+          <Button
+          
+           className={`w-36 bg-blue-700 text-white`}
+          >
+                { `Long:${long}` }
+          </Button>
+        </ButtonGroup>
        <div
         ref={setPopup}
         style={{
@@ -1319,6 +1562,7 @@ export const CompanyMap = () => {
           }}
           controls={[]}
            onSingleclick={onSingleclick}
+          onPointermove={onPointerMove}
         >
 
             {(popup && clickedOnFeature ) ? (
@@ -1337,6 +1581,7 @@ export const CompanyMap = () => {
             center={companyInitialCenter}
             initialZoom={2}
             zoom={companyZoomLevel}
+             onchange={onViewChange}
           />
           <olLayerTile preload={Infinity}>
             {/* <olSourceOSM /> */}
