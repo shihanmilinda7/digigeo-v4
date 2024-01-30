@@ -43,7 +43,7 @@ import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 import { flyTo } from "./fly"
  
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
-import { areaMApPropertyVectorRendererFuncV2_labels } from "./area-map-styles/area-map-styles";
+import { areaMApPropertyVectorRendererFuncV2Highlight, areaMApPropertyVectorRendererFuncV2_labels, areaMapAssetVectorLayerStyleFunctionHighlited, areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited, areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight, styleFunctionClaimHighlight } from "./area-map-styles/area-map-styles";
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 
@@ -319,6 +319,11 @@ export const AreaMap = () => {
 
   const mapRef = useRef();
   const mapViewRef = useRef();
+  const selectedFPropRef = useRef();
+  const selectedAssetRef = useRef();
+  const selectedSynPropRef = useRef();
+  const selectedSynOutLineRef = useRef();
+  const selectedClaimRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -357,33 +362,33 @@ export const AreaMap = () => {
     setlong( c[0].toFixed(4))
     setlat( c[1].toFixed(4))
 
-    return
-    if (curAMapResolution == prevAMapResolution) {
+     
+   
       // console.log("pmov-zoom end-cal started-1");
-      if (selectedFProp !== null) {
+      if (selectedFPropRef.current ) {
         // console.log("pmov-remove applied style-4-1-x1");
-        selectedFProp.setStyle(undefined);
-        selectedFProp = null;
+        selectedFPropRef.current.setStyle(undefined);
+        selectedFPropRef.current = null;
       }
-      if (selectedArea !== null) {
-        selectedArea.setStyle(undefined);
-        selectedArea = null;
+      if (selectedClaimRef.current  ) {
+        selectedClaimRef.current.setStyle(undefined);
+        selectedClaimRef.current = null;
       }
-      if (selectedAsset !== null) {
-        selectedAsset.setStyle(undefined);
-        selectedAsset = null;
+      if (selectedAssetRef.current  ) {
+        selectedAssetRef.current.setStyle(undefined);
+        selectedAssetRef.current = null;
       }
 
-      if (selectedSynProp !== null) {
-        selectedSynProp.setStyle(undefined);
-        selectedSynProp = null;
+      if (selectedSynPropRef.current ) {
+        selectedSynPropRef.current.setStyle(undefined);
+        selectedSynPropRef.current = null;
       }
-      if (selectedSynOutLine !== null) {
-        selectedSynOutLine.setStyle(undefined);
-        selectedSynOutLine = null;
+      if (selectedSynOutLineRef.current  ) {
+        selectedSynOutLineRef.current.setStyle(undefined);
+        selectedSynOutLineRef.current = null;
       }
-     // let fcount = 0;
-      map.forEachFeatureAtPixel(e.pixel, function (f, layer) {
+      // let fcount = 0;
+      mapRef.current.forEachFeatureAtPixel(e.pixel, function (f, layer) {
       //  fcount++;
 
         //  console.log("pmov-features@pixel-loop-init-2");
@@ -397,24 +402,24 @@ export const AreaMap = () => {
           //    color: "rgba(255, 255, 255, 0)",
           //  });
 
-          const selectStyleArea = new Style({
-            text: new Text({
-              text: f.get("area_name"),
-              fill: new Fill({ color: "#0000FF" }),
-              offsetX: 0,
-              offsetY: 0,
-            }),
-            fill,
-            stroke: new Stroke({
-              color: "rgba(0, 0,255, 1.0)",
-              width: 5,
-            }),
-          });
+          // const selectStyleArea = new Style({
+          //   text: new Text({
+          //     text: f.get("area_name"),
+          //     fill: new Fill({ color: "#0000FF" }),
+          //     offsetX: 0,
+          //     offsetY: 0,
+          //   }),
+          //   fill,
+          //   stroke: new Stroke({
+          //     color: "rgba(0, 0,255, 1.0)",
+          //     width: 5,
+          //   }),
+          // });
 
-          selectedArea = f;
-          //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)"); f.get("ft"== 1
-          //layer.get("id1") == "fproperty_areamap"
-          f.setStyle(selectStyleArea);
+          // selectedArea = f;
+          // //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)"); f.get("ft"== 1
+          // //layer.get("id1") == "fproperty_areamap"
+          // f.setStyle(selectStyleArea);
           // } else if (layer.get("id1") == "fproperty_areamap") {
         } else if (f.get("ft") == 1) {
           // console.log("pmov-fp found-3-0");
@@ -433,7 +438,7 @@ export const AreaMap = () => {
           const selectStyle = new Style({zIndex:1});
           selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
           f.setStyle(selectStyle);
-          selectedFProp = f;
+          selectedFPropRef.current = f;
           // }
         } else if (f.get("ft") == 2) {
           // console.log("pmov-sync prop found-3-1");
@@ -441,7 +446,7 @@ export const AreaMap = () => {
           f.setStyle(
             areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
           );
-          selectedSynProp = f;
+          selectedSynPropRef.current = f;
 
           //  if (selectedFProp !== null) {
           //       console.log("pmov-remove applied style-4-1-x1");
@@ -453,7 +458,7 @@ export const AreaMap = () => {
              f.setStyle(
                areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight
              );
-             selectedSynOutLine = f;
+             selectedSynOutLineRef.current = f;
           //  if (selectedFProp !== null) { 
           //       console.log("pmov-remove applied style-4-1-x1");
           //      selectedFProp.setStyle(undefined);
@@ -473,12 +478,18 @@ export const AreaMap = () => {
           //    areaMapAssetVectorLayerStyleFunctionHighlited
           //  );
           f.setStyle(areaMapAssetVectorLayerStyleFunctionHighlited);
-          selectedAsset = f;
+          selectedAssetRef.current = f;
           // const selectStyle = new Style({}); areaMapAssetVectorLayerStyleFunctionHighlited
           // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
           // f.setStyle(selectStyle);
           // selectedFProp = f;
-        } else {
+        }
+        else if (f.get("ft") == 5) {
+           f.setStyle(styleFunctionClaimHighlight);
+          selectedClaimRef.current = f;
+
+        }
+        else {
           // console.log("pmov-other layer found-5");
           // console.log("layer", layer.get("id1"));
           // console.log("xx");
@@ -531,10 +542,10 @@ export const AreaMap = () => {
         return true;
       });
       //console.log("fcount", fcount);
-    }
+   
     // console.log("pmove- end fun",)
 
-    prevAMapResolution = curAMapResolution;
+   
  });
   
     
@@ -859,7 +870,7 @@ export const AreaMap = () => {
     const styleFunctionSyncProperties = (feature, resolution) => {
       //console.log("resolution",resolution)
       let t=""
-      if( resolution< 1850)
+      if( resolution< 300)
        t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
       const s = new Style({
       text:new Text({
