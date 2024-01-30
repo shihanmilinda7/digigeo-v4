@@ -207,7 +207,7 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     
   if(searchParamCountry){
     setCountryTemp(searchParamCountry);
-    // setCountry(searchParamCountry);
+     setCountry(searchParamCountry);
   }
   if(searchParamStateProv){
     setstateProv(searchParamStateProv);
