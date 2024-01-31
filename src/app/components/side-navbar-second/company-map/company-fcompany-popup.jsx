@@ -47,7 +47,7 @@ const getStyledTexts = (name) => {
     const sp = document.createElement("SPAN");
     const sptext = document.createTextNode(name ?? "");
     sp.appendChild(sptext);
-    return [sp];
+    return  [{ text: "", style: {} }];
   }
   const compName = name.substr(0, stBracketIndex);
   const addends = name.substr(stBracketIndex, name.length - stBracketIndex);

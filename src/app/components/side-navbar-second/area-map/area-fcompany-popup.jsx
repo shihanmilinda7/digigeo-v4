@@ -44,10 +44,10 @@ const getStyledTexts = (name) => {
   //console.log("name",name,)
   const stBracketIndex = name.indexOf("(");
   if (stBracketIndex == -1) {
-    const sp = document.createElement("SPAN");
-    const sptext = document.createTextNode(name ?? "");
-    sp.appendChild(sptext);
-    return [sp];
+    // const sp = document.createElement("SPAN");
+    // const sptext = document.createTextNode(name ?? "");
+    // sp.appendChild(sptext);
+    return [{ text:  "", style: {} }];
   }
   const compName = name.substr(0, stBracketIndex);
   const addends = name.substr(stBracketIndex, name.length - stBracketIndex);
@@ -156,15 +156,20 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
+       console.log("bbb1" ); 
       if(d?.data?.length>0){
+         console.log("bbb2",d.data[0]?.company ); 
       const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
+       console.log("bbb2-1",sponsorData ); 
       setsponsorData(sponsorData)
-
+      conbsole.log("sponsorData",sponsorData)
       setprofile(d.data[0]?.profile ?? "")
       }else{
+         console.log("bbb3" ); 
         setprofile("")
         setsponsorData("")
       }
+       console.log("bbb4" ); 
     };
     f().catch(console.error);
   };
@@ -175,22 +180,31 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
+      console.log("aaa1" ); 
           if(d?.data?.length>0){  
-            
+               console.log("aaa2" ); 
                 let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
               seturl(url)
             seturlPrefix(urlPrefix);
               const logo = d.data[0]?.logo;
+               console.log("aaa3",logo ); 
               if(logo){
               const logoext = d.data[0]?.logoext ?? "png";
               console.log("logoext",logoext) 
+              console.log("aaa4" ); 
               let urlimg =
               `data:image/${logoext};base64,` +
               btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
                 
               setlogoPath(urlimg)
+              }else{
+                console.log("aaa5" ); 
+                 setlogoPath("")
+                 seturl("")
+                   
               }
          }else{
+          console.log("aaa6" ); 
              setlogoPath("")
              seturl("")
          }
@@ -238,7 +252,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
             </div>
             <span className="font-bold">{title}</span>
             <span>
-              {sponsorData &&
+              {sponsorData.length>0 &&
                 sponsorData.map((sd) => (
                   <span key={sd.text} style={sd.style}>
                     {sd.text}

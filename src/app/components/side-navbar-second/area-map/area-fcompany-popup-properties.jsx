@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 
@@ -7,6 +7,8 @@ import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
 
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
+  const  blocknoRef   = useRef(0)
+  const  pidRef   = useRef(0)
 
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
@@ -55,11 +57,23 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       margin:"1rem",
       }}>
      
-              {  featureObjects.map(fp => {
-                if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
+        {
+           
+          
+          featureObjects.map(fp => {
+              
+                if(!fp.get("propertyid")){
+                  pidRef.current = pidRef.current -1
+                }
+                console.log("pid",fp.get("propertyid"))
+                if (companyid == fp.get("companyid")   ) {
+                      if(!fp.get("prop_name")){
+                          blocknoRef.current = blocknoRef.current+1
+                        }
+
                     // console.log("companyid",companyid,"pname",fp.properties )
                     return (
-                      <div key={fp.get("propertyid")} className="hover:bg-blue-200 odd:bg-slate-200   cursor-pointer px-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
+                      <div key={fp.get("propertyid") ?? pidRef.current} className="hover:bg-blue-200 odd:bg-slate-200   cursor-pointer px-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
                           onClick={(e) => {
                           flytoHandler(fp)
                       }}>
@@ -70,7 +84,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                             height={10}
                             alt="prop"
                           />
-                        <div > {fp.get("prop_name")}</div>
+                        <div > {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
                          </div>
                           <Image
                           src="./navigation.svg"
@@ -84,7 +98,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                     )
                   }
               
-              })}
+              })
+        }
           
       </div>
     </div>

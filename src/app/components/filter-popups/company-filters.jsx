@@ -341,7 +341,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                     color="primary"
                     className="cursor-pointer hover:bg-blue-600 custom-button-1 right-0 bg-blue-700"
                     onClick={searchAction}
-                    isDisabled={!(company && stockcode)}
+                    isDisabled={!(company )}
                   >
                     Search
                   </Chip>
