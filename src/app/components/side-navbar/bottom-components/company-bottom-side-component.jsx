@@ -184,78 +184,135 @@ const CompanyBottomSideComp = () => {
         <div className="overflow-y-auto max-h-[40vh]">
           <Accordion>
             <div className="flex flex-col gap-6">
-              <AccordionItemWithEye title="Assets" onClick={setcompanyAssetLayerVisibility} eyeState={companyAssetLayerVisible}>
+              <AccordionItemWithEye
+                title="Assets"
+                onClick={setcompanyAssetLayerVisibility}
+                eyeState={companyAssetLayerVisible}
+              >
                 <div className="flex flex-col gap-1">
                   <LayerVisibleDiv
                     title="Operating Mines"
-                    onClick={setcompanyAssetOpMineVisibility}   eyeState={companyAssetOpMineVisible}
+                    onClick={setcompanyAssetOpMineVisibility}
+                    eyeState={companyAssetOpMineVisible}
                   >
-                     <Image
-                          src="./asset-opmine.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    <Image
+                      src="./asset-opmine.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
                   <LayerVisibleDiv
                     title="Deposits"
-                     onClick={setcompanyAssetDepositVisibility}   eyeState={companyAssetDepositsVisible}
-                >
-                  <Image
-                          src="./asset-deposit.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    onClick={setcompanyAssetDepositVisibility}
+                    eyeState={companyAssetDepositsVisible}
+                  >
+                    <Image
+                      src="./asset-deposit.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
                   <LayerVisibleDiv
                     title="Zone"
-                     onClick={setcompanyAssetZoneVisibility}   eyeState={companyAssetZoneVisible}
-                >
-                  <Image
-                          src="./asset-zone.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    onClick={setcompanyAssetZoneVisibility}
+                    eyeState={companyAssetZoneVisible}
+                  >
+                    <Image
+                      src="./asset-zone.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
-                  <LayerVisibleDiv title="Historical Mines"
-                    onClick={setcompanyAssetHistoricalVisibility}   eyeState={companyAssetHistoricalVisible}>
-                  <Image
-                          src="./asset-historical.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                  <LayerVisibleDiv
+                    title="Historical Mines"
+                    onClick={setcompanyAssetHistoricalVisibility}
+                    eyeState={companyAssetHistoricalVisible}
+                  >
+                    <Image
+                      src="./asset-historical.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
-                  <LayerVisibleDiv title="Occurrences"
-                    onClick={setcompanyAssetOccurrenceVisibility}   eyeState={companyAssetOccurrenceVisible}>
-                   <Image
-                          src="./asset-occurrence.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
-                  </LayerVisibleDiv>
-                </div>
-              </AccordionItemWithEye>
-              <AccordionItemWithEye title="Properties" onClick={setPropertiesGroupEye} eyeState={property_claimLinkGroupVisible}>
-                <div className="flex flex-col gap-1">
-                  <LayerVisibleDiv title="Property Points">
-                    <AiFillAppstore />
-                  </LayerVisibleDiv>
-                  <LayerVisibleDiv title="Property Outlines">
-                    <AiFillAppstore />
+                  <LayerVisibleDiv
+                    title="Occurrences"
+                    onClick={setcompanyAssetOccurrenceVisibility}
+                    eyeState={companyAssetOccurrenceVisible}
+                  >
+                    <Image
+                      src="./asset-occurrence.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
                 </div>
               </AccordionItemWithEye>
-              <AccordionItemWithEye title="Claims" onClick={setcompanyClaimLayerVisibility}   eyeState={companyClaimLayerVisible}>
+              <AccordionItemWithEye
+                title="Properties"
+                onClick={setPropertiesGroupEye}
+                eyeState={property_claimLinkGroupVisible}
+              >
                 <div className="flex flex-col gap-1">
-                  <LayerVisibleDiv title="Claims"  onClick={setcompanyClaimLayerVisibility}   eyeState={companyClaimLayerVisible}>
-                    <AiFillAppstore />
+                  <LayerVisibleDiv
+                    title="Property Points"
+                    onClick={setcompanySyncPropLayerVisibility}
+                    eyeState={companySyncPropLayerVisible}
+                  >
+                    <Image
+                      src="./sync-prop.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
                   </LayerVisibleDiv>
-                  <LayerVisibleDiv title="Mining Areas"  onClick={setcompanyAreaBoundaryLayerVisibility}   eyeState={companyAreaBoundaryLayerVisible}>
-                    <AiFillAppstore />
+                  <LayerVisibleDiv
+                    onClick={setcompanySyncClaimLinkLayerVisibility}
+                    title="Property Outlines"
+                    eyeState={companySyncClaimLinkLayerVisible}
+                  >
+                    <Image
+                      src="./sync-prop-outline.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
+                  </LayerVisibleDiv>
+                </div>
+              </AccordionItemWithEye>
+              <AccordionItemWithEye
+                title="Claims"
+                onClick={setcompanyClaimLayerVisibility}
+                eyeState={companyClaimLayerVisible}
+              >
+                <div className="flex flex-col gap-1">
+                  <LayerVisibleDiv
+                    title="Claims"
+                    onClick={setcompanyClaimLayerVisibility}
+                    eyeState={companyClaimLayerVisible}
+                  >
+                    <Image
+                      src="./claims-layer.svg"
+                      width={25}
+                      height={10}
+                      alt="prop"
+                    />
+                  </LayerVisibleDiv>
+                  <LayerVisibleDiv
+                    title="Mining Areas"
+                    onClick={setcompanyAreaBoundaryLayerVisibility}
+                    eyeState={companyAreaBoundaryLayerVisible}
+                  >
+                    <Image
+                    src="./minning-areas-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                   </LayerVisibleDiv>
                 </div>
               </AccordionItemWithEye>
@@ -280,7 +337,7 @@ const CompanyBottomSideComp = () => {
         </AccordionItem>
       </Accordion> */}
       </div>
-    ) 
+    ); 
   
 }
 

@@ -235,14 +235,24 @@ const PropertiesBottomSideComp = () => {
                   onClick={setpropertyMapSyncPropLayerVisibility}
                   eyeState={propertyMapSyncPropLayerVisible}
                 >
-                  <AiFillAppstore />
+                  <Image
+                    src="./sync-prop.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                     onClick={setpropertyMapSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
                   eyeState={propertyMapSyncClaimLinkLayerVisible}
                 >
-                  <AiFillAppstore />
+                   <Image
+                    src="./sync-prop-outline.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
@@ -255,14 +265,24 @@ const PropertiesBottomSideComp = () => {
                  onClick={setpropertyMapClaimLayerVisibility}
                   eyeState={propertyMapClaimLayerVisible}
                 >
-                  <AiFillAppstore />
+                   <Image
+                    src="./claims-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Mining Areas"
                 onClick={setpropertyMapAreaBoundaryLayerVisibility}
                   eyeState={propertyMapAreaBoundaryLayerVisible}
                 >
-                  <AiFillAppstore />
+                    <Image
+                    src="./minning-areas-layer.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
