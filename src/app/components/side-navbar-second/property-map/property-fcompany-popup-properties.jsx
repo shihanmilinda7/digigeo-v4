@@ -8,6 +8,7 @@ import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-m
 const PropertyFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [featuredPropertyFeatures, setfeaturedPropertyFeatures] = useState();
+  const [mapAreas, setmapAreas] = useState([]);
 
   // const featuredPropertyFeatures = useSelector(
   //   (state) => state.propertiesMapReducer.featuredPropertyFeatures
@@ -28,6 +29,15 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
     if(featuredPropertyFeatures?.features){
     const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
     setfeaturesObjects(e);
+      //set areas
+      //setmapAreas
+      let areas = e.map(f => f.get("map_area"))
+      // console.log("areas",areas)
+    const setArea = new Set(areas)
+    areas  = Array.from(setArea); 
+    areas.sort();
+    setmapAreas(areas);
+
     }
   }, [featuredPropertyFeatures]);
 
@@ -94,38 +104,58 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
           margin:"1rem",
         }}
       >
-        {featureObjects.map((fp) => {
-          console.log("prop_name", fp);
+        {
+          // mapAreas.map(area => )
+          mapAreas.map(area => {
+            let blockno = 0;
+            return (<>
+              <span key={area} className="bg-blue-600 text-white w-full" > {area}</span>
+                {featureObjects.map((fp) => {
+                  if(!fp.get("prop_name")){
+                    blockno++
+                  }
+                  // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
+                  // console.log("companyid",companyid,"pname",fp.properties )
+                  if (area == fp.get("map_area")) {
+                    return (
+                      <div
+                        key={fp.get("propertyid")}
+                        className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          width: "100%",
+                        }}
+                        onClick={(e) => {
+                          flytoHandler(fp);
+                        }}
+                      >
+                        <div className="flex">
+                          <Image
+                            src="./sync-prop.svg"
+                            width={25}
+                            height={10}
+                            alt="prop"
+                          />
+                          <div> {fp.get("prop_name") ?? "Block" + blockno}</div>
+                        </div>
+                        <Image
+                          src="./navigation.svg"
+                          width={15}
+                          height={10}
+                          alt="prop"
+                        />
+                      </div>
+                    );
+                  }
 
-          // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
-          // console.log("companyid",companyid,"pname",fp.properties )
-          return (
-            <div
-              key={fp.get("propertyid")}
-              className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%",
-              }}
-              onClick={(e) => {
-                flytoHandler(fp);
-              }}
-            >
-              <div className="flex">
-                <Image
-                  src="./sync-prop.svg"
-                  width={25}
-                  height={10}
-                  alt="prop"
-                />
-                <div> {fp.get("prop_name")}</div>
-              </div>
-              <Image src="./navigation.svg" width={15} height={10} alt="prop" />
-            </div>
-          );
-        })}
+                })}
+                       </>
+                     )
+          })
+        
+        }
       </div>
     </div>
   );
