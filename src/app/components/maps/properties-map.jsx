@@ -49,6 +49,7 @@ import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
 import { areaMApPropertyVectorRendererFuncV2Highlight, areaMApPropertyVectorRendererFuncV2_labels, areaMapAssetVectorLayerStyleFunctionHighlited, areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited, areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight, styleFunctionClaimHighlight } from "./area-map-styles/area-map-styles";
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
+import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 
 
 const fill = new Fill();
@@ -117,6 +118,28 @@ function inchesPreUnit(unit) {
   return toRound ? Math.round(scale) : scale;
 }
 
+//clustring - sync prop
+// export const coordinates = (() => {
+//   const count = 20000;
+//   const e = 4500000;
+//   const coordinates = new Array(count);
+//   for (let i = 0; i < count; i++) {
+//     coordinates[i] = [2 * e * Math.random() - e, 2 * e * Math.random() - e];
+//   }
+//   return coordinates;
+// })();
+
+// export const styleCache = [];
+
+// export const PointsAtCoordinates = memo(({ coordinates }) => {
+//   // It is important to memoize this, to avoid iterating over all the coordinates
+//   // on each react render if the array is not changed.
+//   return coordinates.map((coordinate) => (
+//     <olFeature key={coordinate.join()}>
+//       <olGeomPoint args={[coordinate]} />
+//     </olFeature>
+//   ));
+// });
 
 
 
@@ -155,6 +178,11 @@ export const PropertiesMap = () => {
 
  const [coordinates, setCoordinates] = useState(undefined);
  const [popup, setPopup] = useState();
+  const [distance, setDistance] = useState(40);
+  const [minDistance, setMinDistance] = useState(20);
+
+
+
  const onSingleclick = useCallback((evt) => {
  const { coordinate } = evt;
     setCoordinates(coordinate);
@@ -613,9 +641,16 @@ export const PropertiesMap = () => {
    const image = new Icon({
     src: "./sync-prop.svg",
     scale: 1,
-  });
+   });
+  // aaa //
+ 
+
+
+
+  // aa//
 
   const styleFunctionSyncProperties = (feature, resolution) => {
+    
       //console.log("resolution",resolution)
       let t=""
       if( resolution< 300)
@@ -1600,10 +1635,17 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
           </olLayerVector>
            <olLayerVector
             ref={syncPropVectorLayerRef}
-            style={styleFunctionSyncProperties}
+            style={commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction}
            
           >
-            <olSourceVector ref={syncPropSourceRef}></olSourceVector>
+            {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
+
+               <olSourceCluster distance={distance} minDistance={minDistance}>
+            <olSourceVector ref={syncPropSourceRef}>
+              {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+            </olSourceVector>
+            </olSourceCluster>
+            
           </olLayerVector>
         </Map>
       </div>
