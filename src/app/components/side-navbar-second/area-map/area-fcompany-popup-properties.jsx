@@ -17,8 +17,11 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
   useEffect(() => {
-    const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-    setfeaturesObjects(e);
+    console.log("companyida",companyid)
+    if (featuredPropertyFeatures?.features) {
+      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+      setfeaturesObjects(e);
+    }
   }, [featuredPropertyFeatures]);
 
   //flyto
@@ -37,23 +40,26 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   };
 
   return (
-    < div style={{ height:"10rem"}} > 
-      <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
+    < div style={{ height:"20rem", display:"flex", flexDirection:"column",justifyContent:"start", alignItems:"center"}} > 
+      <div style={{ fontWeight: 700,   }}>{ areaName}</div>
+      <div style={{ fontWeight: 600,   }}>{"Featured Properties" }</div>
       <div className="bg-slate-100"
       style={{
       display: "flex",
       flexDirection: "column",
       justify: "center",
       alignItems: "flex-start", 
-      padding: "1rem",
-      overflowY:"scroll"
+      overflowY: "auto",
+      maxHeight:"18.5rem",
+      width: "14rem",
+      margin:"1rem",
       }}>
      
               {  featureObjects.map(fp => {
                 if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
                     // console.log("companyid",companyid,"pname",fp.properties )
                     return (
-                      <div key={fp.get("propertyid")} className="hover:bg-blue-200 odd:bg-slate-200" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
+                      <div key={fp.get("propertyid")} className="hover:bg-blue-200 odd:bg-slate-200   cursor-pointer px-2" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}
                           onClick={(e) => {
                           flytoHandler(fp)
                       }}>
@@ -68,9 +74,10 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                          </div>
                           <Image
                           src="./navigation.svg"
-                          width={25}
-                          height={10}
+                          width={15}
+                          height={15}
                           alt="prop"
+                         
                         />
                       </div>
                     

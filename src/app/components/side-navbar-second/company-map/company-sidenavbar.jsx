@@ -97,7 +97,7 @@ const CompanySideNavbar = () => {
   const [featuredPropertiesLocal, setFeaturedPropertiesLocal] = useState([]);
   //data load
   useEffect(() => {
-    console.log("companyId",companyId)
+   // console.log("companyId",companyId)
    
       getFeaturedPropertyGeom();
       getSyncPropertiesGeometry();

@@ -114,9 +114,10 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState("");
   const [url, seturl] = useState("");
+  const [urlPrefix, seturlPrefix] = useState("");
 
-  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+  // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
   const customStyles = {
     overlay: {
@@ -124,7 +125,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       zIndex: 50,
     },
     content: {
-      top: "40%",
+      top: "50%",
       left: "50%",
       right: "auto",
       bottom: "auto",
@@ -132,7 +133,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-       
+      overflowY:"hidden" ,
     },
   };
 
@@ -175,15 +176,20 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       );
       const d = await res.json();
           if(d?.data?.length>0){  
+            
                 let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
               seturl(url)
+            seturlPrefix(urlPrefix);
               const logo = d.data[0]?.logo;
+              if(logo){
               const logoext = d.data[0]?.logoext ?? "png";
+              console.log("logoext",logoext) 
               let urlimg =
               `data:image/${logoext};base64,` +
               btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
-      
+                
               setlogoPath(urlimg)
+              }
          }else{
              setlogoPath("")
              seturl("")
@@ -205,42 +211,61 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         ariaHideApp={false}
       >
         <div className="bg-white rounded-lg min-w-[300px] flex-col justify-center items-center">
-
-          <div className="flex items-center justify-center bg-blue-200  h-12 rounded-lg">
-
+          <div className="flex items-center justify-center   h-8 rounded-lg">
             {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               
             </span> */}
             <AiOutlineCloseCircle
               onClick={closePopup}
-              className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
+              className="h-6 w-6 cursor-pointer absolute right-0 mr-6"
             />
           </div>
-          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem"}}>
-             <div> {logoPath && (<Image
-              src={logoPath}
-              width={200}
-              height={100}
-              alt="Logo"
-              />)}</div>
-            <span>{title}</span>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justify: "center",
+              alignItems: "center",
+              padding: "1rem",
+              gap: "1rem",
+            }}
+          >
+            <div>
+              {" "}
+              {logoPath && (
+                <Image src={logoPath} width={200} height={100} alt="Logo" />
+              )}
+            </div>
+            <span className="font-bold">{title}</span>
             <span>
-            {sponsorData && sponsorData.map(sd =>(  
-              <span key={sd.text} style={sd.style}>{sd.text}</span>))
-            } 
+              {sponsorData &&
+                sponsorData.map((sd) => (
+                  <span key={sd.text} style={sd.style}>
+                    {sd.text}
+                  </span>
+                ))}
             </span>
-          
-            {profile && (<Link href={profile} target="_blank" className="rounded-lg border border-solid" >
-             
-              {"View Profile"} 
-            </Link>)}
-            {url && (<Link href={url} target="_blank" className="rounded-lg border border-solid" >
-              {"Read More"} 
-            </Link>)}
-            <AreaFCompanyFProperties companyid={companyid} />
 
+            {url && (
+              <Link
+                href={urlPrefix + url}
+                target="_blank"
+                className="rounded-lg border border-solid underline hover:text-blue-600"
+              >
+                {url}
+              </Link>
+            )}
+            {profile && (
+              <Link
+                href={profile}
+                target="_blank"
+                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600"
+              >
+                {"Read More"}
+              </Link>
+            )}
+            <AreaFCompanyFProperties companyid={companyid} />
           </div>
-         
         </div>
       </Modal>
     </div>

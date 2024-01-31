@@ -8,6 +8,7 @@ import AreaFCompanyPopup from "./area-fcompany-popup";
 
 const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
+ // console.log("companyid",companyid)
   const [isOpenIn, setIsOpenIn] = useState();
 
   const closePopup = () => {
@@ -17,8 +18,7 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   return (
     <div>
       <div
-        style={{ alignItems: "center" }}
-        className="relative item-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
+        className="relative items-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
       >
         <span className="mr-2">{children}</span>
         <h3

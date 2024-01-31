@@ -277,7 +277,7 @@ const AreaSideNavbar = () => {
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
               <div className="flex-col">
               {areaCountry && (<span className="font-bold block">{areaName}/{areaCountry}</span>)}
-              <span className="font-bold block">Company List</span>
+              <span className="font-bold block">Exploration Activities</span>
               </div>
               <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}

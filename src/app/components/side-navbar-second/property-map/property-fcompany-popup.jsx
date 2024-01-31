@@ -113,6 +113,8 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const [logoPath, setlogoPath] = useState("");
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState([]);
+   const [url, seturl] = useState("");
+  const [urlPrefix, seturlPrefix] = useState("");
 
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
@@ -123,7 +125,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       zIndex: 50,
     },
     content: {
-      top: "40%",
+      top: "50%",
       left: "50%",
       right: "auto",
       bottom: "auto",
@@ -131,7 +133,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-       
+      overflowY: "hidden",
     },
   };
 
@@ -154,10 +156,15 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-      setsponsorData(sponsorData)
+      if (d?.data?.length > 0) {
+        const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
+        setsponsorData(sponsorData)
 
-      setprofile(d.data[0]?.profile ?? "")
+        setprofile(d.data[0]?.profile ?? "")
+      }else{
+        setprofile("")
+        setsponsorData("")
+      }
     };
     f().catch(console.error);
   };
@@ -168,15 +175,23 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
+       if(d?.data?.length>0){  
          let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
-          
-        const logo = d.data[0]?.logo;
-        const logoext = d.data[0]?.logoext ?? "png";
-        let urlimg =
-        `data:image/${logoext};base64,` +
-        btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
+           seturl(url);
+           seturlPrefix(urlPrefix);
+         const logo = d.data[0]?.logo;
+         if (logo) {
+           const logoext = d.data[0]?.logoext ?? "png";
+           let urlimg =
+             `data:image/${logoext};base64,` +
+             btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
  
-setlogoPath(urlimg)
+           setlogoPath(urlimg)
+         }
+          }else{
+             setlogoPath("")
+             seturl("")
+         }
 
     };
     f().catch(console.error);
@@ -195,7 +210,7 @@ setlogoPath(urlimg)
       >
         <div className="bg-white rounded-lg min-w-[300px] flex-col justify-center items-center">
 
-          <div className="flex items-center justify-center bg-blue-200  h-12 rounded-lg">
+          <div className="flex items-center justify-center   h-8 rounded-lg">
 
             {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               
@@ -205,28 +220,41 @@ setlogoPath(urlimg)
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
           </div>
-          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem"}}>
+          <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem",gap: "1rem",}}>
           
 
-             <div> <Image
+             <div>{logoPath && ( <Image
               src={logoPath}
               width={200}
               height={100}
-              
               alt="Logo"
-               
-              /></div>
-            <span>{title}</span>
+              />)}</div>
+            <span className="font-bold" >{title}</span>
             <span>
             {sponsorData && sponsorData.map(sd =>(  
               <span key={sd.text} style={sd.style}>{sd.text}</span>))
             } 
             </span>
-            <span>{profile}</span>
-            <Link href={profile} target="_blank" className="rounded-lg border border-solid" >
-             
-              {"Read More"} 
-            </Link>
+             {url && (
+              <Link
+                href={urlPrefix + url}
+                target="_blank"
+                className="rounded-lg border border-solid underline hover:text-blue-600"
+              >
+                {url}
+              </Link>
+            )}
+            {profile && (
+              <Link
+                href={profile}
+                target="_blank"
+                className="rounded-full border border-solid border-black p-2 underline hover:text-blue-600"
+              >
+                {"Read More"}
+              </Link>
+            )}
+            
+            
             <PropertyFCompanyFProperties companyid={companyid} />
 
           </div>

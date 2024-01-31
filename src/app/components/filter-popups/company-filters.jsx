@@ -80,7 +80,7 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   },[companyStockcode])
 
     useEffect(()=>{
-      console.log("companyIdqq",companyId)
+     // console.log("companyIdqq",companyId)
     setCompanyidLocal(companyId)
      
       
