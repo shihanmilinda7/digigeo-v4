@@ -355,7 +355,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     </Autocomplete>
                     <span className="block">Filter By Exploration Area Name</span>
                     <Autocomplete
-                       inputValue={miningArea}
+                      inputValue={miningArea}
+                      allowsEmptyCollection={true}
                       allowsCustomValue
                       label={areaInfo}
                       className="max-w-xs"
@@ -367,14 +368,14 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                           setfilteredAreaList(fa)
                       setMiningArea(e); }}
                     >
-                       {areaList.map((areaObj) => (
+                       {/* {areaList.map((areaObj) => (
                         <AutocompleteItem
                           key={areaObj.area_name}
                           value={areaObj.area_name}
                         >
                           {areaObj.area_name}
                         </AutocompleteItem>
-                      ))}
+                      ))} */}
                     </Autocomplete>
                     <section className="flex items-center justify-between mt-3 fixed bottom-8 border-t-2 border-gray-300 ">
                             <div className="mt-2">

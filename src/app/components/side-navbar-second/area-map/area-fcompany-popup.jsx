@@ -119,6 +119,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
+
   const customStyles = {
     overlay: {
       backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -162,7 +163,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
       const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
        console.log("bbb2-1",sponsorData ); 
       setsponsorData(sponsorData)
-      conbsole.log("sponsorData",sponsorData)
+      console.log("sponsorData",sponsorData)
       setprofile(d.data[0]?.profile ?? "")
       }else{
          console.log("bbb3" ); 
