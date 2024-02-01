@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 
@@ -27,7 +27,8 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   useEffect(() => {
     console.log("featuredPropertyFeatures",featuredPropertyFeatures)
     if(featuredPropertyFeatures?.features){
-    const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+      
     setfeaturesObjects(e);
       //set areas
       //setmapAreas
@@ -80,6 +81,68 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
     f().catch(console.error);
   };
 
+  const domElements = useMemo(() => {
+   
+    const r = (
+          mapAreas.map(area => {
+            let blockno = 0;
+              console.log("area",area)
+                    return (<>
+                      <span key={area} className="bg-blue-600 text-white w-full" > {area}</span>
+                        {featureObjects.map((fp) => {
+                         
+                          // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
+                          // console.log("companyid",companyid,"pname",fp.properties )
+                          if (area == fp.get("map_area")) {
+                                 if(!fp.get("prop_name")){
+                                    blockno++
+                                  }
+                            return (
+                              <div
+                                key={fp.get("propertyid")}
+                                className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                  width: "100%",
+                                }}
+                                onClick={(e) => {
+                                  flytoHandler(fp);
+                                }}
+                              >
+                                <div className="flex">
+                                  <Image
+                                    src="./sync-prop.svg"
+                                    width={25}
+                                    height={10}
+                                    alt="prop"
+                                  />
+                                  <div> {fp.get("prop_name") ?? "Block" + blockno}</div>
+                                </div>
+                                <Image
+                                  src="./navigation.svg"
+                                  width={15}
+                                  height={10}
+                                  alt="prop"
+                                />
+                              </div>
+                            );
+                          }
+
+                        })}
+                              </>
+                            )
+                  })
+
+    )
+
+
+
+    return r;              
+
+  }, [mapAreas]);
+
   return (
     <div
       style={{
@@ -106,54 +169,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
       >
         {
           // mapAreas.map(area => )
-          mapAreas.map(area => {
-            let blockno = 0;
-            return (<>
-              <span key={area} className="bg-blue-600 text-white w-full" > {area}</span>
-                {featureObjects.map((fp) => {
-                  if(!fp.get("prop_name")){
-                    blockno++
-                  }
-                  // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
-                  // console.log("companyid",companyid,"pname",fp.properties )
-                  if (area == fp.get("map_area")) {
-                    return (
-                      <div
-                        key={fp.get("propertyid")}
-                        className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          width: "100%",
-                        }}
-                        onClick={(e) => {
-                          flytoHandler(fp);
-                        }}
-                      >
-                        <div className="flex">
-                          <Image
-                            src="./sync-prop.svg"
-                            width={25}
-                            height={10}
-                            alt="prop"
-                          />
-                          <div> {fp.get("prop_name") ?? "Block" + blockno}</div>
-                        </div>
-                        <Image
-                          src="./navigation.svg"
-                          width={15}
-                          height={10}
-                          alt="prop"
-                        />
-                      </div>
-                    );
-                  }
-
-                })}
-                       </>
-                     )
-          })
+        domElements
         
         }
       </div>

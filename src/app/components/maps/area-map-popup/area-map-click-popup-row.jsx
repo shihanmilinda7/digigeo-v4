@@ -1,7 +1,7 @@
 
 import  Link  from 'next/link';
 
-const AreaMapClickPopupRow = ({label, value, url="" }) => {
+const AreaMapClickPopupRow = ({label, value, url=""    }) => {
   return (
       <div className='flex '>
         <span className='w-48 p-1'>{label}</span>  

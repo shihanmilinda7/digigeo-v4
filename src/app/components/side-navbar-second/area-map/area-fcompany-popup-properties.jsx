@@ -185,7 +185,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       width: "14rem",
       margin:"1rem",
       }}>
-        <span>{companyid}</span>
+       
         {
            getDomElements
           

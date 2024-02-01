@@ -133,66 +133,66 @@ const SideNavbar = () => {
         duration-500`}
         >
           <div
-            className={`${isSideNavOpen ? "py-0.1 flex flex-col " : "hidden"}`}
+            className={`${isSideNavOpen ? "py-0.1 flex-col justify-between h-1/2 gap-2" : "hidden"}`}
           >
-            <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
-              {/* <span className="font-bold">Overview</span> */}
-            </div>
-            <div className="m-2">
-              {/* <Input
-                // list={list}
-                isClearable
-                type="text"
-                size={"sm"}
-                variant="flat"
-                placeholder="Search here..."
-                onClear={() => console.log("input cleared")}
-                className="w-full rounded-lg border border-blue-700"
-                startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
-              /> */}
-            </div>
-            <div className="flex flex-col gap-2 p-2">
-              <AreaMapButton onClick={() => selectMapHandler("area")} />
-              <PropertiesMapButton
-                onClick={() => selectMapHandler("properties")}
-              />
-              <CompanyMapButton onClick={() => selectMapHandler("company")} />
-            </div>
-            <div className="mt-4 mb-1 flex items-center justify-center">
-              <div
-                style={{
-                  display: selectedMap === "area" ? "block" : "none",
-                }}
-                className="w-full"
-              >
-                <AreaBottomSideComp />
+              <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
+                {/* <span className="font-bold">Overview</span> */}
               </div>
-              <div
-                style={{
-                  display: selectedMap === "properties" ? "block" : "none",
-                }}
-                className="w-full"
-              >
-                <PropertiesBottomSideComp />
+              <div className="m-2">
+                {/* <Input
+                  // list={list}
+                  isClearable
+                  type="text"
+                  size={"sm"}
+                  variant="flat"
+                  placeholder="Search here..."
+                  onClear={() => console.log("input cleared")}
+                  className="w-full rounded-lg border border-blue-700"
+                  startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
+                /> */}
               </div>
-              <div
-                style={{
-                  display: selectedMap === "company" ? "block" : "none",
-                }}
-                className="w-full"
-              >
-                <CompanyBottomSideComp />
+              <div className="flex flex-col gap-2 p-2 ">
+                <AreaMapButton onClick={() => selectMapHandler("area")} />
+                <PropertiesMapButton
+                  onClick={() => selectMapHandler("properties")}
+                />
+                <CompanyMapButton onClick={() => selectMapHandler("company")} />
               </div>
-            </div>
-            <div className="w-full pb-2 pl-2 pr-2 pt-2">
-              <div className="flex justify-center">
-                <button className="relative flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">
-                  <span className="uppercase font-semibold">
-                    Reset all filters
-                  </span>
-                </button>
+              <div className="mt-4 mb-1 flex items-center justify-center">
+                <div
+                  style={{
+                    display: selectedMap === "area" ? "block" : "none",
+                  }}
+                  className="w-full"
+                >
+                  <AreaBottomSideComp />
+                </div>
+                <div
+                  style={{
+                    display: selectedMap === "properties" ? "block" : "none",
+                  }}
+                  className="w-full"
+                >
+                  <PropertiesBottomSideComp />
+                </div>
+                <div
+                  style={{
+                    display: selectedMap === "company" ? "block" : "none",
+                  }}
+                  className="w-full"
+                >
+                  <CompanyBottomSideComp />
+                </div>
               </div>
-            </div>
+              <div className="w-full pb-2 pl-2 pr-2 pt-2">
+                <div className="flex justify-center">
+                  <button className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">
+                    <span className="uppercase font-semibold">
+                      Reset all filters
+                    </span>
+                  </button>
+                </div>
+              </div>
           </div>
           <div className="mt-4 flex flex-col gap-4 relative"></div>
         </div>
