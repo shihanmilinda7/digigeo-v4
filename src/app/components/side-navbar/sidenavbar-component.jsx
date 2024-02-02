@@ -128,12 +128,12 @@ const SideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-        h-[90vh] ml-2 mt-2
+          ml-2 mt-2 h-full
         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
         >
           <div
-            className={`${isSideNavOpen ? "py-0.1 flex-col justify-between h-1/2 gap-2" : "hidden"}`}
+            className={`${isSideNavOpen ? "py-0.1 flex-col justify-between   gap-2" : "hidden"}`}
           >
               <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
                 {/* <span className="font-bold">Overview</span> */}

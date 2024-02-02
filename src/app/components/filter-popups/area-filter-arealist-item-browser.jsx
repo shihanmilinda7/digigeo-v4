@@ -8,7 +8,7 @@ import { Pagination, Button } from "@nextui-org/react";
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid 
 const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) => {
      const [currentPage, setCurrentPage] =  useState(1);
-     const [groupedAreaList, setgroupedAreaList] =  useState([]);
+     const [groupedAreaList, setgroupedAreaList] =  useState({});
      const [filteredAreaList, setfilteredAreaList] =  useState([]);
 
      const [selectedKeys, setSelectedKeys] = useState(new Set([]));
@@ -20,7 +20,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
     useEffect(()=>{
          
       const result = Object.groupBy(filteredAreaList, ({ country }) => country);
-      console.log("set gropued ",result)
+     console.log("set gropued1 ",result)
 
       setgroupedAreaList(result)
 
@@ -34,14 +34,25 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
     );
   useEffect(() => {
    
-   console.log("selectedValue", selectedValue[0])
-     const p = selectedValue?.[0]?.toString()?.search(/#/)
-     console.log("c",selectedValue?.[0]?.toString()?.substr(p+1))
-     console.log("a",selectedValue?.[0]?.toString()?.substr(0,p))
-     countryHandler(selectedValue?.[0]?.toString()?.substr(p+1))
-     areaHandler(selectedValue?.[0]?.toString()?.substr(0,p))
+    console.log("selectedValue", selectedValue)
+    if (selectedValue.length>0){
+      const a = areaList.find(a=> a.gid == selectedValue[0] )
+      if(a){
+        countryHandler(a.country)
+        areaHandler(a.area_name)
+        // console.log("qq1-country",a.country)
+        // console.log("qq1-area", a.area_name);
+      }
+    }
+
+    //  const p = selectedValue?.[0]?.toString()?.search(/#/)
+    //  console.log("c",selectedValue?.[0]?.toString()?.substr(p+1))
+    // console.log("a", selectedValue?.[0]?.toString()?.substr(0, p))
+    
+
+    //  countryHandler(selectedValue?.[0]?.toString()?.substr(p+1))
+    //  areaHandler(selectedValue?.[0]?.toString()?.substr(0,p))
      
-  //  selectionHandler(selectedValue)
   }, [selectedKeys])
 
   // useEffect(() => {
@@ -62,14 +73,15 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
             // disallowEmptySelection
           selectionMode="single"
           // selectedKeys={selectedKeys}
-                    onSelectionChange={setSelectedKeys}
+              onSelectionChange={setSelectedKeys}
+              
             className="overflow-hidden w-[450px] "
             // itemClasses={"w-[500px]"}
             >
               {Object.keys(groupedAreaList).map(c => {
                 return (<ListboxSection key ={c} title= {c} showDivider>
                   {groupedAreaList[c].map(a => {
-                    return (<ListboxItem key={a.area_name+ "#" + a.country } description={`${a.country}`}>
+                    return (<ListboxItem key={a.gid } description={`${a.country}`}>
                       {`${a.area_name}`}
                     </ListboxItem> )
                   })}

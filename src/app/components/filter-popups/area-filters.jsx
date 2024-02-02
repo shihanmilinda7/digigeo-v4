@@ -272,7 +272,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
           cache: "force-cache",
         }
       );
-      const d = await res.json();
+   const d = await res.json();
+   
       setallAreaList(d.data);
     };
 
@@ -290,7 +291,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     
     setCountryList(cs.map(c => { return { country: c } }));
     setfilteredAreaList(allAreaList)
- 
+   
   }, [allAreaList])
   
 
