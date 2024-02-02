@@ -147,28 +147,26 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     //heading un named
 
     const h = (
-          <div
-            key={"unnamed" }
-            className="   bg-blue-600  text-white cursor-pointer px-2"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-             
-          >
-            <div className="flex">
-               
-              <div> { "Unnamed Properties" }</div>
-            </div>
-            
-          </div>
-        )
+      <div
+        key={"unnamed"}
+        className="   bg-blue-600  text-white cursor-pointer px-2"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <div className="flex">
+          {unNamedProps.length > 0 ?  <div>{"Unnamed Properties"}</div> : null}
+        </div>
+      </div>
+    );
 
     return [...r,h,...unNamedProps];
   }, [featureObjects]);
   
+
 
   return (
     < div style={{ height:"20rem", display:"flex", flexDirection:"column",justifyContent:"start", alignItems:"center"}} > 

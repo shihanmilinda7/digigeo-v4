@@ -208,7 +208,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="bg-white rounded-lg min-w-[300px] flex-col justify-center items-center">
+        <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center">
 
           <div className="flex items-center justify-center   h-8 rounded-lg">
 

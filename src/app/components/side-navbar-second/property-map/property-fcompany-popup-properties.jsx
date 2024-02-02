@@ -13,7 +13,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   // const featuredPropertyFeatures = useSelector(
   //   (state) => state.propertiesMapReducer.featuredPropertyFeatures
   // );
-
+ 
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -84,22 +84,25 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   const domElements = useMemo(() => {
    
     const r = (
-          mapAreas.map(area => {
+      mapAreas.map(area => {
+            console.log("mapAreas",mapAreas);
             let blockno = 0;
-              console.log("area",area)
                     return (<>
-                      <span key={area} className="bg-blue-600 text-white w-full" > {area}</span>
+                      <span key={area} className="bg-blue-600 text-white w-full pl-2" > {area}</span>
                         {featureObjects.map((fp) => {
-                         
+                           
                           // if (companyid == fp.get("companyid") && fp.get("prop_name") ) {
                           // console.log("companyid",companyid,"pname",fp.properties )
                           if (area == fp.get("map_area")) {
-                                 if(!fp.get("prop_name")){
+                                  if (!fp.get("prop_name")) {
                                     blockno++
-                                  }
+                                    
+                                    }
+                                     
+                            
                             return (
                               <div
-                                key={fp.get("propertyid")}
+                                key={fp.get("id")}
                                 className="hover:bg-blue-200 odd:bg-slate-200  cursor-pointer px-2"
                                 style={{
                                   display: "flex",
@@ -118,7 +121,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                                     height={10}
                                     alt="prop"
                                   />
-                                  <div> {fp.get("prop_name") ?? "Block" + blockno}</div>
+                                  <div> {fp.get("prop_name") ?? "Block" + blockno }</div>
                                 </div>
                                 <Image
                                   src="./navigation.svg"
@@ -163,7 +166,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
           alignItems: "flex-start",
           maxHeight: "18.5rem",
           overflowY: "auto",
-          width: "14rem",
+          width: "18rem",
           margin:"1rem",
         }}
       >
