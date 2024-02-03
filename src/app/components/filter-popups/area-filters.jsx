@@ -2,7 +2,7 @@
 
 import Modal from "react-modal";
 
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Chip } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -25,18 +25,16 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   // const [country, setCountry] = useState("");
   const [country, setCountry] = useState("");
   const [countryList, setCountryList] = useState([]);
-  const [areaList, setAreaList] = useState([]);
+  // const [areaList, setAreaList] = useState([]);
   const [allAreaList, setallAreaList] = useState([]);
   const [filteredAreaList, setfilteredAreaList] = useState([]);
-  // const [miningArea, setMiningArea] = useState("");
   const [miningArea, setMiningArea] = useState("");
   const [areaInfo, setareaInfo] = useState("Type an Area Name...");
   const [propertyList, setpropertyList] = useState([]);
-  const [totalResultCount, settotalResultCount] = useState(0); 
+  const [totalResultCount, settotalResultCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setitemsPerPage] =  useState(10);
-  const [searchQuery, setsearchQuery] = useState(""); 
- 
+  const [itemsPerPage, setitemsPerPage] = useState(10);
+  const [searchQuery, setsearchQuery] = useState("");
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -77,7 +75,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //  useEffect(() => {
 
   //   const fproperty = async () => {
- 
+
   //     const res = await fetch(
   //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/${searchQuery}/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
   //       {
@@ -85,76 +83,76 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //       }
   //     );
   //     const d = await res.json();
-       
+
   //     setpropertyList(d.data);
   //     settotalResultCount(d.count)
-         
+
   //   }
   //   console.log("searchQuery",searchQuery)
 
   //   if (searchQuery) {
-    
+
   //       fproperty().catch(console.error);
-     
+
   //   }
   //   else {
   //     setpropertyList([]);
   //   }
-    
-  // }, [searchQuery,currentPage])   
-  
+
+  // }, [searchQuery,currentPage])
+
+  //change on redux messages
   useEffect(() => {
-    setMiningArea(areaName)
-
-  },[areaName])
-  
+    setMiningArea(areaName);
+  }, [areaName]);
 
   useEffect(() => {
-    setCountry(areaCountry)
-  }, [areaCountry])
-  
+    setCountry(areaCountry);
+  }, [areaCountry]);
 
-  const getSearchQuery= (country="", areaName="")=>{
-    let s=""
-    if(country==""){
-      s=""
-      return s
+  const getSearchQuery = (country = "", areaName = "") => {
+    let s = "";
+    if (country == "") {
+      s = "";
+      return s;
     } else if (areaName == "") {
-        s="country='"+country +"'"
-      return s
+      s = "country='" + country + "'";
+      return s;
     } else {
-      s = "country='" + country + "' and area='" + areaName +"'" 
-      
-      return s
-    }
+      s = "country='" + country + "' and area='" + areaName + "'";
 
-    
-  }
-  
+      return s;
+    }
+  };
 
   useEffect(() => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
 
+  //on change miningArea
   useEffect(() => {
-    //setCountry(areaCountry);
-    // setMiningArea(areaName);
-    const s = getSearchQuery(country, miningArea)
-     console.log("searchQuery-area",s)
-    setsearchQuery(s)
+    const s = getSearchQuery(country, miningArea);
+    console.log("searchQuery-area", s);
+    setsearchQuery(s);
 
+    //clear popup area list
+    // if (miningArea) {
+    //   console.log("opo")
+    //   setfilteredAreaList(filteredAreaList.map(f => f.area_name == miningArea))
+    // }
   }, [miningArea]);
 
-  //areal load country
+  //on country change areal load
   useEffect(() => {
-    // console.log("c",country)
-    if(country ==null){
-      setAreaList([])
-       setpropertyList([]);
-      setareaInfo("Type an Area name...")
+    if (!country) {
+      console.log("css", country);
+      // setAreaList([]);
+      setpropertyList([]);
+      setareaInfo("Type an Area name...");
       // console.log("alist",allAreaList)
-       setfilteredAreaList(allAreaList)
-      return
+      console.log("pok7");
+      setfilteredAreaList(allAreaList);
+      return;
     }
 
     //load areas
@@ -164,11 +162,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         { cache: "force-cache" }
       );
       const d = await res.json();
-      setAreaList(d.data);
-      if(d.data.length>0){
-         setareaInfo(`Select an Area-(${d.data.length} areas)`)
-      }else{
-         setareaInfo(`No areas for ${country}`)
+      // setMiningArea(areaName);
+      // setAreaList(d.data);
+      if (d.data.length > 0) {
+        setareaInfo(`Select an Area-(${d.data.length} areas)`);
+      } else {
+        setareaInfo(`No areas for ${country}`);
       }
     };
 
@@ -176,7 +175,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
     //load results
     //   const fproperty = async () => {
-       
+
     //   const res = await fetch(
     //     `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
     //     {
@@ -184,38 +183,33 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     //     }
     //   );
     //   const d = await res.json();
- 
+
     //   setpropertyList(d.data);
     //   settotalResultCount(d.count)
-         
-     
+
     // }
     // fproperty().catch(console.error);
 
-    const s = getSearchQuery(country, areaName)
-    setsearchQuery(s)
+    const s = getSearchQuery(country, areaName);
+    setsearchQuery(s);
 
     //filterAllrea by country
-     
-    if(country){
-      const fa =    allAreaList.filter(a=> a.country==country)
-      setfilteredAreaList(fa)
 
-    }else{
-      setfilteredAreaList(allAreaList)
-      setAreaList([])
-      setareaInfo("Type An Area Name...")
-    }
-    
-    
-    
+    // if(country){
+    //   const fa =    allAreaList.filter(a=> a.country==country)
+    //   setfilteredAreaList(fa)
+
+    // }else{
+    //   setfilteredAreaList(allAreaList)
+    //   setAreaList([])
+    //   setareaInfo("Type An Area Name...")
+    // }
   }, [country]);
 
   // useEffect(() => {
 
-
   //   const fproperty = async () => {
-       
+
   //     const res = await fetch(
   //       `https://atlas.ceyinfo.cloud/matlas/propertylistuniversal/country='${country}'/${itemsPerPage}/${(currentPage - 1) * itemsPerPage}`,
   //       {
@@ -223,16 +217,14 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //       }
   //     );
   //     const d = await res.json();
- 
+
   //     setpropertyList(d.data);
   //     settotalResultCount(d.count)
-         
-     
+
   //   }
   //   fproperty().catch(console.error);
- 
+
   // }, [miningArea])
-  
 
   const searchAction = async () => {
     if (country && miningArea) {
@@ -249,7 +241,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
     // dispatch(setAreaState("Canada"));
   };
   //const animals = [{value:"qqq", label:"q1"},{value:"qqq2", label:"q2"},{value:"qqq3", label:"q3"}]
-//init use effect
+  //init use effect
   useEffect(() => {
     // const f = async () => {
     //   const res = await fetch(
@@ -264,44 +256,53 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
     // f().catch(console.error);
 
-    //load area list   
- const fareas = async () => {
+    //load area list
+    const fareas = async () => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/allarealist`,
         {
           cache: "force-cache",
         }
       );
-   const d = await res.json();
-   
+      const d = await res.json();
+
       setallAreaList(d.data);
     };
 
     fareas().catch(console.error);
-
-   
-
-    
-
   }, []);
 
+  //allAreaList
   useEffect(() => {
-     const result = Object.groupBy(allAreaList, ({ country }) => country);
-    const cs = Object.keys(result) 
-    
-    setCountryList(cs.map(c => { return { country: c } }));
-    setfilteredAreaList(allAreaList)
-   
-  }, [allAreaList])
-  
+    const result = Object.groupBy(allAreaList, ({ country }) => country);
+    const cs = Object.keys(result);
 
-  const resetHandler = ()=>{
-     setCountry("")
-     setMiningArea("")
-     setAreaList([])
-       dispatch(setAreaCountry(country));
-      dispatch(setAreaMiningArea(miningArea));
-  }
+    setCountryList(
+      cs.map((c) => {
+        return { country: c };
+      })
+    );
+    console.log("pok5");
+    if (areaName) {
+      setfilteredAreaList(
+        allAreaList.filter(
+          (a) => a.area_name == areaName && a.country == areaCountry
+        )
+      );
+    } else {
+      setfilteredAreaList(allAreaList);
+    }
+  }, [allAreaList]);
+
+  const resetHandler = () => {
+    setCountry("");
+    setMiningArea("");
+    setareaInfo("Type An Area Name...");
+    // setAreaList([]);
+    setfilteredAreaList([...allAreaList]);
+    dispatch(setAreaCountry(""));
+    dispatch(setAreaMiningArea(""));
+  };
   return (
     <div>
       <Modal
@@ -331,19 +332,32 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                   <div className="flex-col gap-2   w-1/3">
                     <span className="block">Filter By Country</span>
                     <Autocomplete
-                    
                       allowsEmptyCollection={true}
                       allowsCustomValue={true}
                       label="Select a country"
                       className="max-w-xs"
                       onInputChange={(e) => {
-                      
-                          setCountry(e);
-                       
+                        console.log("pok9", e);
+                        if (e) {
+                          const fa = allAreaList.filter((a) => a.country == e);
+                          console.log("pok2");
+                          setfilteredAreaList(fa);
+                        } else {
+                          console.log("pok3");
+                          setfilteredAreaList([...allAreaList]);
+                          // setAreaList([]);
+                          setareaInfo("Type An Area Name...");
+                          setMiningArea("");
+                        }
+                        setCountry(e);
 
+                        // if(!e){
+
+                        //    setMiningArea("")
+                        // }
                       }}
                       inputValue={country}
-                       defaultSelectedKey={country}
+                      defaultSelectedKey={country}
                     >
                       {countryList.map((countryObj) => (
                         <AutocompleteItem
@@ -354,7 +368,9 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                         </AutocompleteItem>
                       ))}
                     </Autocomplete>
-                    <span className="block">Filter By Exploration Area Name</span>
+                    <span className="block">
+                      Filter By Exploration Area Name
+                    </span>
                     <Autocomplete
                       inputValue={miningArea}
                       allowsEmptyCollection={true}
@@ -363,13 +379,23 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                       defaultSelectedKey={miningArea}
                       onInputChange={(e) => {
-                        console.log(e)
-                         const r =  new RegExp(e, "i") 
-                         const fa =    allAreaList.filter(a=> a.area_name.search(r)!=-1)
-                          setfilteredAreaList(fa)
-                      setMiningArea(e); }}
+                        const r = new RegExp(e, "i");
+                        const fa = allAreaList.filter((a) => {
+                          if (country) {
+                            return (
+                              a.area_name.search(r) != -1 &&
+                              a.country == country
+                            );
+                          } else {
+                            return a.area_name.search(r) != -1;
+                          }
+                        });
+                        console.log("pok1");
+                        setfilteredAreaList(fa);
+                        setMiningArea(e);
+                      }}
                     >
-                       {/* {areaList.map((areaObj) => (
+                      {/* {areaList.map((areaObj) => (
                         <AutocompleteItem
                           key={areaObj.area_name}
                           value={areaObj.area_name}
@@ -379,47 +405,44 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                       ))} */}
                     </Autocomplete>
                     <section className="flex items-center justify-between mt-3 fixed bottom-8 border-t-2 border-gray-300 ">
-                            <div className="mt-2">
-                              <Chip
-                                color="default"
-                                variant="light"
+                      <div className="mt-2">
+                        <Chip
+                          color="default"
+                          variant="light"
                           className="cursor-pointer"
                           onClick={resetHandler}
-                              >
-                                Reset
-                              </Chip>
-                            </div>
-                            <div className="mt-2">
-                                 <Chip
-                                 isDisabled ={!(country && miningArea)}
-                                color="primary"
-                                className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
-                                onClick={searchAction}
-                              >
-                                Search
-                              </Chip>
-                            </div>
-                    </section>`
+                        >
+                          Reset
+                        </Chip>
+                      </div>
+                      <div className="mt-2">
+                        <Chip
+                          isDisabled={!(country && miningArea)}
+                          color="primary"
+                          className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
+                          onClick={searchAction}
+                        >
+                          Search
+                        </Chip>
+                      </div>
+                    </section>
+                    `
                   </div>
-                  <div className="w-2/3" >
-                  { 
-                    ( <div className="flex-col gap-32">
-                    
-                      <div className="border-solid border  last: w-[500px] bg-white rounded-lg m-2  ">
-              
-                        <AreaFilterAreaListItemBrowser areaList={filteredAreaList } countryHandler={setCountry} areaHandler={setMiningArea}     />
-                        
+                  <div className="w-2/3">
+                    {
+                      <div className="flex-col gap-32">
+                        <div className="border-solid border  last: w-[500px] bg-white rounded-lg m-2  ">
+                          <AreaFilterAreaListItemBrowser
+                            areaList={filteredAreaList}
+                            countryHandler={setCountry}
+                            areaHandler={setMiningArea}
+                          />
+                        </div>
                       </div>
-                      
-                      </div>
-                    )
-                  } 
-
+                    }
                   </div>
                 </div>
               </div>
-            
-           
             </div>
           </div>
         </div>

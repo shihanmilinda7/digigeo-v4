@@ -13,7 +13,15 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
 
      const [selectedKeys, setSelectedKeys] = useState(new Set([]));
 
-  useEffect(() => {
+    //  useEffect(()=>{
+    //    setfilteredAreaList(areaList)
+
+    //  },[areaList])
+  
+  
+  
+  
+     useEffect(() => {
        console.log("set ffilterd init ",areaList)
       setfilteredAreaList(areaList)
      },[areaList])
@@ -40,6 +48,12 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
       if(a){
         countryHandler(a.country)
         areaHandler(a.area_name)
+
+        //console.log("poi",areaList.filter(f => f.area_name == a.area_name))
+      
+        setfilteredAreaList(areaList.filter(f => f.area_name == a.area_name))
+   
+
         // console.log("qq1-country",a.country)
         // console.log("qq1-area", a.area_name);
       }
