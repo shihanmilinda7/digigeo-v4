@@ -12,85 +12,75 @@ const arimo = Arimo({
   display: 'swap',
 })
 
-const AreaMapClickPopup = ({}) => {
- 
-   //clickObjects
-  const claimObj = useSelector(
-    (state) => state.areaMapReducer.clickclaimObject
-  );
-  const fpropObj = useSelector(
-    (state) => state.areaMapReducer.clickfPropertyObject
-  );
-  const assetObj = useSelector(
-    (state) => state.areaMapReducer.clickassetObject
-  );
-  const syncPropObj = useSelector(
-    (state) => state.areaMapReducer.clicksyncPropertyObject
-  );
+const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
+  //clickObjects
+  // const claimObj = useSelector(
+  //   (state) => state.areaMapReducer.clickclaimObject
+  // );
+  // const fpropObj = useSelector(
+  //   (state) => state.areaMapReducer.clickfPropertyObject
+  // );
+  // const assetObj = useSelector(
+  //   (state) => state.areaMapReducer.clickassetObject
+  // );
+  // const syncPropObj = useSelector(
+  //   (state) => state.areaMapReducer.clicksyncPropertyObject
+  // );
 
-  const [resourcesFormated,setresourcesFormated] = useState([])
+  const [resourcesFormated, setresourcesFormated] = useState([]);
 
   useEffect(() => {
-
+    console.log("fpropObj2",fpropObj)
     function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
-    
-    const formatOunce = (amt)=>{
-     
-      const dotLoc = amt.search(".00") 
-      if(dotLoc != -1){
-      let val = amt.substr(0,dotLoc+3)
-      val = numberWithCommas(val)
-      return val
-      }else{
-        return amt
+
+    const formatOunce = (amt) => {
+      const dotLoc = amt.search(".00");
+      if (dotLoc != -1) {
+        let val = amt.substr(0, dotLoc + 3);
+        val = numberWithCommas(val);
+        return val;
+      } else {
+        return amt;
       }
-    }
-    const restext = fpropObj?.resources
+    };
+    const restext = fpropObj?.resources;
     if (restext) {
-      const items = restext.split(" oz")
-     
+      const items = restext.split(" oz");
 
-      const itemsTextFormated = items.map(i => {
-            const contents = i.split(" ")
-           
-            let result=""
-            switch (contents.length) {
-              case 1:
-                result =  contents[0].length ==1 ? "" :  contents[0];
-                break;
-              case 2:
-                result = contents[0] + " " + formatOunce(contents[1]) + " oz."
-                break
-              case 3:
-                result = contents[1] + " " + formatOunce(contents[2])  + " oz."
-                break;
-            
-              default:
-                result = contents
-                break;
-            }
-            return result
-         })
+      const itemsTextFormated = items.map((i) => {
+        const contents = i.split(" ");
 
+        let result = "";
+        switch (contents.length) {
+          case 1:
+            result = contents[0].length == 1 ? "" : contents[0];
+            break;
+          case 2:
+            result = contents[0] + " " + formatOunce(contents[1]) + " oz.";
+            break;
+          case 3:
+            result = contents[1] + " " + formatOunce(contents[2]) + " oz.";
+            break;
 
-      setresourcesFormated(itemsTextFormated)
+          default:
+            result = contents;
+            break;
+        }
+        return result;
+      });
+
+      setresourcesFormated(itemsTextFormated);
       // console.log("pp1-itemsTextFormated", itemsTextFormated)
-
     }
-    
-    
-    
-  }, [fpropObj])
-  
-
+  }, [fpropObj]);
 
   return (
     <div
       className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}
     >
-      {syncPropObj && (
+      { Object.keys(syncPropObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Property Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -114,7 +104,7 @@ const AreaMapClickPopup = ({}) => {
           </div>
         </div>
       )}
-      {fpropObj && (
+      { Object.keys(fpropObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Featured Property Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -151,16 +141,15 @@ const AreaMapClickPopup = ({}) => {
               label={"Ownership:"}
               value={fpropObj.owners}
             />
-            <AreaMapClickPopupRow
+              <AreaMapClickPopupRow
               label={"External Property Page:"}
-              value={"Open Url"}
+              value={fpropObj.prop_exturl ? "Open Url" : ""}
               url={fpropObj.prop_exturl}
-              
             />
           </div>
         </div>
       )}
-      {assetObj && (
+      { Object.keys(assetObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Asset Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -181,7 +170,7 @@ const AreaMapClickPopup = ({}) => {
           </div>
         </div>
       )}
-      {claimObj && (
+      { Object.keys(claimObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Claim Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -195,6 +184,6 @@ const AreaMapClickPopup = ({}) => {
       )}
     </div>
   );
-}
+};
 
 export default AreaMapClickPopup

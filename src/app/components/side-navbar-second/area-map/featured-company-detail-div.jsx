@@ -17,9 +17,7 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
 
   return (
     <div>
-      <div
-        className="relative items-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in"
-      >
+      <div className="relative items-center flex pl-4 border rounded-lg border-blue-700 focus:outline-none text-black text-sm sm:text-sm py-1 w-full transition duration-150 ease-in">
         <span className="mr-2">{children}</span>
         <h3
           style={{
@@ -37,7 +35,7 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
           </span> */}
           <span className="">
             <MdInfoOutline
-              className="cursor-pointer h-4 w-4"
+              className="cursor-pointer h-4 w-4 hover:scale-125"
               onClick={() => setIsOpenIn(true)}
               // onClick={() => console.log("title", title)}
             />

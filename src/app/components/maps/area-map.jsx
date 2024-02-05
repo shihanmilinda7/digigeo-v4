@@ -311,10 +311,7 @@ export const AreaMap = () => {
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
-  const [claimObject, setclaimObject] = useState(undefined);
-  // const [fPropertyObject, setfPropertyObject] = useState(undefined);
-  // const [assetObject, setassetObject] = useState(undefined);
-  // const [syncPropertyObject, setsyncPropertyObject] = useState(undefined);
+   
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
 
   const mapRef = useRef();
@@ -338,6 +335,28 @@ export const AreaMap = () => {
   const [mapScale, setmapScale] = useState(0);
   const [lat, setlat] = useState(0);
   const [long, setlong] = useState(0);
+   
+   const [ assetObject, setassetObject]=useState()
+   const [ fPropertyObject, setfPropertyObject]=useState()
+   const [ syncPropertyObject, setsyncPropertyObject]=useState()
+   const [ claimObject, setclaimObject]=useState()
+
+  useEffect(() => {
+    dispatch(setclickassetObject(assetObject));
+  }, [assetObject]);
+
+  useEffect(() => {
+    dispatch(setclicksyncPropertyObject(syncPropertyObject));
+  }, [syncPropertyObject]);
+
+  useEffect(() => {
+    dispatch(setclickfPropertyObject(fPropertyObject));
+  }, [fPropertyObject]);
+
+  useEffect(() => {
+      dispatch(setclickclaimObject(claimObject));
+  }, [claimObject]);
+
    
 
   const onSingleclick = useCallback((evt) => {
@@ -1224,7 +1243,7 @@ export const AreaMap = () => {
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
     
-      let assetObject, fPropertyObject, syncPropertyObject, claimObject;
+      
 
       let extentDim;
       const viewResolution = mapViewRef?.current?.getResolution();
@@ -1263,7 +1282,7 @@ export const AreaMap = () => {
         let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
         let country = selAssetFeatures?.[0]?.get("country") ?? "";
         let region = selAssetFeatures?.[0]?.get("region") ?? "";
-        assetObject = {
+      const assetObject1 = {
           asset_name,
           assetalias,
           asset_type,
@@ -1273,8 +1292,8 @@ export const AreaMap = () => {
           country,
           region,
         };
-
-        dispatch(setclickassetObject(assetObject));
+      setassetObject(assetObject1);
+       
       } else {
         dispatch(setclickassetObject(undefined));
       }
@@ -1338,7 +1357,7 @@ export const AreaMap = () => {
         let profile = d?.profile ?? "";
         
          
-        fPropertyObject = {
+        const fPropertyObject1 = {
           sponsoredowners,
           prop_name,
           commo_ref,
@@ -1351,8 +1370,8 @@ export const AreaMap = () => {
           propertyid,
           profile
         };
-
-        dispatch(setclickfPropertyObject(fPropertyObject));
+        setfPropertyObject(fPropertyObject1);
+        
       } else {
         dispatch(setclickfPropertyObject(undefined));
       }
@@ -1374,7 +1393,7 @@ export const AreaMap = () => {
         const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
         // const selSynClaimLinkFeatures =
         //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
-        syncPropertyObject = {
+        const syncPropertyObject1 = {
           prop_name,
           owners,
           name: name1,
@@ -1382,8 +1401,8 @@ export const AreaMap = () => {
           country,
           area,
         };
-
-        dispatch(setclicksyncPropertyObject(syncPropertyObject));
+        setsyncPropertyObject(syncPropertyObject1);
+       
       } else {
         dispatch(setclicksyncPropertyObject(undefined));
       }
@@ -1396,15 +1415,14 @@ export const AreaMap = () => {
           clickedOnFeatureTmp = true
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
-        claimObject = { ownerref, claimno };
-
-        dispatch(setclickclaimObject(claimObject));
+        const claimObject1 = { ownerref, claimno };
+        setclaimObject(claimObject1)
+      
       } else {
         dispatch(setclickclaimObject(undefined));
       }
 
       console.log("111");
-      //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
     };
  
     if (coordinates ) {
@@ -1495,28 +1513,19 @@ export const AreaMap = () => {
           </Button>
         </ButtonGroup>
 
-          <ButtonGroup
+        <ButtonGroup
           variant="faded"
           className="fixed right-0 bottom-0 z-50 "
           color="primary"
         >
-          <Button
-            
-           className={`w-36 bg-blue-700 text-white`}
-          >
+          <Button className={`w-36 bg-blue-700 text-white`}>
             {`Scale:${mapScale}`}
           </Button>
-          <Button
-            
-            className={`w-36 bg-blue-700 text-white`}
-          >
-           { `Lat:${lat}` }
+          <Button className={`w-36 bg-blue-700 text-white`}>
+            {`Lat:${lat}`}
           </Button>
-          <Button
-          
-           className={`w-36 bg-blue-700 text-white`}
-          >
-                { `Long:${long}` }
+          <Button className={`w-36 bg-blue-700 text-white`}>
+            {`Long:${long}`}
           </Button>
         </ButtonGroup>
 
@@ -1529,7 +1538,7 @@ export const AreaMap = () => {
             right: "8px",
             backgroundColor: "white",
             boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-             padding: "15px",
+            padding: "15px",
             borderRadius: "10px",
             border: "1px solid #cccccc",
             minWidth: "280px",
@@ -1555,14 +1564,20 @@ export const AreaMap = () => {
               position: "absolute",
               top: "2px",
               right: "8px",
-             
             }}
           >
             ✖
           </button>
-          <div id="popup-contenta" >
-            {/* <p>Info:</p> */}
-            {clickDataLoaded && <AreaMapClickPopup />}
+          <div id="popup-contenta">
+            {/* <p>Info:</p> */}, , ,
+            {clickDataLoaded && (
+              <AreaMapClickPopup
+                claimObj={claimObject}
+                fpropObj={fPropertyObject}
+                assetObj={assetObject}
+                syncPropObj={syncPropertyObject}
+              />
+            )}
           </div>
         </div>
 
@@ -1577,7 +1592,7 @@ export const AreaMap = () => {
           onSingleclick={onSingleclick}
           onPointermove={onPointerMove}
         >
-          {(popup && clickedOnFeature ) ? (
+          {popup && clickedOnFeature ? (
             <olOverlay
               element={popup}
               position={coordinates}
@@ -1648,14 +1663,10 @@ export const AreaMap = () => {
           <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
-               minResolution={0}
+            minResolution={0}
             maxResolution={150}
           >
-            <olSourceVector ref={assetSourceRef}
-         
-            >
-
-            </olSourceVector>
+            <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
           <olLayerVector
             ref={syncPropVectorLayerRef}

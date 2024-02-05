@@ -1,16 +1,21 @@
 "use client"
 
 import Image from "next/image";
-import { useEffect, useState,useRef,useCallback,useMemo } from "react";
+import { useEffect, useState,useRef,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
+import { MdInfoOutline } from "react-icons/md";
 
 import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
+import DialogComponent from './../../../utils/dialog/dialog';
+import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [unNamedFeatureObjects, setunNamedFeatureObjects] = useState([]);
+  const [showDlg, setshowDlg] = useState("");
+  const [fpropObj, setfpropObj] = useState();
   const  blocknoRef   = useRef(0)
   const  pidRef   = useRef(0)
 
@@ -22,17 +27,17 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
 
-  useEffect(()=>{
-    setunNamedFeatureObjects([])
-     console.log("qqq1-mounted")
-    return ()=>{
-      setunNamedFeatureObjects([])
-    }
-  },[])
+  // useEffect(()=>{
+  //   setunNamedFeatureObjects([])
+  //    console.log("qqq1-mounted")
+  //   return ()=>{
+  //     setunNamedFeatureObjects([])
+  //   }
+  // },[])
 
   useEffect(() => {
-    // console.log("companyida",companyid)
-    setunNamedFeatureObjects([]);
+     console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
+   //setunNamedFeatureObjects([]);
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
       let b=0
@@ -51,9 +56,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       setfeaturesObjects(e);
     }
 
-    return ()=>{
-      setunNamedFeatureObjects([])
-    }
+    // return ()=>{
+    //   setunNamedFeatureObjects([])
+    // }
 
   }, [featuredPropertyFeatures]);
 
@@ -72,15 +77,84 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     dispatch(setareaFlyToLocation(loc));
   };
 
+  const showProperties =async (e,companyid,propertyid,prop_name,hotplayid) => {
+       console.log("hotplayid",hotplayid)
+           const getData = async (hotplayid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            hotplayid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+        //console.log("hotplayid",hotplayid)
+        const dd = await getData(hotplayid) 
+        console.log("dd",dd)
+        const d= dd?.[0] 
+
+        const sponsoredowners = d?.sponsor ?? "";
+        let commo_ref = d?.commo_ref ?? "";
+        let assets = d?.assets ?? "";
+        let resources = d?.resources ?? "";
+        let map_area = d?.map_area ?? "";
+        let owners = d?.owners ?? "";
+        let prop_exturl = d?.prop_exturl ?? "";
+        let sale_name = d?.sale_name ?? "";
+        let profile = d?.profile ?? "";
+        
+         
+        const fPropertyObject1 = {
+          sponsoredowners,
+          prop_name,
+          commo_ref,
+          assets,
+          resources,
+          map_area,
+          owners,
+          prop_exturl,
+          sale_name,
+          propertyid,
+          profile
+        };
+
+    
+    setfpropObj(fPropertyObject1)
+    setshowDlg("y")
+  }
+
+  const dialogStateCallBack = () => {
+     setshowDlg("n");
+  }
+
    
   const getDomElements = useMemo(() => {
-     console.log("qqq1",unNamedFeatureObjects)
     // console.log("qwe", featureObjects);
     const r = featureObjects.map((fp) => {
       if (!fp.get("propertyid")) {
         pidRef.current = pidRef.current - 1;
       }
-      console.log("pid", fp.get("propertyid"));
+      console.log("fp9", fp);
       if (companyid == fp.get("companyid") && fp.get("prop_name")) {
         // if (!fp.get("prop_name")) {
         //   console.log("blocknoRef1", blocknoRef.current);
@@ -92,22 +166,47 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         return (
           <div
             key={fp.get("propertyid") ?? pidRef.current}
-            className="hover:bg-blue-200 odd:bg-slate-200   cursor-pointer px-2"
+            className="hover:bg-blue-200 odd:bg-slate-200  px-2"
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
               width: "100%",
             }}
-            onClick={(e) => {
-              flytoHandler(fp);
-            }}
           >
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
               <div> {fp.get("prop_name") ?? "Block" + blocknoRef.current}</div>
             </div>
-            <Image src="./navigation.svg" width={15} height={15} alt="prop" />
+            <div className="flex gap-1">
+              <span className="">
+                <MdInfoOutline
+                  className="cursor-pointer h-4 w-4 hover:scale-125 "
+                  onClick={(e) =>
+                    showProperties(
+                      e,
+                      companyid,
+                      fp.get("propertyid"),
+                      fp.get("prop_name"),
+                      fp.get("id")
+                    )
+                  }
+                  //onClick={() => setIsOpenIn(true)}
+                  // onClick={() => console.log("title", title)}
+                />
+              </span>
+
+              <Image
+                src="./navigation.svg"
+                width={15}
+                height={15}
+                alt="prop"
+                className=" cursor-pointer hover:scale-125 "
+                onClick={(e) => {
+                  flytoHandler(fp);
+                }}
+              />
+            </div>
           </div>
         );
       }
@@ -122,8 +221,8 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         // console.log("companyid",companyid,"pname",fp.properties )
         return (
           <div
-            key={fp.get("propertyid") }
-            className="hover:bg-blue-200 odd:bg-slate-200   cursor-pointer px-2"
+            key={fp.get("propertyid")}
+            className="hover:bg-blue-200 odd:bg-slate-200    px-2"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -136,9 +235,31 @@ const AreaFCompanyFProperties = ({ companyid }) => {
           >
             <div className="flex">
               <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
-              <div> {fp.get("prop_name_empty") }</div>
+              <div> {fp.get("prop_name_empty")}</div>
             </div>
-            <Image src="./navigation.svg" width={15} height={15} alt="prop" />
+            <div className="flex gap-1">
+              <span className="">
+                <MdInfoOutline
+                  className="cursor-pointer h-4 w-4 hover:scale-125 "
+                  onClick={(e) =>
+                    showProperties(
+                      e,
+                      companyid,
+                      fp.get("propertyid"),
+                      fp.get("prop_name"),
+                      fp.get("id")
+                    )
+                  }
+                />
+              </span>
+              <Image
+                src="./navigation.svg"
+                width={15}
+                height={15}
+                alt="prop"
+                className=" cursor-pointer hover:scale-125 cursor-pointer "
+              />
+            </div>
           </div>
         );
       
@@ -166,30 +287,48 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     return [...r,h,...unNamedProps];
   }, [featureObjects]);
   
-
+//const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => { propertyInfo
 
   return (
-    < div style={{ height:"20rem", display:"flex", flexDirection:"column",justifyContent:"start", alignItems:"center"}} > 
-      <div style={{ fontWeight: 700,   }}>{ areaName}</div>
-      <div style={{ fontWeight: 600,   }}>{"Featured Properties" }</div>
-      <div className="bg-slate-100"
+    <div
       style={{
-      display: "flex",
-      flexDirection: "column",
-      justify: "center",
-      alignItems: "flex-start", 
-      overflowY: "auto",
-      maxHeight:"18.5rem",
-      width: "14rem",
-      margin:"1rem",
-      }}>
-       
-        {
-           getDomElements
-          
-        
-        }
-          
+        height: "20rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ fontWeight: 700 }}>{areaName}</div>
+      <div style={{ fontWeight: 600 }}>{"Featured Properties"}</div>
+      <div
+        className="bg-slate-100"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justify: "center",
+          alignItems: "flex-start",
+          overflowY: "auto",
+          maxHeight: "18.5rem",
+          width: "20rem",
+          margin: "1rem",
+        }}
+      >
+        <DialogComponent
+          title="Property Info"
+          onClose={() => console.log("close")}
+          onOk={() => console.log("ok")}
+          showDialog={showDlg}
+          dialogStateCallBack ={dialogStateCallBack}
+        >
+          <AreaMapClickPopup
+            claimObj={{}}
+            fpropObj={fpropObj}
+            assetObj={{}}
+            syncPropObj={{}}
+          ></AreaMapClickPopup>
+        </DialogComponent>
+        {getDomElements}
       </div>
     </div>
   );
