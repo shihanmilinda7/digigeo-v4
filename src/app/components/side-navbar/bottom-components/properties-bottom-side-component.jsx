@@ -26,11 +26,15 @@ import {
   setpropertyMapAssetZoneVisible,
   setpropertyMapAssetHistoricalVisible,
   setpropertyMapAssetOccurrenceVisible,
-} from "@/store/properties-map/properties-map-slice";
+} from "../../../../store/properties-map/properties-map-slice";
 import Image from "next/image";
+ 
 
 
 const PropertiesBottomSideComp = () => {
+
+   
+
   let pathname = "";
   const dispatch = useDispatch();
   const [property_claimLinkGroupVisible, setproperty_claimLinkGroupVisible] = useState(true)

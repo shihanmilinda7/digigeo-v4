@@ -2,10 +2,14 @@ import Image from "next/image";
 import { useEffect, useState,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
+import { setpropertyMapFlyToLocation } from "../../../../store/properties-map/properties-map-slice";
 
-import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
+// import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
 
 const PropertyFCompanyFProperties = ({ companyid }) => {
+
+  
+
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [featuredPropertyFeatures, setfeaturedPropertyFeatures] = useState();
   const [mapAreas, setmapAreas] = useState([]);

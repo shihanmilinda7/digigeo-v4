@@ -1,14 +1,14 @@
 // import React from "react";
 
-import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
+// import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
 import Image from "next/image";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { setpropertyMapFlyToLocation } from "../../../../store/properties-map/properties-map-slice";
 
 const PropertyPropertyNode = ({ propertyName,location }) => {
   const [isOpen, setIsOpen] = useState(false);
   // const hasChildren = node.children && node.children.length > 0;
-
   // const handleToggle = () => {
   //   setIsOpen(!isOpen);
   // 

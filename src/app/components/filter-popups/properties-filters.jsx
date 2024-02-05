@@ -15,12 +15,14 @@ import {
   setsearchParamMiningArea,
   setsearchParamAssetTypeList,
   setsearchParamCommodityList,
+  setIsPropertiesSideNavOpen,
+  setpropertySearchQuery,
 } from "../../../store/properties-map/properties-map-slice";
 
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import CheckboxGroup from "../common-comp/checkboxgroup";
 import CheckboxGroupWithFilter from "../common-comp/checkboxgroup-with-filter";
-import { setIsPropertiesSideNavOpen ,setpropertySearchQuery} from "@/store/properties-map/properties-map-slice";
+// import { } from "@/store/properties-map/properties-map-slice";
 import useDebounce from "./useDebounce";
 import PropertyFilterPropertyItemBrowser from "./property-filter-property-item-browser";
 

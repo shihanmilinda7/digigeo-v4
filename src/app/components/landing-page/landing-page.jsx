@@ -24,8 +24,9 @@ import {
   setAreaZoomMode,
   setIsAreaSideNavOpen,
 } from "../../../store/area-map/area-map-slice";
-import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
-import { setIsCompanySideNavOpen } from "@/store/company-map/company-map-slice";
+// import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
+import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
+import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
 
 export const LandingPage = () => {
   let pathname = "";

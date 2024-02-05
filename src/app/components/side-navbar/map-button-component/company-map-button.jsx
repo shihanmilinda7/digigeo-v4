@@ -23,7 +23,6 @@ import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
-import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 import CompanyFilter from "../../filter-popups/company-filters";
 import { setIsCompanySideNavOpen } from "../../../../store/company-map/company-map-slice";
 
