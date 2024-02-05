@@ -37,9 +37,10 @@ const PropertyPropertyNode = ({ propertyName,location }) => {
             </div>
              <Image
                           src="./navigation.svg"
-                          width={25}
-                          height={10}
+                          width={15}
+                          height={15}
                           alt="prop"
+                          className=" cursor-pointer hover:scale-125 "
           />
           
       </div>

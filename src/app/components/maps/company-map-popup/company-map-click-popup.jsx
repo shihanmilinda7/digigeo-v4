@@ -53,7 +53,7 @@ const CompanyMapClickPopup = ({}) => {
               <CompanyMapClickPopupRow label={"Property Name:"} value={fpropObj.prop_name}/>
               <CompanyMapClickPopupRow label={"Commodity:"} value={fpropObj.commo_ref}/>
               <CompanyMapClickPopupRow label={"Asset List:"} value={fpropObj.assets}/>
-              <CompanyMapClickPopupRow label={"Resources"} value={fpropObj.resources}/>
+              <CompanyMapClickPopupRow label={"Resources:"} value={fpropObj.resources}/>
               <CompanyMapClickPopupRow label={"Map Area:"} value={fpropObj.map_area}/>
               <CompanyMapClickPopupRow label={"Map Event:"} value={fpropObj.sale_name} /> 
               <CompanyMapClickPopupRow label={"Ownership:"} value={fpropObj.owners} /> 

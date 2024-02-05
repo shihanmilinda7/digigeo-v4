@@ -270,7 +270,7 @@ const AreaSideNavbar = () => {
           <div
             className={`${
               isAreaSideNavOpen && isSideNavOpen
-                ? "py-0.1 flex flex-col "
+                ? "py-0.1 flex flex-col  "
                 : "hidden"
             }`}
           >

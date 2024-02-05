@@ -46,6 +46,7 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
               closePopup={closePopup}
               titleIn={title}
               companyid={companyid}
+               
             />
           ) : null}
         </div>

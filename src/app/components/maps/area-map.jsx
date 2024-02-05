@@ -1541,7 +1541,7 @@ export const AreaMap = () => {
             padding: "15px",
             borderRadius: "10px",
             border: "1px solid #cccccc",
-            minWidth: "280px",
+            minWidth: "400px",
             color: "black",
             // backgroundColor: "white",
             // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
@@ -1569,7 +1569,7 @@ export const AreaMap = () => {
             ✖
           </button>
           <div id="popup-contenta">
-            {/* <p>Info:</p> */}, , ,
+            {/* <p>Info:</p> */} 
             {clickDataLoaded && (
               <AreaMapClickPopup
                 claimObj={claimObject}

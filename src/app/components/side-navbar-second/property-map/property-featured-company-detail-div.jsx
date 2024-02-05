@@ -33,9 +33,8 @@ const PropertyFeaturedCompanyDetailDiv = ({ companyid, title, children, onClick 
           </span> */}
           <span className="">
             <MdInfoOutline
-              className="cursor-pointer h-4 w-4"
+              className="cursor-pointer h-4 w-4 hover:scale-125"
               onClick={() => setIsOpenIn(true)}
-              // onClick={() => console.log("title", title)}
             />
           </span>
           {isOpenIn ? (

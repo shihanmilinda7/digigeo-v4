@@ -21,28 +21,22 @@ const AreaPropertyNode = ({ propertyName,location }) => {
 
   return (
     <div>
-      <div className="flex justify-between hover:bg-slate-200 cursor-pointer" style={{ marginLeft: "20px" }} onClick={() => {
-        handlePropertyNodeClick(location)
-      }}>
-       
-            <div className="flex">
-                      <Image
-                  src="./sync-prop.svg"
-                  width={25}
-                  height={10}
-                  alt="prop"
-                />
-                    {propertyName}
-            </div>
-             <Image
-                          src="./navigation.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-          />
-          
+      <div
+        className="flex justify-between hover:bg-slate-200 cursor-pointer"
+        style={{ marginLeft: "20px" }}
+        onClick={() => {
+          handlePropertyNodeClick(location);
+        }}
+      >
+        <div className="flex">
+          <Image src="./sync-prop.svg" width={25} height={10} alt="prop" />
+          {propertyName}
+        </div>
+        <Image src="./navigation.svg" width={15} height={15} alt="prop" 
+        className=" cursor-pointer hover:scale-125 "
+        />
       </div>
-       
+
       {/* {isOpen && hasChildren && (
         <div style={{ marginLeft: "20px" }}>
           {node.children.map((child) => (

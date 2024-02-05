@@ -115,8 +115,8 @@ export const LandingPage = () => {
   };
 
   return (
-    <div className="w-full flex bg-white">
-      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40"}`}>
+    <div className="w-full flex bg-white h-full">
+      <div className={`${isSideNavOpen ? "z-40 h-full" : "fixed top-15 left-0 z-40 h-full"}`}>
         <SideNavbar />
       </div>
       <div className="z-0">

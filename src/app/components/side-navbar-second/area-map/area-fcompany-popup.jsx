@@ -225,7 +225,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center">
+        <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center select-none">
           <div className="flex items-center justify-center   h-8 rounded-lg">
             {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               
@@ -253,7 +253,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
             </div>
             <span className="font-bold">{title}</span>
             <span>
-              {sponsorData.length>0 &&
+              {sponsorData.length > 0 &&
                 sponsorData.map((sd) => (
                   <span key={sd.text} style={sd.style}>
                     {sd.text}

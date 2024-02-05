@@ -132,6 +132,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                                   width={15}
                                   height={10}
                                   alt="prop"
+                                  className=" cursor-pointer hover:scale-125 "
                                 />
                               </div>
                             );

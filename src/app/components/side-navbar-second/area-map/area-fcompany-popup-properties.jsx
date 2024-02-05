@@ -257,7 +257,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
                 width={15}
                 height={15}
                 alt="prop"
-                className=" cursor-pointer hover:scale-125 cursor-pointer "
+                className=" cursor-pointer hover:scale-125"
               />
             </div>
           </div>

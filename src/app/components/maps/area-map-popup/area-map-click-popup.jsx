@@ -80,7 +80,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
     <div
       className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}
     >
-      { Object.keys(syncPropObj).length>0 && (
+      { syncPropObj && Object.keys(syncPropObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Property Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -104,7 +104,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
           </div>
         </div>
       )}
-      { Object.keys(fpropObj).length>0 && (
+      {fpropObj && Object.keys(fpropObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Featured Property Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -126,7 +126,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
               value={fpropObj.assets}
             />
             <AreaMapClickPopupRowMultiValue
-              label={"Resources"}
+              label={"Resources:"}
               value={resourcesFormated}
             />
             <AreaMapClickPopupRow
@@ -149,7 +149,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
           </div>
         </div>
       )}
-      { Object.keys(assetObj).length>0 && (
+      { assetObj && Object.keys(assetObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Asset Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
@@ -170,7 +170,7 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
           </div>
         </div>
       )}
-      { Object.keys(claimObj).length>0 && (
+      {claimObj && Object.keys(claimObj).length>0 && (
         <div>
           <AreaMapClickPopupHeaderRow label="Claim Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
