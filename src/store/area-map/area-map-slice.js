@@ -25,6 +25,7 @@ const initialState = {
   clickfPropertyObject: undefined,
   clickassetObject: undefined,
   clicksyncPropertyObject: undefined,
+  navigatedFPropId: 0,
 };
 
 const areaMapSlice = createSlice({
@@ -106,6 +107,9 @@ const areaMapSlice = createSlice({
     setclicksyncPropertyObject: (state, action) => {
       state.clicksyncPropertyObject = action.payload;
     },
+    setnavigatedFPropId: (state, action) => {
+      state.navigatedFPropId = action.payload;
+    },
   },
 });
 
@@ -134,6 +138,7 @@ export const {
   setclickfPropertyObject,
   setclickassetObject,
   setclicksyncPropertyObject,
+  setnavigatedFPropId
 
 } = areaMapSlice.actions;
 

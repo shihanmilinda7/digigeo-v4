@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
-import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
+import { setareaFlyToLocation,setnavigatedFPropId } from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
 import DialogComponent from './../../../utils/dialog/dialog';
 import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
+import { areaMApPropertyVectorRendererFuncV2Highlight } from "../../maps/area-map-styles/area-map-styles";
 
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
@@ -26,6 +27,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const dispatch = useDispatch();
 
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+   
 
   // useEffect(()=>{
   //   setunNamedFeatureObjects([])
@@ -36,7 +38,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   // },[])
 
   useEffect(() => {
-     console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
+    //  console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
    //setunNamedFeatureObjects([]);
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
@@ -74,19 +76,20 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }
     //flyTo
-    dispatch(setareaFlyToLocation(loc));
+    dispatch(setareaFlyToLocation( loc));
 
     //set style
-      console.log("kkk")
-      const selectStyle = new Style({
-        
-        stroke: new Stroke({
-          color: "red",
-          width: 8,
-        }),
-      });
+    dispatch(setnavigatedFPropId(feature.get("id")));
 
-    feature.setStyle(selectStyle);
+    //  console.log("kkk")
+    //  const selectStyle = new Style({ zIndex: 1 });
+    // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+    //  const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+
+    //  const fSelected = e.find(f=> f.get("id") == feature.get("id") )
+    //  console.log("fSelected",fSelected)
+    //  fSelected?.setStyle(selectStyle);
     
   };
 
