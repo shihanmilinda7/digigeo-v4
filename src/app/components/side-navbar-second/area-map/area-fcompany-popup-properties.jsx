@@ -5,7 +5,7 @@ import { useEffect, useState,useRef,useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
 import { MdInfoOutline } from "react-icons/md";
-
+import { Circle as CircleStyle, Fill, Stroke, Style, Icon } from "ol/style";
 import { setareaFlyToLocation } from "@/store/area-map/area-map-slice";
 import { radioGroup } from "@nextui-org/react";
 import DialogComponent from './../../../utils/dialog/dialog';
@@ -14,7 +14,7 @@ import AreaMapClickPopup from "../../maps/area-map-popup/area-map-click-popup";
 const AreaFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [unNamedFeatureObjects, setunNamedFeatureObjects] = useState([]);
-  const [showDlg, setshowDlg] = useState("");
+  const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
   const  blocknoRef   = useRef(0)
   const  pidRef   = useRef(0)
@@ -66,7 +66,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
   const flytoHandler = (feature) => {
      console.log("feature", feature,)
-
+     
     const polygon = feature.getGeometry();
     let loc = [];
     if (polygon) {
@@ -75,6 +75,19 @@ const AreaFCompanyFProperties = ({ companyid }) => {
     }
     //flyTo
     dispatch(setareaFlyToLocation(loc));
+
+    //set style
+      console.log("kkk")
+      const selectStyle = new Style({
+        
+        stroke: new Stroke({
+          color: "red",
+          width: 8,
+        }),
+      });
+
+    feature.setStyle(selectStyle);
+    
   };
 
   const showProperties =async (e,companyid,propertyid,prop_name,hotplayid) => {

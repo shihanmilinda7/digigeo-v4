@@ -370,6 +370,8 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
       setmineTypeSelections([])
       setcommoditySelections([])
 
+      
+      dispatch(setpropertySearchQuery(""));
       dispatch(setsearchParamPropertyName(""));
       dispatch(setsearchParamCountry(""));
       dispatch(setsearchParamStateProv(""));

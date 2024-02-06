@@ -108,7 +108,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
 
   useEffect(() => {
     setCountry(areaCountry);
-  }, [areaCountry]);
+  }, [areaCountry]);   
 
   const getSearchQuery = (country = "", areaName = "") => {
     let s = "";

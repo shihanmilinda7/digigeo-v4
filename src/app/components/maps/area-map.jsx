@@ -1478,7 +1478,7 @@ export const AreaMap = () => {
         </div>
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-0 z-50 m-2"
+          className="absolute left-0 bottom-0 z-50  "
           color="primary"
         >
           <Button
@@ -1543,13 +1543,7 @@ export const AreaMap = () => {
             border: "1px solid #cccccc",
             minWidth: "400px",
             color: "black",
-            // backgroundColor: "white",
-            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-            // padding: "15px",
-            // borderRadius: "10px",
-            // border: "1px solid #cccccc",
-            // minWidth: "280px",
-            // color: "black",
+           
           }}
         >
           <button

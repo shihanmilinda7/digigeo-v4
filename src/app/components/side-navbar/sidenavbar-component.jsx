@@ -20,12 +20,33 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../filter-popups/area-filters";
 import AreaBottomSideComp from "./bottom-components/area-bottom-side-component";
-import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import AreaMapButton from "./map-button-component/area-map-button";
 import PropertiesMapButton from "./map-button-component/properties-map-button";
 import PropertiesBottomSideComp from "./bottom-components/properties-bottom-side-component";
 import CompanyMapButton from "./map-button-component/company-map-button";
 import CompanyBottomSideComp from "./bottom-components/company-bottom-side-component";
+
+import {
+  setAreaCountry,
+  setAreaMiningArea,
+  
+} from "../../../store/area-map/area-map-slice";
+import {
+   setcompanyId, setcompanyName,
+  setcompanyStockcode
+} from "../../..//store/company-map/company-map-slice";
+
+import {
+  setsearchParamPropertyName,
+  setsearchParamStateProv,
+  setsearchParamCountry,
+  setsearchParamMiningArea,
+  setsearchParamAssetTypeList,
+  setsearchParamCommodityList,
+  setpropertySearchQuery,
+} from "../../../store/properties-map/properties-map-slice";
+
+// } from "../../../store/area-map/area-map-slice";
 
 const SideNavbar = () => {
   let pathname = "";
@@ -108,6 +129,24 @@ const SideNavbar = () => {
     window.history.replaceState({}, "", newUrl);
   };
 
+  const resetAllFilters =()=>{
+    dispatch(setAreaCountry(""));
+    dispatch(setAreaMiningArea(""));
+
+    //company
+    dispatch(setcompanyId(0));
+    dispatch(setcompanyName(""));
+    dispatch(setcompanyStockcode(""));
+
+    //props
+     dispatch(setpropertySearchQuery(""));
+     dispatch(setsearchParamPropertyName(""));
+      dispatch(setsearchParamCountry(""));
+      dispatch(setsearchParamStateProv(""));
+      dispatch(setsearchParamMiningArea(""));
+      dispatch(setsearchParamAssetTypeList([]));
+      dispatch(setsearchParamCommodityList([]));
+  }
   // const openAreaNav = () => {
   //   let newUrl;
   //   if (areaState == "") {
@@ -119,8 +158,8 @@ const SideNavbar = () => {
   //   dispatch(setIsAreaSideNavOpen(true));
   // };
   return (
-    <section className="flex gap-6">
-      <div className={`duration-500 flex w-auto`}>
+    // <section className="flex gap-6 ">
+      // <div className={`duration-500 flex w-auto items-stretch`}>
         <div
           className={`
         ${
@@ -128,18 +167,18 @@ const SideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-          ml-2 mt-2 h-full
+          ml-2 mt-2 h-full 
         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
         >
           <div
-            className={`${isSideNavOpen ? "py-0.1 flex-col justify-between   gap-2" : "hidden"}`}
+            className={`${isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"}`}
           >
-              <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
-                {/* <span className="font-bold">Overview</span> */}
-              </div>
-              <div className="m-2">
-                {/* <Input
+              {/* <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
+                <span className="font-bold">Overview</span>
+              </div> */}
+              {/* <div className="m-2">
+                <Input
                   // list={list}
                   isClearable
                   type="text"
@@ -149,8 +188,8 @@ const SideNavbar = () => {
                   onClear={() => console.log("input cleared")}
                   className="w-full rounded-lg border border-blue-700"
                   startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
-                /> */}
-              </div>
+                />
+              </div> */}
               <div className="flex flex-col gap-2 p-2 ">
                 <AreaMapButton onClick={() => selectMapHandler("area")} />
                 <PropertiesMapButton
@@ -158,10 +197,10 @@ const SideNavbar = () => {
                 />
                 <CompanyMapButton onClick={() => selectMapHandler("company")} />
               </div>
-              <div className="mt-4 mb-1 flex items-center justify-center">
+              <div className="mb-1 flex flex-col items-center justify-center grow">
                 <div
                   style={{
-                    display: selectedMap === "area" ? "block" : "none",
+                    display: selectedMap === "area" ? "flex" : "none",
                   }}
                   className="w-full"
                 >
@@ -169,7 +208,7 @@ const SideNavbar = () => {
                 </div>
                 <div
                   style={{
-                    display: selectedMap === "properties" ? "block" : "none",
+                    display: selectedMap === "properties" ? "flex" : "none",
                   }}
                   className="w-full"
                 >
@@ -177,7 +216,7 @@ const SideNavbar = () => {
                 </div>
                 <div
                   style={{
-                    display: selectedMap === "company" ? "block" : "none",
+                    display: selectedMap === "company" ? "flex" : "none",
                   }}
                   className="w-full"
                 >
@@ -186,7 +225,10 @@ const SideNavbar = () => {
               </div>
               <div className="w-full pb-2 pl-2 pr-2 pt-2">
                 <div className="flex justify-center">
-                  <button className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in">
+            <button
+              className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
+              onClick={resetAllFilters}
+              >
                     <span className="uppercase font-semibold">
                       Reset all filters
                     </span>
@@ -194,10 +236,10 @@ const SideNavbar = () => {
                 </div>
               </div>
           </div>
-          <div className="mt-4 flex flex-col gap-4 relative"></div>
+          {/* <div className="mt-4 flex flex-col gap-4 relative"></div> */}
         </div>
-      </div>
-    </section>
+      // {/* </div> */}
+    // </section>
   );
 };
 export default SideNavbar;

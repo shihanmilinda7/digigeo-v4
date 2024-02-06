@@ -133,15 +133,13 @@ const PropertiesSideNavbar = () => {
   },[searchParamCommodityList])
   //data load
   useEffect(() => {
-    // console.log("propertyMapPropertyAssetIdCsv",propertyMapPropertyAssetIdCsv)
-    if (propertySearchQuery) {
+   
       getFeaturedCompanyDetails();
-
       getSyncPropertiesGeometry();
       getClaimLinkPropertiesGeometry();
       getAssetsGeometry();
       getFeaturedPropertyGeom();
-    }
+   
   }, [propertySearchQuery]);
 
   const closeSecondNavBar = () => {
@@ -155,29 +153,30 @@ const PropertiesSideNavbar = () => {
 
   const getFeaturedPropertyGeom = async () => {
     const f = async () => {
-      // console.log("ppppp");
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      console.log("fps-pmap", d);
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
+      if(propertySearchQuery){
+          const res = await fetch(
+            `https://atlas.ceyinfo.cloud/matlas/fpropertygeomuniversal/${propertySearchQuery}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
+          
+          const gj = {
+            type: "FeatureCollection",
+            crs: {
+              type: "name",
+              properties: {
+                name: "EPSG:3857",
+              },
+            },
+            features: d.data[0].json_build_object.features,
+          };
 
-      ///console.log("llll", d.data[0].json_build_object.features)
-      dispatch(setFPropertyFeatures(gj));
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // );
+         
+          dispatch(setFPropertyFeatures(gj));
+        
+      } else {
+          dispatch(setFPropertyFeatures({}));
+        }
     };
 
     f().catch(console.error);
@@ -185,105 +184,104 @@ const PropertiesSideNavbar = () => {
 
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      //  console.log("fps", d.data);
+      if(propertySearchQuery){
+            const res = await fetch(
+              `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist_pmap/${propertySearchQuery}`,
+              { cache: "no-store" }
+            );
+            const d = await res.json();
+            
 
-      setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // );
+            setFeaturedCompanies(d.data);
+      }
+      else{
+            setFeaturedCompanies([]);
+      }
+     
     };
 
     f().catch(console.error);
   };
 
   const getSyncPropertiesGeometry = async () => {
-    console.log("lop");
+   
     const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      // console.log("fps", d); propertySearchQuery
-      console.log("fps11", d.data);
+       if(propertySearchQuery){
+          const res = await fetch(
+            `https://atlas.ceyinfo.cloud/matlas/propertygeomuniversal/${propertySearchQuery}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
 
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
-
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setSyncPropertyFeatures(gj));
-      console.log("gj-suncp", gj);
+          const gj = {
+            type: "FeatureCollection",
+            crs: {
+              type: "name",
+              properties: {
+                name: "EPSG:3857",
+              },
+            },
+            features: d.data[0].json_build_object.features,
+          };
+          dispatch(setSyncPropertyFeatures(gj));
+        }else{
+          dispatch(setSyncPropertyFeatures({}));
+        }
     };
     f().catch(console.error);
   };
   const getAssetsGeometry = async () => {
     const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      // console.log("fps", d);
-      console.log("assets", d.data);
+       if(propertySearchQuery){
+            const res = await fetch(
+              `https://atlas.ceyinfo.cloud/matlas/pmapassetgeomuniversal/${propertySearchQuery}`,
+              { cache: "no-store" }
+            );
+            const d = await res.json();
 
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
-
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setAssetFeatures(gj));
+            const gj = {
+              type: "FeatureCollection",
+              crs: {
+                type: "name",
+                properties: {
+                  name: "EPSG:3857",
+                },
+              },
+              features: d.data[0].json_build_object.features,
+            };
+            dispatch(setAssetFeatures(gj));
+          }else{
+              dispatch(setAssetFeatures({}));
+          }
       //console.log("gj", gj);
     };
     f().catch(console.error);
   };
 
   const getClaimLinkPropertiesGeometry = async () => {
-    console.log("fps-clink1");
     const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      console.log("fps-clink", d);
+       if(propertySearchQuery){
+          const res = await fetch(
+            `https://atlas.ceyinfo.cloud/matlas/pmapclinkgeomuniversal/${propertySearchQuery}`,
+            { cache: "no-store" }
+          );
+          const d = await res.json();
 
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setsyncClaimLinkPropertyFeatures(gj));
+          const gj = {
+            type: "FeatureCollection",
+            crs: {
+              type: "name",
+              properties: {
+                name: "EPSG:3857",
+              },
+            },
+            features: d.data[0].json_build_object.features,
+          };
+          dispatch(setsyncClaimLinkPropertyFeatures(gj));
+        }
+        else{
+           dispatch(setsyncClaimLinkPropertyFeatures({}));
+        }
     };
 
     f().catch(console.error);
@@ -294,7 +292,7 @@ const PropertiesSideNavbar = () => {
   );
 
   const setareaFpropLayerVisibility = (e) => {
-    console.log("zzzzzzz");
+    
     dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
   };
 
@@ -341,8 +339,8 @@ const PropertiesSideNavbar = () => {
               {searchParamCountry !="" && <BreadcrumbItem>{"Country:" + searchParamCountry}</BreadcrumbItem> }
               {searchParamStateProv !="" && <BreadcrumbItem>{"State/Province:" + searchParamStateProv}</BreadcrumbItem> }
               {searchParamMiningArea !="" && <BreadcrumbItem>{"Area:" + searchParamMiningArea}</BreadcrumbItem> }
-              {selectedAssetTypes !="" && <BreadcrumbItem>{"Asset Types:" + selectedAssetTypes}</BreadcrumbItem> }
-              {selectedCommodities !="" && <BreadcrumbItem>{"Commodities:" + selectedCommodities}</BreadcrumbItem> }
+              {searchParamAssetTypeList.length > 0  && <BreadcrumbItem>{"Asset Types:" + selectedAssetTypes}</BreadcrumbItem> }
+              {searchParamCommodityList.length > 0 && <BreadcrumbItem>{"Commodities:" + selectedCommodities}</BreadcrumbItem> }
                
             </Breadcrumbs>
           </div>

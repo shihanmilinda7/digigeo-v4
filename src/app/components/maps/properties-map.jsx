@@ -481,7 +481,7 @@ export const PropertiesMap = () => {
         fPropSourceRef?.current?.addFeatures(e);
         fPropSourceLabelRef?.current?.addFeatures(e);
 
-    }
+       }
 
     //  if (fPropSourceRef.current) {
     //    const p1= fPropSourceRef.current?.getExtent()[0]
@@ -496,7 +496,6 @@ export const PropertiesMap = () => {
   }, [featuredPropertyFeatures]);
 
   useEffect(() => {
- console.log("eee1",syncClaimLinkPropertyFeatures )
     claimLinkSourceRef?.current?.clear();
     if (syncClaimLinkPropertyFeatures?.features) {
       
@@ -515,12 +514,13 @@ export const PropertiesMap = () => {
 
     // }
   }, [syncClaimLinkPropertyFeatures]);
+
   useEffect(() => {
-    console.log("PPP")
-    if (syncPropertyFeatures) {
-      syncPropSourceRef?.current?.clear();
+    syncPropSourceRef?.current?.clear();
+    if (syncPropertyFeatures?.features) {
+      
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
- console.log("oioi",e.length)
+ 
       syncPropSourceRef?.current?.addFeatures(e);
     }
 
@@ -536,11 +536,11 @@ export const PropertiesMap = () => {
   }, [syncPropertyFeatures]);
 
    useEffect(() => {
-    console.log("assetFeatures", assetFeatures,)
-    if (assetFeatures?.features) {
       assetSourceRef?.current?.clear()
+    if (assetFeatures?.features) {
+   
       const e = new GeoJSON().readFeatures(assetFeatures)
-        console.log("assetFeatures added" )
+        
       assetSourceRef?.current?.addFeatures(e);
     }
         

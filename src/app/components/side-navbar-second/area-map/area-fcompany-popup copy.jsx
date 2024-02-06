@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image'
 import Link from "next/link";
 import AreaFCompanyFProperties from "./area-fcompany-popup-properties";
-import AMapDialogComponent from './area-fcompany-dialog';
 
 
 const formatUrl = (url) => {
@@ -106,17 +105,17 @@ const getStyledTexts = (name) => {
 };
 
 
-const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogStateCallBack,getDialogRef }) => {
+const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const dispatch = useDispatch();
   
-  const [isOpen, setIsOpen] = useState("n");
+  const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [logoPath, setlogoPath] = useState("");
   const [sponsorData, setsponsorData] = useState([]);
   const [profile, setprofile] = useState("");
   const [url, seturl] = useState("");
   const [urlPrefix, seturlPrefix] = useState("");
-  const [showDlg, setshowDlg] = useState("");
+
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
@@ -217,41 +216,32 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
 
 
 
-
   return (
     <div>
-      {/* <Modal
+      <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}
         // shouldCloseOnOverlayClick={false} [220px]
         style={customStyles}
         ariaHideApp={false}
-      > */}
-      <AMapDialogComponent
-        title=""
-        // onClose={closePopup}
-        //onOk={() => console.log("ok")}
-        showDialog={isOpen}
-        dialogStateCallBack={dialogStateCallBack}
-        getDialogRef={getDialogRef}
       >
         <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center select-none">
-          {/* <div className="flex items-center justify-center   h-8 rounded-lg">
-            <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
+          <div className="flex items-center justify-center   h-8 rounded-lg">
+            {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               
-            </span>
+            </span> */}
             <AiOutlineCloseCircle
               onClick={closePopup}
               className="h-6 w-6 cursor-pointer absolute right-0 mr-6"
             />
-          </div> */}
+          </div>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               justify: "center",
               alignItems: "center",
-              // padding: "1rem",
+              padding: "1rem",
               gap: "1rem",
             }}
           >
@@ -292,7 +282,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
             <AreaFCompanyFProperties companyid={companyid} />
           </div>
         </div>
-      </AMapDialogComponent>
+      </Modal>
     </div>
   );
 };

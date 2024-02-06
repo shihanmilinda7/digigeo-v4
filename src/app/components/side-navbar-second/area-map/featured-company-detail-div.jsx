@@ -10,10 +10,24 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
  // console.log("companyid",companyid)
   const [isOpenIn, setIsOpenIn] = useState();
+  const [dialogRef, setdialogRef] = useState();
 
-  const closePopup = () => {
-    setIsOpenIn(false);
-  };
+  // const closePopup = () => {
+  //   setIsOpenIn("n");
+  // };
+
+    const dialogStateCallBack = () => {
+     setIsOpenIn("n");
+  }
+
+  const getDialogRef = (dialogRef) => {
+    setdialogRef(dialogRef)
+      console.log("polk",dialogRef)
+    //  dialogRef?.close();
+    //  setIsOpenIn("n");
+    //  onClose();
+    //  dialogStateCallBack();
+   };
 
   return (
     <div>
@@ -36,17 +50,21 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
           <span className="">
             <MdInfoOutline
               className="cursor-pointer h-4 w-4 hover:scale-125"
-              onClick={() => setIsOpenIn(true)}
+              onClick={() => {
+                console.log("lok",dialogRef)
+                 dialogRef?.close();
+                setIsOpenIn("y")}}
               // onClick={() => console.log("title", title)}
             />
           </span>
-          {isOpenIn ? (
+          {isOpenIn=="y" ? (
             <AreaFCompanyPopup
               isOpenIn={isOpenIn}
-              closePopup={closePopup}
+              // closePopup={closeDialog}
               titleIn={title}
               companyid={companyid}
-               
+               dialogStateCallBack={dialogStateCallBack}
+              getDialogRef={getDialogRef}
             />
           ) : null}
         </div>

@@ -9,9 +9,9 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
     const [treeViewData, setTreeViewData] = useState();
 
   useEffect(() => {
-    if (syncPropFeatures?.features) {
+   
       buildTreeViewData(syncPropFeatures)
-    }
+    
   }, [syncPropFeatures]);
 
     const addNode = (nodes, country,stateprovName,propertyName,location) => {
@@ -118,6 +118,8 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
       // ];
       setTreeViewData(nodes)
     
+    }else{
+      setTreeViewData([])
     }
   }
   return (
