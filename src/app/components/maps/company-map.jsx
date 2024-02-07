@@ -1400,9 +1400,19 @@ export const CompanyMap = () => {
   }, [coordinates])
   
 
-  // const handleClickPopup = useCallback(   (coordinates) =>  {
-   
-  // },[coordinates])
+  const onClickViewPlusZoom = ()=>{
+       const curZoom = mapViewRef.current.getZoom();
+        mapViewRef.current.setZoom(curZoom + 1);
+  }
+    const onClickViewMinusZoom = ()=>{
+       const curZoom = mapViewRef.current.getZoom();
+        mapViewRef.current.setZoom(curZoom - 1);
+  }
+
+      const onClickViewInitZoom = ()=>{
+        
+        mapViewRef.current.setZoom(3.25);
+  }
 
 
 
@@ -1423,16 +1433,20 @@ export const CompanyMap = () => {
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
+              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`}
+               onClick={onClickViewInitZoom}
+              />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillPlusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewPlusZoom}
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillMinusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewMinusZoom}
               />
             </Button>
           </div>

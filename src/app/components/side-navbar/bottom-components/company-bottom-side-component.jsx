@@ -177,11 +177,11 @@ const CompanyBottomSideComp = () => {
     
     
     return (
-      <div className="flex flex-col w-full">
-        <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
+      <div className="flex flex-col w-full  h-full grow">
+        <div className="ml-2 mr-2  flex items-center justify-center border-b-2">
           <span className="font-bold">Map Layers</span>
         </div>
-        <div className="overflow-y-auto max-h-[40vh]">
+        <div className="overflow-y-auto max-h-[56vh]">
           <Accordion>
             <div className="flex flex-col gap-6">
               <AccordionItemWithEye

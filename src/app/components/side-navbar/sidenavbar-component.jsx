@@ -197,7 +197,7 @@ const SideNavbar = () => {
                 />
                 <CompanyMapButton onClick={() => selectMapHandler("company")} />
               </div>
-              <div className="mb-1 flex flex-col items-center justify-center grow">
+              <div className="flex flex-col items-center justify-center grow">
                 <div
                   style={{
                     display: selectedMap === "area" ? "flex" : "none",
@@ -225,7 +225,7 @@ const SideNavbar = () => {
               </div>
               <div className="w-full pb-2 pl-2 pr-2 pt-2">
                 <div className="flex justify-center">
-            <button
+                  <button
               className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
               onClick={resetAllFilters}
               >

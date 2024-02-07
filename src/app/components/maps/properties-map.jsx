@@ -1406,6 +1406,22 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
      
   }, [coordinates])
 
+
+  
+  const onClickViewPlusZoom = ()=>{
+       const curZoom = mapViewRef.current.getZoom();
+        mapViewRef.current.setZoom(curZoom + 1);
+  }
+    const onClickViewMinusZoom = ()=>{
+       const curZoom = mapViewRef.current.getZoom();
+        mapViewRef.current.setZoom(curZoom - 1);
+  }
+
+      const onClickViewInitZoom = ()=>{
+        
+        mapViewRef.current.setZoom(3.25);
+  }
+
   return (
     <div className="flex">
       <PropertiesSideNavbar />
@@ -1414,7 +1430,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
           <div className="flex flex-col gap-4 mt-2">
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill
-                // size={26}
+                
                 className={`cursor-pointer text-white h-6 w-6 ${
                   isSideNavOpen ? "" : "rotate-180"
                 }`}
@@ -1422,16 +1438,20 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`} />
+              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`}
+              onClick={onClickViewInitZoom}
+              />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillPlusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewPlusZoom}
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <AiFillMinusSquare
                 className={`text-white cursor-pointer h-6 w-6`}
+                 onClick={onClickViewMinusZoom}
               />
             </Button>
           </div>

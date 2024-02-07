@@ -275,7 +275,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
               <Link
                 href={urlPrefix + url}
                 target="_blank"
-                className="rounded-lg border border-solid underline hover:text-blue-600"
+                className="font-bold  rounded-lg border border-solid underline hover:text-blue-600"
               >
                 {url}
               </Link>
