@@ -2,7 +2,8 @@
 import { useSearchParams } from 'next/navigation'
 import { useRef, useEffect } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-
+import { useDispatch, useSelector } from "react-redux";
+import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
 // type Props = {
 //     title: string,
 //     onClose: () => void,
@@ -11,17 +12,26 @@ import { AiOutlineCloseCircle } from 'react-icons/ai';
 // }
 
 export default function AMapDialogComponent({
-  title,
-  // onClose,
-  // onOk,
+  
   children,
-  showDialog,
-  dialogStateCallBack,
-  getDialogRef
+   
 }) {
 
 
   const dialogRef = useRef(null);
+  const dispatch = useDispatch();
+
+      const popupFcompanyId = useSelector(
+      (state) => state.areaMapReducer.popupFcompanyId
+    );
+
+    useEffect(()=>{
+
+       if(popupFcompanyId){
+         dialogRef.current?.show();
+       }
+
+    },[popupFcompanyId])
   
   // useEffect(()=>{
   //   console.log("goh",dialogRef)
@@ -32,40 +42,39 @@ export default function AMapDialogComponent({
  
   //   const showDialog = searchParams.get('showDialog')
 
-  useEffect(() => {
+  // useEffect(() => {
     
-     getDialogRef(dialogRef?.current);
-    // console.log("lokr")
-    if (showDialog === "y") {
-      dialogRef.current?.show();
-    } else {
-      dialogRef.current?.close();
-    }
-  }, [showDialog]);
+  //    getDialogRef(dialogRef?.current);
+  //   // console.log("lokr")
+  //   if (showDialog === "y") {
+  //     dialogRef.current?.show();
+  //   } else {
+  //     dialogRef.current?.close();
+  //   }
+  // }, [showDialog]);
 
     const closeDialog = () => {
        
-    dialogRef.current?.close();
-        //onClose(dialogRef.current);
-        dialogStateCallBack();
+    dispatch(setpopupFcompanyId(0))
+        
+        
   };
 
     const clickOk = () => {
       
-        onOk();
-         dialogStateCallBack();
-    closeDialog();
+        // onOk();
+        //  dialogStateCallBack();
+    // closeDialog();
   };
 
-  const dialog =
-    showDialog === "y" ? (
+  const dialog =   (
       <dialog
         ref={dialogRef}
         className="fixed inset-0     rounded-xl backdrop:bg-gray-800/50 z-[60]"
       >
         <div className="w-[400px] max-w-full  flex flex-col overflow-hidden">
-          <div className="flex flex-row justify-between    ">
-            <h1 className="text-2xl">{title}</h1>
+          <div className="flex flex-row-reverse justify-between    ">
+            {/* <h1 className="text-2xl">{title}</h1> */}
             <AiOutlineCloseCircle
               onClick={closeDialog}
               className="mb-2 py-1 px-2 cursor-pointer rounded border-none w-10 h-10 font-bold  "
@@ -92,7 +101,7 @@ export default function AMapDialogComponent({
           </div>
         </div>
       </dialog>
-    ) : null;
+    )  ;
 
   return dialog;
 }

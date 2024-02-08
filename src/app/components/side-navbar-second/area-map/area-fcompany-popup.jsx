@@ -106,7 +106,7 @@ const getStyledTexts = (name) => {
 };
 
 
-const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogStateCallBack,getDialogRef }) => {
+const AreaFCompanyPopup = ({ }) => {
   const dispatch = useDispatch();
   
   const [isOpen, setIsOpen] = useState("n");
@@ -120,6 +120,23 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
+   const popupFcompanyId = useSelector(
+      (state) => state.areaMapReducer.popupFcompanyId
+  );
+  
+  useEffect(()=>{
+     console.log("popupFcompanyId",popupFcompanyId)
+    if(popupFcompanyId){
+         getCompanyDetails();
+        getSponsorDetails();
+    }else{
+      console.log("popupFcompanyId",popupFcompanyId)
+    }
+
+
+  },[popupFcompanyId])
+
+  
 
   const customStyles = {
     overlay: {
@@ -139,27 +156,28 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
     },
   };
 
-  useEffect(() => {
-    setIsOpen(isOpenIn);
-  }, [isOpenIn]);
+  // useEffect(() => {
+  //   setIsOpen(isOpenIn);
+  // }, [isOpenIn]);
   useEffect(() => {
   }, [sponsorData]);
 
-  useEffect(() => {
-    setTitle(titleIn);
-    getCompanyDetails();
-    getSponsorDetails();
-  }, [titleIn]);
+  // useEffect(() => {
+    // setTitle(titleIn);
+  //   getCompanyDetails();
+  //   getSponsorDetails();
+  // }, [titleIn]);
 
  const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${companyid}`,
+        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
        console.log("bbb1" ); 
       if(d?.data?.length>0){
+         setTitle(d.data[0].company2)
          console.log("bbb2",d.data[0]?.company ); 
       const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
        console.log("bbb2-1",sponsorData ); 
@@ -178,12 +196,13 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
  const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
+        `https://atlas.ceyinfo.cloud/matlas/company_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       console.log("aaa1" ); 
           if(d?.data?.length>0){  
+           
                console.log("aaa2" ); 
                 let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
               seturl(url)
@@ -228,12 +247,12 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
         ariaHideApp={false}
       > */}
       <AMapDialogComponent
-        title=""
-        // onClose={closePopup}
-        //onOk={() => console.log("ok")}
-        showDialog={isOpen}
-        dialogStateCallBack={dialogStateCallBack}
-        getDialogRef={getDialogRef}
+        // title=""
+        // // onClose={closePopup}
+        // //onOk={() => console.log("ok")}
+        // showDialog={isOpen}
+        // dialogStateCallBack={dialogStateCallBack}
+        // getDialogRef={getDialogRef}
       >
         <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center select-none">
           {/* <div className="flex items-center justify-center   h-8 rounded-lg">
@@ -289,7 +308,7 @@ const AreaFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid,dialogState
                 {"Read More"}
               </Link>
             )}
-            <AreaFCompanyFProperties companyid={companyid} />
+            <AreaFCompanyFProperties companyid={popupFcompanyId} />
           </div>
         </div>
       </AMapDialogComponent>

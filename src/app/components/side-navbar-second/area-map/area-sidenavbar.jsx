@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import   { useEffect, useState } from "react";
 import {
   AiFillAppstore,
   AiFillMinusSquare,
@@ -35,6 +35,7 @@ import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import AreaTreeView from "./area-tree-view";
 import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
+import AreaFCompanyPopup from "./area-fcompany-popup";
 
 const AreaSideNavbar = () => {
   let pathname = "";
@@ -253,6 +254,10 @@ const AreaSideNavbar = () => {
       dispatch(setareaFpropLayerVisible(!areaFpropLayerVisible));
   }
 
+    const popupFcompanyId = useSelector(
+      (state) => state.areaMapReducer.popupFcompanyId
+    );
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -276,8 +281,12 @@ const AreaSideNavbar = () => {
           >
             <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2 relative">
               <div className="flex-col">
-              {areaCountry && (<span className="font-bold block">{areaName}/{areaCountry}</span>)}
-              <span className="font-bold block">Exploration Activities</span>
+                {areaCountry && (
+                  <span className="font-bold block">
+                    {areaName}/{areaCountry}
+                  </span>
+                )}
+                <span className="font-bold block">Exploration Activities</span>
               </div>
               <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
@@ -290,7 +299,11 @@ const AreaSideNavbar = () => {
             <div>
               <Accordion>
                 <div className="flex flex-col gap-6">
-                  <AccordionItemWithEye title="Featured Companies" onClick = {setareaFpropLayerVisibility} eyeState={areaFpropLayerVisible}>
+                  <AccordionItemWithEye
+                    title="Featured Companies"
+                    onClick={setareaFpropLayerVisibility}
+                    eyeState={areaFpropLayerVisible}
+                  >
                     <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                       {featuredCompanies.map((i) => (
                         <FeaturedCompanyDetailDiv
@@ -321,6 +334,9 @@ const AreaSideNavbar = () => {
           </div>
         </div>
       </div>
+     {popupFcompanyId>0 && (<AreaFCompanyPopup
+       
+      />)}
     </section>
   );
 };

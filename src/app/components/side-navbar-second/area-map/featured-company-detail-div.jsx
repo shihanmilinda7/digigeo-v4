@@ -1,9 +1,12 @@
+"use client"
+
 // components/Accordion.js
-import React, { useState } from "react";
+
+import  { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
 import AreaFCompanyPopup from "./area-fcompany-popup";
-
-
+import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
+import { useDispatch } from "react-redux";
 
 
 const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
@@ -11,23 +14,23 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
  // console.log("companyid",companyid)
   const [isOpenIn, setIsOpenIn] = useState();
   const [dialogRef, setdialogRef] = useState();
-
+  const dispatch = useDispatch();
   // const closePopup = () => {
   //   setIsOpenIn("n");
   // };
 
-    const dialogStateCallBack = () => {
-     setIsOpenIn("n");
-  }
+  //   const dialogStateCallBack = () => {
+  //    setIsOpenIn("n");
+  // }
 
-  const getDialogRef = (dialogRef) => {
-    setdialogRef(dialogRef)
-      console.log("polk",dialogRef)
-    //  dialogRef?.close();
-    //  setIsOpenIn("n");
-    //  onClose();
-    //  dialogStateCallBack();
-   };
+  // const getDialogRef = (dialogRef) => {
+  //   setdialogRef(dialogRef)
+  //     console.log("polk",dialogRef)
+  //   //  dialogRef?.close();
+  //   //  setIsOpenIn("n");
+  //   //  onClose();
+  //   //  dialogStateCallBack();
+  //  };
 
   return (
     <div>
@@ -51,10 +54,9 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
             <MdInfoOutline
               className="cursor-pointer h-4 w-4 hover:scale-125"
               onClick={() => {
-                console.log("lok",dialogRef)
-                 dialogRef?.close();
-                setIsOpenIn("y")}}
-              // onClick={() => console.log("title", title)}
+                dispatch(setpopupFcompanyId(companyid))
+                // setIsOpenIn("y")}}
+              }}
             />
           </span>
           {isOpenIn=="y" ? (
