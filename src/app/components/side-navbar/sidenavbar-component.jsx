@@ -190,39 +190,42 @@ const SideNavbar = () => {
                   startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
                 />
               </div> */}
-              <div className="flex flex-col gap-2 p-2 ">
-                <AreaMapButton onClick={() => selectMapHandler("area")} />
-                <PropertiesMapButton
-                  onClick={() => selectMapHandler("properties")}
-                />
-                <CompanyMapButton onClick={() => selectMapHandler("company")} />
+              <div>
+                  <div className="flex flex-col gap-2 p-2 ">
+                    <AreaMapButton onClick={() => selectMapHandler("area")} />
+                    <PropertiesMapButton
+                      onClick={() => selectMapHandler("properties")}
+                    />
+                    <CompanyMapButton onClick={() => selectMapHandler("company")} />
+                  </div>
+                  <div className="flex flex-col items-center justify-center">
+                    <div
+                      style={{
+                        display: selectedMap === "area" ? "flex" : "none",
+                      }}
+                      className="w-full"
+                    >
+                      <AreaBottomSideComp />
+                    </div>
+                    <div
+                      style={{
+                        display: selectedMap === "properties" ? "flex" : "none",
+                      }}
+                      className="w-full"
+                    >
+                      <PropertiesBottomSideComp />
+                    </div>
+                    <div
+                      style={{
+                        display: selectedMap === "company" ? "flex" : "none",
+                      }}
+                      className="w-full"
+                    >
+                      <CompanyBottomSideComp />
+                    </div>
+                  </div>
               </div>
-              <div className="flex flex-col items-center justify-center grow">
-                <div
-                  style={{
-                    display: selectedMap === "area" ? "flex" : "none",
-                  }}
-                  className="w-full"
-                >
-                  <AreaBottomSideComp />
-                </div>
-                <div
-                  style={{
-                    display: selectedMap === "properties" ? "flex" : "none",
-                  }}
-                  className="w-full"
-                >
-                  <PropertiesBottomSideComp />
-                </div>
-                <div
-                  style={{
-                    display: selectedMap === "company" ? "flex" : "none",
-                  }}
-                  className="w-full"
-                >
-                  <CompanyBottomSideComp />
-                </div>
-              </div>
+
               <div className="w-full pb-2 pl-2 pr-2 pt-2">
                 <div className="flex justify-center">
                   <button
