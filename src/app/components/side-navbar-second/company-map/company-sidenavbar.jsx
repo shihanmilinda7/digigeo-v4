@@ -298,10 +298,8 @@ const CompanySideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-        h-[90vh] ml-2 mt-2
-        ${
-          isCompanySideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
-        } 
+         ml-2 
+        ${isCompanySideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
         >
           <div
@@ -311,52 +309,64 @@ const CompanySideNavbar = () => {
                 : "hidden"
             }`}
           >
-              <div className="flex-col "> 
-              <div className="flex justify-end mx-2"> 
+            <div className="flex flex-col ">
+              <div className="flex justify-end mx-2">
                 {/* <span className="font-bold block">Property Info</span> */}
                 <AiOutlineCloseCircle
-                onClick={closeSecondNavBar}
-                className="h-6 w-6 text-blue-700 cursor-pointer right-0"
+                  onClick={closeSecondNavBar}
+                  className="h-6 w-6 text-blue-700 cursor-pointer right-0"
                 />
-                </div>
-                <div className="flex items-center justify-center border-b-2 relative">
-                  <CMapFCompanyAddlock titleIn={companyName} companyid={companyId} ></CMapFCompanyAddlock>
-                  {/* <div className="flex-col">
+              </div>
+              <div className="flex items-center justify-center border-b-2 relative">
+                <CMapFCompanyAddlock
+                  titleIn={companyName}
+                  companyid={companyId}
+                ></CMapFCompanyAddlock>
+                {/* <div className="flex-col">
                   {companyName && (<span className="font-bold block">{companyName}</span>)}
                   {companyStockcode && (<span className="font-bold block">Stock Code:{companyStockcode} </span>)}
                   
                   </div> */}
-                </div>
               </div>
+            </div>
           </div>
-          <div className=" flex flex-col gap-4 relative">
+          <div className="mt-4  flex flex-col gap-4 relative">
             <Accordion>
               <div className="flex flex-col gap-6">
-                <AccordionItemWithEye title="Featured Properties" onClick = {setFpropLayerVisibility} eyeState={companyFpropLayerVisible}>
+                <AccordionItemWithEye
+                  title="Featured Properties"
+                  onClick={setFpropLayerVisibility}
+                  eyeState={companyFpropLayerVisible}
+                >
                   <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                      {featuredPropertiesLocal.map((i) => (
-                       i.get("prop_name") && (<FeaturedPropertyDetailDiv
-                          key={i.get("id")}
-                          title={i.get("prop_name")}
-                          propertyid={i.get("propertyid")}
-                          // onClick={() => console.log(featuredCompanies)}
-                          //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
-                        >
-                           <Image
-                            src= {"data:image/svg+xml;utf8," + encodeURIComponent(i.get("hatch"))}
-                            className={`w-4 h-4`}
-                            width={4}
-                            height={4}
-                            alt="prop"
+                    {featuredPropertiesLocal.map(
+                      (i) =>
+                        i.get("prop_name") && (
+                          <FeaturedPropertyDetailDiv
+                            key={i.get("id")}
+                            title={i.get("prop_name")}
+                            propertyid={i.get("propertyid")}
+                            // onClick={() => console.log(featuredCompanies)}
+                            //imgRect.src = "data:image/svg+xml;utf8," + encodeURIComponent(hatch);
+                          >
+                            <Image
+                              src={
+                                "data:image/svg+xml;utf8," +
+                                encodeURIComponent(i.get("hatch"))
+                              }
+                              className={`w-4 h-4`}
+                              width={4}
+                              height={4}
+                              alt="prop"
                             />
-                        
-                        </FeaturedPropertyDetailDiv>)
-                      ))}
-                    </div>
+                          </FeaturedPropertyDetailDiv>
+                        )
+                    )}
+                  </div>
                 </AccordionItemWithEye>
                 <AccordionItemWithEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
-                     <CompanyTreeView syncPropFeatures={syncPropertyFeatures} />
+                    <CompanyTreeView syncPropFeatures={syncPropertyFeatures} />
                   </div>
                 </AccordionItemWithEye>
               </div>

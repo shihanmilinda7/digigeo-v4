@@ -123,14 +123,16 @@ const PropertyTreeView = ({ syncPropFeatures }) => {
     }
   }
   return (
-      
-       <div>
-          {treeViewData?.map((node) => (
-          
-            <PropertyCountryNode key={node.label}  countryName={node.label}   stateProvNodes={node.children} />  
+    <div className="max-h-[150px]">
+      {treeViewData?.map((node) => (
+        <PropertyCountryNode
+          key={node.label}
+          countryName={node.label}
+          stateProvNodes={node.children}
+        />
       ))}
     </div>
-  )
+  );
 }
 
 export default PropertyTreeView

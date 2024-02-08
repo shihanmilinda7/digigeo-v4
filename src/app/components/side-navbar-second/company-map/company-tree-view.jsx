@@ -124,7 +124,7 @@ const CompanyTreeView = ({ syncPropFeatures }) => {
   }
   return (
       
-       <div>
+       <div className="max-h-[150px]">
           {treeViewData?.map((node) => (
           
             <CompanyCountryNode key={node.label}  countryName={node.label}   stateProvNodes={node.children} />  

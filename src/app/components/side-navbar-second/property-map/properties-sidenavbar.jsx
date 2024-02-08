@@ -306,7 +306,7 @@ const PropertiesSideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-        h-[90vh] ml-2 mt-2
+          ml-2 
         ${
           isPropertiesSideNavOpen && isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"
         } 
