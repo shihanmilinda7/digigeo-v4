@@ -168,9 +168,13 @@ export const PropertiesMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
+  const navigatedFPropertyRef = useRef();
 
  
   const dispatch = useDispatch();
+
+  const navigatedFPropId = useSelector((state) => state.propertiesMapReducer.navigatedFPropId);
+
 
     const propertyFlyToLocation = useSelector(
     (state) => state.propertiesMapReducer.propertyMapFlyToLocation
@@ -181,7 +185,24 @@ export const PropertiesMap = () => {
   const [distance, setDistance] = useState(40);
   const [minDistance, setMinDistance] = useState(20);
 
+  
+  useEffect(()=>{
+    if(navigatedFPropertyRef.current){
+    const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
 
+
+      console.log("kkk")
+     const selectStyle = new Style({ zIndex: 1 });
+    selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+     
+
+     
+     console.log("fSelected",fp)
+     fp?.setStyle(selectStyle);
+    }
+
+   },[navigatedFPropId])
 
  const onSingleclick = useCallback((evt) => {
  const { coordinate } = evt;
@@ -478,6 +499,7 @@ export const PropertiesMap = () => {
       if (featuredPropertyFeatures?.features) {
       // fPropSourceRef?.current?.clear();
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+        navigatedFPropertyRef.current = e
         fPropSourceRef?.current?.addFeatures(e);
         fPropSourceLabelRef?.current?.addFeatures(e);
 

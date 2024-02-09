@@ -178,7 +178,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       // if (!fp.get("propertyid")) {
       //   pidRef.current = pidRef.current - 1;
       // }
-      console.log("fp9", fp);
+      
       if (companyid == fp.get("companyid") && fp.get("prop_name")) {
         // if (!fp.get("prop_name")) {
         //   console.log("blocknoRef1", blocknoRef.current);

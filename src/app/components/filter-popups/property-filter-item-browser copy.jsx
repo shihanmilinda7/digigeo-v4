@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
-const PropertyFilterItemBrowser = ({properties}) => {
+const xPropertyFilterItemBrowser = ({properties}) => {
      const [currentPage, setCurrentPage] =  useState(1);
 
      const [selectedKeys, setSelectedKeys] = useState(new Set(["text"]));
@@ -60,4 +60,4 @@ const PropertyFilterItemBrowser = ({properties}) => {
   )
 }
 
-export default PropertyFilterItemBrowser
+export default xPropertyFilterItemBrowser

@@ -6,7 +6,7 @@ import { Pagination, Button } from "@nextui-org/react";
 
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid
-const PropertyFilterAssetItemBrowser = ({properties,totalResultCount,curPageHandler,itemsPerPage,selectionHandler}) => {
+const xPropertyFilterAssetItemBrowser = ({properties,totalResultCount,curPageHandler,itemsPerPage,selectionHandler}) => {
      const [currentPage, setCurrentPage] =  useState(1);
 
      const [selectedKeys, setSelectedKeys] = useState(new Set([]));
@@ -100,4 +100,4 @@ const PropertyFilterAssetItemBrowser = ({properties,totalResultCount,curPageHand
   )
 }
 
-export default PropertyFilterAssetItemBrowser
+export default xPropertyFilterAssetItemBrowser

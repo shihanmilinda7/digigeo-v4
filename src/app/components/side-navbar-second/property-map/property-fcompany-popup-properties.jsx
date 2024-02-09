@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { useEffect, useState,useMemo } from "react";
+import { useEffect, useState,useMemo,useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GeoJSON from "ol/format/GeoJSON";
-import { setpropertyMapFlyToLocation } from "../../../../store/properties-map/properties-map-slice";
+import { setpropertyMapFlyToLocation,setnavigatedFPropId } from "../../../../store/properties-map/properties-map-slice";
 
 // import { setpropertyMapFlyToLocation } from "@/store/properties-map/properties-map-slice";
 
@@ -13,6 +13,14 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
   const [featureObjects, setfeaturesObjects] = useState([]);
   const [featuredPropertyFeatures, setfeaturedPropertyFeatures] = useState();
   const [mapAreas, setmapAreas] = useState([]);
+
+  // const [unNamedFeatureObjects, setunNamedFeatureObjects] = useState([]);
+  const [showDlg, setshowDlg] = useState("n");
+  const [fpropObj, setfpropObj] = useState();
+  const [loadData, setloadData] = useState(false);
+  const  blocknoRef   = useRef(0)
+  const pidRef = useRef(0)
+  
 
   // const featuredPropertyFeatures = useSelector(
   //   (state) => state.propertiesMapReducer.featuredPropertyFeatures
@@ -27,6 +35,12 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
 
   },[])
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
+
+    useEffect(()=>{
+    //setunNamedFeatureObjects([]);
+    setloadData((t)=> !t)
+    
+    }, [companyid])
 
   useEffect(() => {
     console.log("featuredPropertyFeatures",featuredPropertyFeatures)
@@ -59,6 +73,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
     }
     //flyTo
     dispatch(setpropertyMapFlyToLocation(loc));
+    dispatch(setnavigatedFPropId(feature.get("id")));
   };
 
    const getCompanyHotPlayProperties = async () => {
@@ -114,9 +129,7 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                                   alignItems: "center",
                                   width: "100%",
                                 }}
-                                onClick={(e) => {
-                                  flytoHandler(fp);
-                                }}
+                             
                               >
                                 <div className="flex">
                                   <Image
@@ -133,6 +146,9 @@ const PropertyFCompanyFProperties = ({ companyid }) => {
                                   height={10}
                                   alt="prop"
                                   className=" cursor-pointer hover:scale-125 "
+                                     onClick={(e) => {
+                                  flytoHandler(fp);
+                                }}
                                 />
                               </div>
                             );

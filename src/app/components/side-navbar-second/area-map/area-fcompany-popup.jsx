@@ -157,8 +157,8 @@ const AreaFCompanyPopup = ({ }) => {
   // useEffect(() => {
   //   setIsOpen(isOpenIn);
   // }, [isOpenIn]);
-  useEffect(() => {
-  }, [sponsorData]);
+  // useEffect(() => {
+  // }, [sponsorData]);
 
   // useEffect(() => {
     // setTitle(titleIn);
@@ -202,9 +202,9 @@ const AreaFCompanyPopup = ({ }) => {
           if(d?.data?.length>0){  
                 // await new Promise((resolve) => setTimeout(resolve, 3000));
                
-                let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
+              let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
               seturl(url)
-            seturlPrefix(urlPrefix);
+              seturlPrefix(urlPrefix);
               const logo = d.data[0]?.logo;
               setlogoLoaded(true)
               if(logo){
@@ -232,7 +232,7 @@ const AreaFCompanyPopup = ({ }) => {
   };
 
   const clearForm = () => {
-    console.log("uiu")
+     
      setlogoPath("")
              seturl("")
   }
@@ -257,7 +257,7 @@ const AreaFCompanyPopup = ({ }) => {
         // dialogStateCallBack={dialogStateCallBack}
         // getDialogRef={getDialogRef}
       >
-        <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center select-none">
+        <div className="bg-white rounded-lg min-w-[400px] flex flex-col justify-center items-center select-none">
           {/* <div className="flex items-center justify-center   h-8 rounded-lg">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               

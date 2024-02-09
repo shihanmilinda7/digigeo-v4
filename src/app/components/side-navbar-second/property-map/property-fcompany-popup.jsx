@@ -2,7 +2,7 @@
 
 import Modal from "react-modal";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Button, Chip } from "@nextui-org/react";
 import { FaFilter } from "react-icons/fa";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -11,7 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from 'next/image'
 import Link from "next/link";
 import PropertyFCompanyFProperties from "./property-fcompany-popup-properties";
-
+import PMapDialogComponent from "./property-fcompany-dialog";
+import {Spinner} from "@nextui-org/react";
 
 const formatUrl = (url) => {
   //remove https:
@@ -105,7 +106,7 @@ const getStyledTexts = (name) => {
 };
 
 
-const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
+const PropertyFCompanyPopup = ({   }) => {
   const dispatch = useDispatch();
   
   const [isOpen, setIsOpen] = useState(false);
@@ -119,6 +120,20 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
 
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+const popupFcompanyId = useSelector(
+      (state) => state.propertiesMapReducer.popupFcompanyId
+  );
+  
+  useEffect(()=>{
+    clearForm();
+    setlogoLoaded(false)
+    if(popupFcompanyId){
+         getCompanyDetails();
+        getSponsorDetails();
+    } 
+
+  },[popupFcompanyId])
+
 
   const customStyles = {
     overlay: {
@@ -138,26 +153,27 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
     },
   };
 
-  useEffect(() => {
-    setIsOpen(isOpenIn);
-  }, [isOpenIn]);
-  useEffect(() => {
-  }, [sponsorData]);
+  // useEffect(() => {
+  //   setIsOpen(isOpenIn);
+  // }, [isOpenIn]);
+  // useEffect(() => {
+  // }, [sponsorData]);
 
-  useEffect(() => {
-    setTitle(titleIn);
-    getCompanyDetails();
-    getSponsorDetails();
-  }, [titleIn]);
+  // useEffect(() => {
+  //   setTitle(titleIn);
+  //   getCompanyDetails();
+  //   getSponsorDetails();
+  // }, [titleIn]);
 
  const getSponsorDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${companyid}`,
+        `https://atlas.ceyinfo.cloud/matlas/sponsor_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
       if (d?.data?.length > 0) {
+         setTitle(d.data[0].company2)
         const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
         setsponsorData(sponsorData)
 
@@ -172,7 +188,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
  const getCompanyDetails = async () => {
     const f = async () => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/company_details/${companyid}`,
+        `https://atlas.ceyinfo.cloud/matlas/company_details/${popupFcompanyId}`,
         { cache: "no-store" }
       );
       const d = await res.json();
@@ -181,6 +197,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
            seturl(url);
            seturlPrefix(urlPrefix);
          const logo = d.data[0]?.logo;
+         setlogoLoaded(true)
          if (logo) {
            const logoext = d.data[0]?.logoext ?? "png";
            let urlimg =
@@ -198,33 +215,49 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
     f().catch(console.error);
   };
 
-
+  const clearForm = () => {
+    
+     setlogoPath("")
+             seturl("")
+  }
 
   return (
     <div>
-      <Modal
+
+      {/* <Modal
         isOpen={isOpen}
         onRequestClose={closePopup}
         // shouldCloseOnOverlayClick={false} [220px]
         style={customStyles}
         ariaHideApp={false}
-      >
-        <div className="bg-white rounded-lg min-w-[400px] flex-col justify-center items-center">
+      > */}
+        <PMapDialogComponent
+        clearForm={clearForm}
+        // title=""
+        // // onClose={closePopup}
+        // //onOk={() => console.log("ok")}
+        // showDialog={isOpen}
+        // dialogStateCallBack={dialogStateCallBack}
+        // getDialogRef={getDialogRef}
+        > 
+        <div className="bg-white rounded-lg min-w-[400px] flex flex-col justify-center items-center">
 
-          <div className="flex items-center justify-center   h-8 rounded-lg">
+          {/* <div className="flex items-center justify-center   h-8 rounded-lg">
 
-            {/* <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
+            <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               
-            </span> */}
+            </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
-          </div>
+          </div> */}
           <div  style={{display: "flex", flexDirection:"column", justify:"center", alignItems:"center", padding:"1rem",gap: "1rem",}}>
           
 
-             <div>{logoPath && ( <Image
+             <div>
+                 {!logoLoaded && <Spinner size="lg" />}
+              {logoPath && ( <Image
               src={logoPath}
               width={200}
               height={100}
@@ -256,12 +289,12 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
             )}
             
             
-            <PropertyFCompanyFProperties companyid={companyid} />
+            <PropertyFCompanyFProperties companyid={popupFcompanyId} />
 
           </div>
          
         </div>
-      </Modal>
+      </PMapDialogComponent>
     </div>
   );
 };

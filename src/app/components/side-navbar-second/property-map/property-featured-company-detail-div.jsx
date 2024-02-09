@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
+import { setpopupFcompanyId } from "../../../../store/properties-map/properties-map-slice";
+import { useDispatch } from "react-redux";
 
 
 const PropertyFeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
   const [isOpenIn, setIsOpenIn] = useState();
-
+  const dispatch = useDispatch();
   const closePopup = () => {
     setIsOpenIn(false);
   };
@@ -36,7 +38,11 @@ const PropertyFeaturedCompanyDetailDiv = ({ companyid, title, children, onClick 
           <span className="">
             <MdInfoOutline
               className="cursor-pointer h-4 w-4 hover:scale-125"
-              onClick={() => setIsOpenIn(true)}
+              // onClick={() => setIsOpenIn(true)}
+                 onClick={() => {
+                dispatch(setpopupFcompanyId(companyid))
+                // setIsOpenIn("y")}}
+              }}
             />
           </span>
           {isOpenIn ? (

@@ -36,6 +36,7 @@ import AreaTreeView from "../area-map/area-tree-view";
 import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail-div";
 import PropertyTreeView from "./property-tree-view";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
+import PropertyFCompanyPopup from "./property-fcompany-popup";
 
 
 
@@ -296,6 +297,10 @@ const PropertiesSideNavbar = () => {
     dispatch(setpropertyMapFpropLayerVisible(!propertyMapFpropLayerVisible));
   };
 
+  const popupFcompanyId = useSelector(
+  (state) => state.propertiesMapReducer.popupFcompanyId
+  );
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -335,13 +340,37 @@ const PropertiesSideNavbar = () => {
                 separator: "px-2",
               }}
             >
-              {(searchParamPropertyName !="" && searchParamPropertyName !=null ) && <BreadcrumbItem>{"Property Name Like:" + searchParamPropertyName}</BreadcrumbItem> }
-              {searchParamCountry !="" && <BreadcrumbItem>{"Country:" + searchParamCountry}</BreadcrumbItem> }
-              {searchParamStateProv !="" && <BreadcrumbItem>{"State/Province:" + searchParamStateProv}</BreadcrumbItem> }
-              {searchParamMiningArea !="" && <BreadcrumbItem>{"Area:" + searchParamMiningArea}</BreadcrumbItem> }
-              {searchParamAssetTypeList.length > 0  && <BreadcrumbItem>{"Asset Types:" + selectedAssetTypes}</BreadcrumbItem> }
-              {searchParamCommodityList.length > 0 && <BreadcrumbItem>{"Commodities:" + selectedCommodities}</BreadcrumbItem> }
-               
+              {searchParamPropertyName != "" &&
+                searchParamPropertyName != null && (
+                  <BreadcrumbItem>
+                    {"Property Name Like:" + searchParamPropertyName}
+                  </BreadcrumbItem>
+                )}
+              {searchParamCountry != "" && (
+                <BreadcrumbItem>
+                  {"Country:" + searchParamCountry}
+                </BreadcrumbItem>
+              )}
+              {searchParamStateProv != "" && (
+                <BreadcrumbItem>
+                  {"State/Province:" + searchParamStateProv}
+                </BreadcrumbItem>
+              )}
+              {searchParamMiningArea != "" && (
+                <BreadcrumbItem>
+                  {"Area:" + searchParamMiningArea}
+                </BreadcrumbItem>
+              )}
+              {searchParamAssetTypeList.length > 0 && (
+                <BreadcrumbItem>
+                  {"Asset Types:" + selectedAssetTypes}
+                </BreadcrumbItem>
+              )}
+              {searchParamCommodityList.length > 0 && (
+                <BreadcrumbItem>
+                  {"Commodities:" + selectedCommodities}
+                </BreadcrumbItem>
+              )}
             </Breadcrumbs>
           </div>
           <div className="mt-4 flex flex-col gap-4 relative">
@@ -378,6 +407,7 @@ const PropertiesSideNavbar = () => {
           </div>
         </div>
       </div>
+      {popupFcompanyId > 0 && <PropertyFCompanyPopup />}
     </section>
   );
 };
