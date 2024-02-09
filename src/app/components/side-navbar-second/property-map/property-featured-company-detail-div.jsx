@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { MdInfoOutline } from "react-icons/md";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
+
+
 const PropertyFeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
   const [isOpenIn, setIsOpenIn] = useState();

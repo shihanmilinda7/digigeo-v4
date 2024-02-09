@@ -39,16 +39,25 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   //set unnmaed props
   useEffect(() => {
       console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
-
+    
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
       let b = 0;
       for (let index = 0; index < e.length; index++) {
         const element = e[index];
+          if (!element.get("propertyid")) {
+              pidRef.current = pidRef.current - 1;
+              element.set("propertyid",pidRef.current)
+            }
+
+
         if (!element.get("prop_name")) {
           if (companyid == element.get("companyid")) {
             b++;
             element.set("prop_name_empty", "Block" + b);
+
+          
+
             setunNamedFeatureObjects((p) => [...p, element]);
             // console.log("b",b)
           }
@@ -166,9 +175,9 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const getDomElements = useMemo(() => {
      
     const r = featureObjects.map((fp) => {
-      if (!fp.get("propertyid")) {
-        pidRef.current = pidRef.current - 1;
-      }
+      // if (!fp.get("propertyid")) {
+      //   pidRef.current = pidRef.current - 1;
+      // }
       console.log("fp9", fp);
       if (companyid == fp.get("companyid") && fp.get("prop_name")) {
         // if (!fp.get("prop_name")) {
@@ -180,7 +189,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         // console.log("companyid",companyid,"pname",fp.properties )
         return (
           <div
-            key={fp.get("propertyid") ?? pidRef.current}
+            key={fp.get("propertyid")  }
             className="hover:bg-blue-200 odd:bg-slate-200  px-2"
             style={{
               display: "flex",
@@ -226,14 +235,13 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         );
       }
     });
+     
+    const ee= unNamedFeatureObjects.filter(r=> !r.get("propertyid"))
+
+    console.log("unNamedFeatureObjects", ee)
     
     const unNamedProps = unNamedFeatureObjects.map((fp) => {
-        //   console.log("blocknoRef1", blocknoRef.current);
-        //   blocknoRef.current = blocknoRef.current + 1;
-        //   console.log("blocknoRef2", blocknoRef.current);
-        // }
-
-        // console.log("companyid",companyid,"pname",fp.properties )
+        
         return (
           <div
             key={fp.get("propertyid")}
@@ -299,7 +307,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
       </div>
     );
 
-    return [...r,h,...unNamedProps];
+    return ([...r,h,...unNamedProps]);
   }, [featureObjects]);
   
 //const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => { propertyInfo

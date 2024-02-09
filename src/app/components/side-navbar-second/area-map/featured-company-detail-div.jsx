@@ -13,24 +13,8 @@ const FeaturedCompanyDetailDiv = ({ companyid, title, children, onClick }) => {
   // const [isPopupOpen, setIsPopup]
  // console.log("companyid",companyid)
   const [isOpenIn, setIsOpenIn] = useState();
-  const [dialogRef, setdialogRef] = useState();
   const dispatch = useDispatch();
-  // const closePopup = () => {
-  //   setIsOpenIn("n");
-  // };
-
-  //   const dialogStateCallBack = () => {
-  //    setIsOpenIn("n");
-  // }
-
-  // const getDialogRef = (dialogRef) => {
-  //   setdialogRef(dialogRef)
-  //     console.log("polk",dialogRef)
-  //   //  dialogRef?.close();
-  //   //  setIsOpenIn("n");
-  //   //  onClose();
-  //   //  dialogStateCallBack();
-  //  };
+ 
 
   return (
     <div>

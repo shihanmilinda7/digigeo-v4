@@ -115,6 +115,7 @@ const PropertyFCompanyPopup = ({ isOpenIn, closePopup, titleIn,companyid }) => {
   const [profile, setprofile] = useState([]);
    const [url, seturl] = useState("");
   const [urlPrefix, seturlPrefix] = useState("");
+  const [logoLoaded, setlogoLoaded] = useState(false);
 
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
