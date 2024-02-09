@@ -312,7 +312,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="bg-white rounded-lg overflow-y-hidden">
+        <div className="bg-white rounded-lg overflow-y-hidden  ">
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               Exploration Area Filters
@@ -323,13 +323,13 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
             />
           </div>
           <div className="flex items-center justify-center pl-8   overflow-x-hidden">
-            <div className="mx-auto w-full max-w-[950px] min-w-[550px] min-h-[350px]">
+            <div className="mx-auto w-full max-w-[950px] min-w-[400px] min-h-[350px]">
               <div className="-mx-3 flex flex-wrap">
                 <div className="w-full flex  first-line: gap-3 space-between ">
                   {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
                     Exploration Areas
                   </span> */}
-                  <div className="flex-col gap-2   w-1/3">
+                  <div className="flex-col gap-2   w-[16vw]">
                     <span className="block">Filter By Country</span>
                     <Autocomplete
                       allowsEmptyCollection={true}
@@ -428,10 +428,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                     </section>
                     `
                   </div>
-                  <div className="w-2/3">
+                  <div className="w-[16vw]">
                     {
                       <div className="flex-col gap-32">
-                        <div className="border-solid border  last: w-[500px] bg-white rounded-lg m-2  ">
+                        <div className="border-solid border   w-full bg-white rounded-lg m-2  ">
                           <AreaFilterAreaListItemBrowser
                             areaList={filteredAreaList}
                             countryHandler={setCountry}

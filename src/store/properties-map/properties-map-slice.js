@@ -31,7 +31,8 @@ const initialState = {
   searchParamStateProv:"",
   searchParamMiningArea:"",
   searchParamAssetTypeList:[],
-  searchParamCommodityList:[],
+  searchParamCommodityList: [],
+   navigatedFPropId: 0,
 };
 
 const propertiesMapSlice = createSlice({
@@ -135,6 +136,9 @@ const propertiesMapSlice = createSlice({
     setsearchParamCommodityList: (state, action) => {
       state.searchParamCommodityList = action.payload;
     },
+     setnavigatedFPropId: (state, action) => {
+      state.navigatedFPropId = action.payload;
+    },
   },
 });
 
@@ -170,6 +174,7 @@ export const {
   setsearchParamMiningArea,
   setsearchParamAssetTypeList,
   setsearchParamCommodityList,
+  setnavigatedFPropId
 } = propertiesMapSlice.actions;
 
 export default propertiesMapSlice.reducer;

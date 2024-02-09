@@ -23,9 +23,6 @@ import {
 import { BsFillArrowLeftSquareFill } from "react-icons/bs";
 import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
-import AreaSideNavbar from "../side-navbar-second/area-map/area-sidenavbar";
-import { FaChevronLeft, FaChevronUp } from "react-icons/fa";
-import { setIsAreaSideNavOpen } from "../../../store/area-map/area-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
 import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Text,  Circle, } from "ol/style";
@@ -33,7 +30,6 @@ import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
-import PropertiesSideNavbar from "../side-navbar-second/property-map/properties-sidenavbar";
 import CompanySideNavbar from "../side-navbar-second/company-map/company-sidenavbar";
 import { flyTo } from "./fly"
 import { setclickassetObject, setclickclaimObject, setclickfPropertyObject, setclicksyncPropertyObject } from "@/store/company-map/company-map-slice";
@@ -341,16 +337,42 @@ export const CompanyMap = () => {
   const selectedSynPropRef = useRef();
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
-
+  const navigatedFPropertyRef = useRef();
+  
   const dispatch = useDispatch();
 
     const companyFlyToLocation = useSelector(
     (state) => state.companyMapReducer.companyFlyToLocation
   );
 
+  const navigatedFPropId = useSelector(
+    (state) => state.companyMapReducer.navigatedFPropId
+  );
+
 
  const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
+
+   useEffect(() => {
+    console.log("fp added0",navigatedFPropId)
+     if (navigatedFPropertyRef.current) {
+       console.log("fp added1")
+       const fp = navigatedFPropertyRef.current.find(
+         (f) => f.get("id") == navigatedFPropId
+       );
+
+       console.log("fp added2");
+       const selectStyle = new Style({ zIndex: 1 });
+       selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+
+       console.log("fp added3", fp);
+       fp?.setStyle(selectStyle);
+     }
+   }, [navigatedFPropId]);
+
+
+
+
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
     setCoordinates(coordinate);
@@ -661,7 +683,8 @@ export const CompanyMap = () => {
       
      
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-       
+     
+      navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
 

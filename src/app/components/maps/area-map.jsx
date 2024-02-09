@@ -307,7 +307,7 @@ export const AreaMap = () => {
   try {
     pathname = window.location.href;
   } catch (error) {}
-
+useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");

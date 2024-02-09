@@ -17,6 +17,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const [unNamedFeatureObjects, setunNamedFeatureObjects] = useState([]);
   const [showDlg, setshowDlg] = useState("n");
   const [fpropObj, setfpropObj] = useState();
+  const [loadData, setloadData] = useState(false);
   const  blocknoRef   = useRef(0)
   const  pidRef   = useRef(0)
 
@@ -29,45 +30,43 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
    
 
-  // useEffect(()=>{
-  //   setunNamedFeatureObjects([])
-  //    console.log("qqq1-mounted")
-  //   return ()=>{
-  //     setunNamedFeatureObjects([])
-  //   }
-  // },[])
+  useEffect(()=>{
+    setunNamedFeatureObjects([]);
+    setloadData((t)=> !t)
+    
+  },[companyid])
 
+  //set unnmaed props
   useEffect(() => {
-    //  console.log("featuredPropertyFeatures1",featuredPropertyFeatures)
-   //setunNamedFeatureObjects([]);
+      console.log("unNamedFeatureObjects2",unNamedFeatureObjects)
+
     if (featuredPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      let b=0
+      let b = 0;
       for (let index = 0; index < e.length; index++) {
         const element = e[index];
-        if(!element.get("prop_name") ){
-          if( companyid == element.get("companyid")){
-            b++
-            element.set("prop_name_empty", "Block" + b)  
-            setunNamedFeatureObjects((p)=> [...p,element])
+        if (!element.get("prop_name")) {
+          if (companyid == element.get("companyid")) {
+            b++;
+            element.set("prop_name_empty", "Block" + b);
+            setunNamedFeatureObjects((p) => [...p, element]);
             // console.log("b",b)
           }
         }
       }
-      console.log("ww12" )
+
       setfeaturesObjects(e);
+    } else {
+      console.log("lop2")
     }
 
-    // return ()=>{
-    //   setunNamedFeatureObjects([])
-    // }
-
-  }, [featuredPropertyFeatures]);
+ 
+  }, [loadData]);
 
   //flyto
 
   const flytoHandler = (feature) => {
-     console.log("feature", feature,)
+    
      
     const polygon = feature.getGeometry();
     let loc = [];
@@ -94,7 +93,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
   };
 
   const showProperties =async (e,companyid,propertyid,prop_name,hotplayid) => {
-       console.log("hotplayid",hotplayid)
+       
            const getData = async (hotplayid) => {
           const url =
             "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
@@ -165,7 +164,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
 
    
   const getDomElements = useMemo(() => {
-    // console.log("qwe", featureObjects);
+     
     const r = featureObjects.map((fp) => {
       if (!fp.get("propertyid")) {
         pidRef.current = pidRef.current - 1;
@@ -280,7 +279,7 @@ const AreaFCompanyFProperties = ({ companyid }) => {
         );
       
     });
-
+   
     //heading un named
 
     const h = (

@@ -4,7 +4,7 @@ const initialState = {
   isCompanySideNavOpen: false,
   companyName: "",
   companyId: "",
-  companyStockcode:"",
+  companyStockcode: "",
   syncPropertyFeatures: undefined,
   featuredPropertyFeatures: undefined,
   syncClaimLinkPropertyFeatures: undefined,
@@ -22,10 +22,11 @@ const initialState = {
   companyAssetHistoricalVisible: true,
   companyAssetOccurrenceVisible: true,
   companyFlyToLocation: [],
-  clickclaimObject:undefined,
-  clickfPropertyObject:undefined,
-  clickassetObject:undefined,
-  clicksyncPropertyObject:undefined,
+  clickclaimObject: undefined,
+  clickfPropertyObject: undefined,
+  clickassetObject: undefined,
+  clicksyncPropertyObject: undefined,
+  navigatedFPropId: 0,
 };
 
 const companyMapSlice = createSlice({
@@ -110,6 +111,9 @@ const companyMapSlice = createSlice({
     setclicksyncPropertyObject: (state, action) => {
       state.clicksyncPropertyObject = action.payload;
     },
+    setnavigatedFPropId: (state, action) => {
+      state.navigatedFPropId = action.payload;
+    },
   },
 });
 
@@ -138,6 +142,7 @@ export const { setIsCompanySideNavOpen,
   setclickfPropertyObject,
   setclickassetObject,
   setclicksyncPropertyObject,
+  setnavigatedFPropId,
 } = companyMapSlice.actions;
 
 export default companyMapSlice.reducer;

@@ -79,7 +79,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
 
     
     return (
-      <div className="flex-col"   >
+      <div className="flex flex-col overflow-y-scroll"   >
          <div className="overflow-y-auto max-h-[455px] min-h-[455px]">
          <ListboxWrapper>
             <Listbox variant="flat" aria-label="Listbox menu with descriptions"
@@ -89,7 +89,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
           // selectedKeys={selectedKeys}
               onSelectionChange={setSelectedKeys}
               
-            className="overflow-hidden w-[450px] "
+            className="overflow-hidden  "
             // itemClasses={"w-[500px]"}
             >
               {Object.keys(groupedAreaList).map(c => {

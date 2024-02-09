@@ -7,7 +7,7 @@ import   { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import GeoJSON from "ol/format/GeoJSON";
 
-import { setareaFlyToLocation } from '@/store/area-map/area-map-slice';
+import { setcompanyFlyToLocation ,setnavigatedFPropId } from '@/store/company-map/company-map-slice';
  
 
 const CompanyFCompanyFProperties = ({companyid}) => {
@@ -16,18 +16,19 @@ const CompanyFCompanyFProperties = ({companyid}) => {
     
 
       const featuredPropertyFeatures = useSelector(
-    (state) => state.areaMapReducer.featuredPropertyFeatures
+    (state) => state.companyMapReducer.featuredPropertyFeatures
     );
 
   
     const dispatch = useDispatch();
 
-    const areaName = useSelector(
-    (state) => state.areaMapReducer.areaMiningArea
-    );
+
 
     useEffect(() => {
+      console.log("werty")
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
+      const y = e.filter(f=> f.get("propertyid") ==null)
+      console.log("fp added20",y)
       setfeaturesObjects(e)
        
     }, [featuredPropertyFeatures])
@@ -36,7 +37,7 @@ const CompanyFCompanyFProperties = ({companyid}) => {
   //flyto
   
   const flytoHandler = (feature) => {
-    // console.log("feature", feature,)
+     console.log("fp added11" )
 
     const polygon = feature.getGeometry();
     let loc = [];
@@ -45,14 +46,16 @@ const CompanyFCompanyFProperties = ({companyid}) => {
       loc = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
     }  
     //flyTo
-    dispatch(setareaFlyToLocation(loc));
-
+    dispatch(setcompanyFlyToLocation(loc));
+      console.log("fp added12" )
+      dispatch(setnavigatedFPropId(feature.get("id")));
+       
   };
 
     
   return (
     < div style={{ height:"10rem"}} > 
-     <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div>
+     {/* <div style={{ fontWeight: 600,   }}>{"Properties of Area: " + areaName}</div> */}
     <div className="bg-slate-100"    style={{
       display: "flex",
       flexDirection: "column",

@@ -6,7 +6,7 @@ import AreaFCompanyPopup from "./company-fcompany-popup";
 import  Image  from 'next/image';
 import GeoJSON from "ol/format/GeoJSON";
 import { useDispatch, useSelector } from 'react-redux';
-import { setcompanyFlyToLocation } from "@/store/company-map/company-map-slice";
+import { setcompanyFlyToLocation,setnavigatedFPropId } from "@/store/company-map/company-map-slice";
 
 
 const FeaturedPropertyDetailDiv = ({ propertyid,title, children, onClick }) => {
@@ -51,7 +51,7 @@ const dispatch = useDispatch();
     }  
     //flyTo
     dispatch(setcompanyFlyToLocation(loc));
-
+      dispatch(setnavigatedFPropId(feature.get("id")));
   };
 
   return (

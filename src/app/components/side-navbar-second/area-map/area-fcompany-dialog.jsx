@@ -12,7 +12,7 @@ import { setpopupFcompanyId } from "../../../../store/area-map/area-map-slice";
 // }
 
 export default function AMapDialogComponent({
-  
+  clearForm,
   children,
    
 }) {
@@ -26,8 +26,8 @@ export default function AMapDialogComponent({
     );
 
     useEffect(()=>{
-
-       if(popupFcompanyId){
+      
+       if(popupFcompanyId && !dialogRef.current.open){
          dialogRef.current?.show();
        }
 
@@ -54,7 +54,7 @@ export default function AMapDialogComponent({
   // }, [showDialog]);
 
     const closeDialog = () => {
-       
+       clearForm()
     dispatch(setpopupFcompanyId(0))
         
         

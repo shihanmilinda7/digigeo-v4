@@ -12,7 +12,7 @@ import Image from 'next/image'
 import Link from "next/link";
 import AreaFCompanyFProperties from "./area-fcompany-popup-properties";
 import AMapDialogComponent from './area-fcompany-dialog';
-
+import {Spinner} from "@nextui-org/react";
 
 const formatUrl = (url) => {
   //remove https:
@@ -116,7 +116,7 @@ const AreaFCompanyPopup = ({ }) => {
   const [profile, setprofile] = useState("");
   const [url, seturl] = useState("");
   const [urlPrefix, seturlPrefix] = useState("");
-  const [showDlg, setshowDlg] = useState("");
+  const [logoLoaded, setlogoLoaded] = useState(false);
   // const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   // const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
 
@@ -125,14 +125,12 @@ const AreaFCompanyPopup = ({ }) => {
   );
   
   useEffect(()=>{
-     console.log("popupFcompanyId",popupFcompanyId)
+    clearForm();
+    setlogoLoaded(false)
     if(popupFcompanyId){
          getCompanyDetails();
         getSponsorDetails();
-    }else{
-      console.log("popupFcompanyId",popupFcompanyId)
-    }
-
+    } 
 
   },[popupFcompanyId])
 
@@ -175,21 +173,21 @@ const AreaFCompanyPopup = ({ }) => {
         { cache: "no-store" }
       );
       const d = await res.json();
-       console.log("bbb1" ); 
+       
       if(d?.data?.length>0){
          setTitle(d.data[0].company2)
-         console.log("bbb2",d.data[0]?.company ); 
+          
       const sponsorData = getStyledTexts(d.data[0]?.company ?? "");
-       console.log("bbb2-1",sponsorData ); 
+       
       setsponsorData(sponsorData)
-      console.log("sponsorData",sponsorData)
+      
       setprofile(d.data[0]?.profile ?? "")
       }else{
-         console.log("bbb3" ); 
+         
         setprofile("")
         setsponsorData("")
       }
-       console.log("bbb4" ); 
+       
     };
     f().catch(console.error);
   };
@@ -202,24 +200,23 @@ const AreaFCompanyPopup = ({ }) => {
       const d = await res.json();
       console.log("aaa1" ); 
           if(d?.data?.length>0){  
-           
-               console.log("aaa2" ); 
+                // await new Promise((resolve) => setTimeout(resolve, 3000));
+               
                 let { url, urlPrefix } = formatUrl(d.data[0]?.url ?? "");
               seturl(url)
             seturlPrefix(urlPrefix);
               const logo = d.data[0]?.logo;
-               console.log("aaa3",logo ); 
+              setlogoLoaded(true)
               if(logo){
               const logoext = d.data[0]?.logoext ?? "png";
-              console.log("logoext",logoext) 
-              console.log("aaa4" ); 
+              
               let urlimg =
               `data:image/${logoext};base64,` +
               btoa(String.fromCharCode.apply(null, new Uint8Array(logo.data)));
                 
               setlogoPath(urlimg)
               }else{
-                console.log("aaa5" ); 
+                
                  setlogoPath("")
                  seturl("")
                    
@@ -234,6 +231,11 @@ const AreaFCompanyPopup = ({ }) => {
     f().catch(console.error);
   };
 
+  const clearForm = () => {
+    console.log("uiu")
+     setlogoPath("")
+             seturl("")
+  }
 
 
 
@@ -247,6 +249,7 @@ const AreaFCompanyPopup = ({ }) => {
         ariaHideApp={false}
       > */}
       <AMapDialogComponent
+        clearForm={clearForm}
         // title=""
         // // onClose={closePopup}
         // //onOk={() => console.log("ok")}
@@ -275,7 +278,7 @@ const AreaFCompanyPopup = ({ }) => {
             }}
           >
             <div>
-              {" "}
+              {!logoLoaded && <Spinner size="lg" />}
               {logoPath && (
                 <Image src={logoPath} width={200} height={100} alt="Logo" />
               )}
