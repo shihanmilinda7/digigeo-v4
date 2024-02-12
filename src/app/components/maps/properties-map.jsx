@@ -1480,7 +1480,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
         </div>
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-0 z-50 m-2"
+          className="absolute left-0 bottom-1 z-50 "
           color="primary"
         >
           <Button
@@ -1516,7 +1516,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
         </ButtonGroup>
     <ButtonGroup
           variant="faded"
-          className="fixed right-0 bottom-0 z-50 "
+          className="fixed right-0 bottom-1 z-50 "
           color="primary"
         >
           <Button

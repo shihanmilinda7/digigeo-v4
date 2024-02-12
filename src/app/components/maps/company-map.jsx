@@ -1476,7 +1476,7 @@ export const CompanyMap = () => {
         </div>
         <ButtonGroup
           variant="faded"
-          className="absolute left-0 bottom-0 z-50 m-2"
+          className="absolute left-0 bottom-1 z-50"
           color="primary"
         >
           <Button
@@ -1519,7 +1519,7 @@ export const CompanyMap = () => {
         
           <ButtonGroup
           variant="faded"
-          className="fixed right-0 bottom-0 z-50 "
+          className="fixed right-0 bottom-1 z-50 "
           color="primary"
         >
           <Button
