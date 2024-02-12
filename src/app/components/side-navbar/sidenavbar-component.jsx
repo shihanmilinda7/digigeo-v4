@@ -226,7 +226,7 @@ const SideNavbar = () => {
                   </div>
               </div>
 
-              <div className="w-full pb-2 pl-2 pr-2 pt-2">
+              <div className="w-full pb-1 pl-2 pr-2 pt-2">
                 <div className="flex justify-center">
                   <button
               className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
