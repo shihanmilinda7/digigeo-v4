@@ -187,7 +187,7 @@ const AreaBottomSideComp = () => {
       </div>
       <div className="overflow-y-auto max-h-[56vh]">
         <Accordion>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-1">
             <AccordionItemWithEye
               title="Assets"
               onClick={setareaAssetLayerVisibility}
