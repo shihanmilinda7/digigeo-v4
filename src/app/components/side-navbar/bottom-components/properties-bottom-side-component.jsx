@@ -165,67 +165,78 @@ const PropertiesBottomSideComp = () => {
   };
 
   return (
-    <div className="flex flex-col w-full  h-full">
+    <div className="flex flex-col w-full  h-full grow">
       <div className="ml-2 mr-2  flex items-center justify-center border-b-2">
         <span className="font-bold">Map Layers</span>
       </div>
       <div className="overflow-y-auto max-h-[56vh]">
         <Accordion>
           <div className="flex flex-col gap-6">
-            <AccordionItemWithEye title="Assets" onClick={setpropertyMapAssetLayerVisibility} eyeState={propertyMapAssetLayerVisible}>
+            <AccordionItemWithEye
+              title="Assets"
+              onClick={setpropertyMapAssetLayerVisibility}
+              eyeState={propertyMapAssetLayerVisible}
+            >
               <div className="flex flex-col gap-1">
                 <LayerVisibleDiv
                   title="Operating Mines"
-                 onClick={setpropertyMapAssetOpMineVisibility}   eyeState={propertyMapAssetOpMineVisible}
+                  onClick={setpropertyMapAssetOpMineVisibility}
+                  eyeState={propertyMapAssetOpMineVisible}
                 >
-                   <Image
-                          src="./asset-opmine.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                  <Image
+                    src="./asset-opmine.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Deposits"
-                  onClick={setpropertyMapAssetDepositVisibility}   eyeState={propertyMapAssetDepositsVisible}
+                  onClick={setpropertyMapAssetDepositVisibility}
+                  eyeState={propertyMapAssetDepositsVisible}
                 >
-                   <Image
-                          src="./asset-deposit.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                  <Image
+                    src="./asset-deposit.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Zone"
-                  onClick={setpropertyMapAssetZoneVisibility}   eyeState={propertyMapAssetZoneVisible}
+                  onClick={setpropertyMapAssetZoneVisibility}
+                  eyeState={propertyMapAssetZoneVisible}
                 >
                   <Image
-                          src="./asset-zone.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-zone.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Historical Mines"
-                onClick={setpropertyMapAssetHistoricalVisibility}   eyeState={propertyMapAssetHistoricalVisible}
+                <LayerVisibleDiv
+                  title="Historical Mines"
+                  onClick={setpropertyMapAssetHistoricalVisibility}
+                  eyeState={propertyMapAssetHistoricalVisible}
                 >
                   <Image
-                          src="./asset-historical.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-historical.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
-                <LayerVisibleDiv title="Occurrences"
-                onClick={setpropertyMapAssetOccurrenceVisibility}   eyeState={propertyMapAssetOccurrenceVisible}
+                <LayerVisibleDiv
+                  title="Occurrences"
+                  onClick={setpropertyMapAssetOccurrenceVisibility}
+                  eyeState={propertyMapAssetOccurrenceVisible}
                 >
                   <Image
-                          src="./asset-occurrence.svg"
-                          width={25}
-                          height={10}
-                          alt="prop"
-                     />
+                    src="./asset-occurrence.svg"
+                    width={25}
+                    height={10}
+                    alt="prop"
+                  />
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
@@ -235,7 +246,8 @@ const PropertiesBottomSideComp = () => {
               eyeState={property_claimLinkGroupVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Property Points"
+                <LayerVisibleDiv
+                  title="Property Points"
                   onClick={setpropertyMapSyncPropLayerVisibility}
                   eyeState={propertyMapSyncPropLayerVisible}
                 >
@@ -247,11 +259,11 @@ const PropertiesBottomSideComp = () => {
                   />
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
-                    onClick={setpropertyMapSyncClaimLinkLayerVisibility}
+                  onClick={setpropertyMapSyncClaimLinkLayerVisibility}
                   title="Property Outlines"
                   eyeState={propertyMapSyncClaimLinkLayerVisible}
                 >
-                   <Image
+                  <Image
                     src="./sync-prop-outline.svg"
                     width={25}
                     height={10}
@@ -260,16 +272,18 @@ const PropertiesBottomSideComp = () => {
                 </LayerVisibleDiv>
               </div>
             </AccordionItemWithEye>
-            <AccordionItemWithEye title="Claims"
+            <AccordionItemWithEye
+              title="Claims"
               onClick={setpropertyMapClaimLayerVisibility}
               eyeState={propertyMapClaimLayerVisible}
             >
               <div className="flex flex-col gap-1">
-                <LayerVisibleDiv title="Claims"
-                 onClick={setpropertyMapClaimLayerVisibility}
+                <LayerVisibleDiv
+                  title="Claims"
+                  onClick={setpropertyMapClaimLayerVisibility}
                   eyeState={propertyMapClaimLayerVisible}
                 >
-                   <Image
+                  <Image
                     src="./claims-layer.svg"
                     width={25}
                     height={10}
@@ -278,10 +292,10 @@ const PropertiesBottomSideComp = () => {
                 </LayerVisibleDiv>
                 <LayerVisibleDiv
                   title="Mining Areas"
-                onClick={setpropertyMapAreaBoundaryLayerVisibility}
+                  onClick={setpropertyMapAreaBoundaryLayerVisibility}
                   eyeState={propertyMapAreaBoundaryLayerVisible}
                 >
-                    <Image
+                  <Image
                     src="./minning-areas-layer.svg"
                     width={25}
                     height={10}

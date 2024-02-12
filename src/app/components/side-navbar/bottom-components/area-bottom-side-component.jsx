@@ -189,7 +189,7 @@ const AreaBottomSideComp = () => {
         <Accordion>
           <div className="flex flex-col gap-6">
             <AccordionItemWithEye
-              title="Assetsa"
+              title="Assets"
               onClick={setareaAssetLayerVisibility}
               eyeState={areaAssetLayerVisible}
             >
@@ -323,7 +323,6 @@ const AreaBottomSideComp = () => {
           </div>
         </Accordion>
       </div>
-     
     </div>
   );
 };
