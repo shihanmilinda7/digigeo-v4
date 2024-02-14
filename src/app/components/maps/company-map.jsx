@@ -1456,8 +1456,9 @@ export const CompanyMap = () => {
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`}
-               onClick={onClickViewInitZoom}
+              <GiEarthAmerica
+                className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewInitZoom}
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
@@ -1485,7 +1486,7 @@ export const CompanyMap = () => {
               companyLyrs == "m"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            } w-22`}
           >
             Map
           </Button>
@@ -1495,98 +1496,82 @@ export const CompanyMap = () => {
               companyLyrs == "s"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22 `}
           >
             Satelite
           </Button>
-
-
-
-
-
-
           <Button
             onClick={() => setLyrs("p")}
             className={`${
               companyLyrs == "p"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22 `}
           >
             Terrain
           </Button>
         </ButtonGroup>
-        
-          <ButtonGroup
+
+        <ButtonGroup
           variant="faded"
           className="fixed right-0 bottom-1 z-50 "
           color="primary"
         >
-          <Button
-            
-           className={`w-36 bg-blue-700 text-white`}
-          >
+          <Button className={`w-36 bg-blue-700 text-white`}>
             {`Scale:${mapScale}`}
           </Button>
-          <Button
-            
-            className={`w-36 bg-blue-700 text-white`}
-          >
-           { `Lat:${lat}` }
+          <Button className={`w-36 bg-blue-700 text-white`}>
+            {`Lat:${lat}`}
           </Button>
-          <Button
-          
-           className={`w-36 bg-blue-700 text-white`}
-          >
-                { `Long:${long}` }
+          <Button className={`w-36 bg-blue-700 text-white`}>
+            {`Long:${long}`}
           </Button>
         </ButtonGroup>
-       <div
-        ref={setPopup}
-        style={{
+        <div
+          ref={setPopup}
+          style={{
             textDecoration: "none",
             position: "absolute",
             top: "2px",
             right: "8px",
             backgroundColor: "white",
             boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-             padding: "15px",
+            padding: "15px",
             borderRadius: "10px",
             border: "1px solid #cccccc",
             minWidth: "280px",
             color: "black",
-          // backgroundColor: "white",
-          // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-          // padding: "15px",
-          // borderRadius: "10px",
-          // border: "1px solid #cccccc",
-          // minWidth: "280px",
-          // color: "black",
-        }}
-      >
-        <button
-          type="button"
-          onClick={(e) => {
-            setCoordinates(undefined);
-            e.target.blur();
-            return false;
-          }}
-          style={{
-            textDecoration: "none",
-            position: "absolute",
-            top: "2px",
-            right: "8px",
+            // backgroundColor: "white",
+            // boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            // padding: "15px",
+            // borderRadius: "10px",
+            // border: "1px solid #cccccc",
+            // minWidth: "280px",
+            // color: "black",
           }}
         >
-          ✖
-        </button>
-        <div id="popup-contentc">
-          {/* <p>Info:</p> */}
-          { clickDataLoaded && (<CompanyMapClickPopup  />)}
-        
+          <button
+            type="button"
+            onClick={(e) => {
+              setCoordinates(undefined);
+              e.target.blur();
+              return false;
+            }}
+            style={{
+              textDecoration: "none",
+              position: "absolute",
+              top: "2px",
+              right: "8px",
+            }}
+          >
+            ✖
+          </button>
+          <div id="popup-contentc">
+            {/* <p>Info:</p> */}
+            {clickDataLoaded && <CompanyMapClickPopup />}
+          </div>
         </div>
-        </div>  
-               
+
         <Map
           ref={mapRef}
           style={{
@@ -1594,27 +1579,26 @@ export const CompanyMap = () => {
             height: "90vh",
           }}
           controls={[]}
-           onSingleclick={onSingleclick}
+          onSingleclick={onSingleclick}
           onPointermove={onPointerMove}
         >
-
-            {(popup && clickedOnFeature ) ? (
-          <olOverlay
-            element={popup}
-            position={coordinates}
-            autoPan
-            autoPanAnimation={{
-              duration: 250,
-            }}
-          />
-        ) : null}
+          {popup && clickedOnFeature ? (
+            <olOverlay
+              element={popup}
+              position={coordinates}
+              autoPan
+              autoPanAnimation={{
+                duration: 250,
+              }}
+            />
+          ) : null}
           <olView
-             ref={mapViewRef}
+            ref={mapViewRef}
             initialCenter={[0, 0]}
             center={companyInitialCenter}
             initialZoom={2}
             zoom={companyZoomLevel}
-             onchange={onViewChange}
+            onchange={onViewChange}
           />
           <olLayerTile preload={Infinity}>
             {/* <olSourceOSM /> */}
@@ -1626,31 +1610,23 @@ export const CompanyMap = () => {
             ></olSourceXYZ>
           </olLayerTile>
 
-             <olLayerVectorImage
+          <olLayerVectorImage
             ref={areaBoundaryImgLayerRef}
             style={styleFunctionAreaBoundary}
-            
           >
-            
-              <olSourceVector
+            <olSourceVector
               ref={areaBoundaryImgSourceRef}
               // format={new GeoJSON()}
               strategy={all}
               loader={areaLoaderFunc}
-              >
-              </olSourceVector>
-           
+            ></olSourceVector>
           </olLayerVectorImage>
-              <olLayerVector
-            ref={claimLinkVectorLayerRef}
-            >
-            {syncClaimLinkPropertyFeatures  && (
+          <olLayerVector ref={claimLinkVectorLayerRef}>
+            {syncClaimLinkPropertyFeatures && (
               <olSourceVector
                 ref={claimLinkSourceRef}
                 //  style={companyMap_tbl_sync_claimlink_VectorLayerStyleFunction}
-              >
-              
-              </olSourceVector>
+              ></olSourceVector>
             )}
           </olLayerVector>
           <olLayerVectorImage
@@ -1659,56 +1635,34 @@ export const CompanyMap = () => {
             minResolution={0}
             maxResolution={150}
           >
-            
-              <olSourceVector
+            <olSourceVector
               ref={claimVectorImgSourceRef}
               // format={new GeoJSON()}
               strategy={bbox}
               loader={claimLoaderFunc}
-              >
-              </olSourceVector>
-           
+            ></olSourceVector>
           </olLayerVectorImage>
 
-             <olLayerVector ref={fPropVectorLayerRef}>
-             
-              <olSourceVector
-                ref={fPropSourceRef}
-              >
-              </olSourceVector>
-             
+          <olLayerVector ref={fPropVectorLayerRef}>
+            <olSourceVector ref={fPropSourceRef}></olSourceVector>
           </olLayerVector>
           <olLayerVector ref={fPropVectorLayerLabelRef}>
             <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
           </olLayerVector>
-            <olLayerVector
+          <olLayerVector
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
-             minResolution={0}
+            minResolution={0}
             maxResolution={150}
           >
-            
-              <olSourceVector
-                ref={assetSourceRef}
-                 
-              >
-               
-              </olSourceVector>
-            
+            <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
-           <olLayerVector
+          <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
           >
-            
-              <olSourceVector
-                ref={syncPropSourceRef}
-            
-              >
-              </olSourceVector>
-           
+            <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
-
         </Map>
       </div>
     </div>

@@ -1489,7 +1489,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
               propertiesLyrs == "m"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
             Map
           </Button>
@@ -1499,7 +1499,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
               propertiesLyrs == "s"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
             Satelite
           </Button>
@@ -1509,7 +1509,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
               propertiesLyrs == "p"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
             Terrain
           </Button>
@@ -1682,11 +1682,11 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
           >
             {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
 
-               <olSourceCluster distance={distance} minDistance={minDistance}>
-            <olSourceVector ref={syncPropSourceRef}>
-              {/* <PointsAtCoordinates coordinates={coordinates} /> */}
-            </olSourceVector>
-            </olSourceCluster>
+              <olSourceCluster distance={distance} minDistance={minDistance}>
+                <olSourceVector ref={syncPropSourceRef}>
+                  {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+                </olSourceVector>
+              </olSourceCluster>
             
           </olLayerVector>
         </Map>

@@ -307,7 +307,7 @@ export const AreaMap = () => {
   try {
     pathname = window.location.href;
   } catch (error) {}
-useSelector
+  //  useSelector
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
@@ -342,21 +342,21 @@ useSelector
    const [ fPropertyObject, setfPropertyObject]=useState()
    const [ syncPropertyObject, setsyncPropertyObject]=useState()
    const [ claimObject, setclaimObject]=useState()
-
+   
 
    useEffect(()=>{
     if(navigatedFPropertyRef.current){
     const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
 
 
-      console.log("kkk")
+   
      const selectStyle = new Style({ zIndex: 1 });
     selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
      
 
      
-     console.log("fSelected",fp)
+    
      fp?.setStyle(selectStyle);
     }
 
@@ -640,6 +640,8 @@ useSelector
   const claimVectorImgLayerRef = useRef(null);
   const areaBoundaryImgSourceRef = useRef(null);
   const areaBoundaryImgLayerRef = useRef(null);
+  const allSyncPropVectorLayerRef = useRef(null);
+  const allSyncPropSourceRef = useRef(null);
 
   const syncPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncPropertyFeatures
@@ -1532,7 +1534,7 @@ useSelector
               mapLyrs == "m"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
             Map
           </Button>
@@ -1542,9 +1544,9 @@ useSelector
               mapLyrs == "s"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
-            Satellite
+            Satelite
           </Button>
           <Button
             onClick={() => setLyrs("p")}
@@ -1552,7 +1554,7 @@ useSelector
               mapLyrs == "p"
                 ? "bg-blue-900 text-white"
                 : "bg-blue-700 text-white"
-            } `}
+            }  w-22`}
           >
             Terrain
           </Button>
@@ -1713,6 +1715,8 @@ useSelector
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
+
+
         </Map>
       </div>
     </div>
