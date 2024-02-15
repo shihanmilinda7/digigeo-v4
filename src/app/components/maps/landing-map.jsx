@@ -381,7 +381,69 @@ export const LandingMap = () => {
        
       };
       f().catch(console.error);
-    };
+  };
+  
+  // const getFeaturedCompanyGeometry = async () => {
+  //       //view_hotplay_table_with_sponsor_prop
+  //   const f = async () => {
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor`,
+  //       { cache: "no-store" }
+  //     );
+  //    const d = await res.json();
+     
+  //     const gj = {
+  //       type: "FeatureCollection",
+  //       crs: {
+  //         type: "name",
+  //         properties: {
+  //           name: "EPSG:3857",
+  //         },
+  //       },
+  //       features: d.data[0].json_build_object.features,
+  //     };
+
+  //    // const e =   new GeoJSON().readFeatures(gj)
+
+  //     dispatch(setFPropertyFeatures(gj));
+  //   };
+
+  //   f().catch(console.error);
+  // };
+
+    const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
+      console.log("hit fprop", extent);
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+        `/${extent.join("/")}`;
+      // console.log("url", url);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+         
+          if (json.data) {
+           
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              fPropSourceRef.current.addFeatures(features);
+
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    }, []);
+  
 
   //  useEffect(()=>{
   //   if(navigatedFPropertyRef.current){
@@ -829,6 +891,7 @@ export const LandingMap = () => {
   useEffect(() => {
     mouseScrollEvent();
     getSyncPropertiesGeometry();
+   
   }, []);
 
   useEffect(() => {
@@ -1729,8 +1792,9 @@ export const LandingMap = () => {
             ></olSourceVector>
           </olLayerVectorImage>
 
-          <olLayerVector ref={fPropVectorLayerRef}>
-            <olSourceVector ref={fPropSourceRef}></olSourceVector>
+          <olLayerVector ref={fPropVectorLayerRef}   minResolution={0}
+            maxResolution={150}>
+            <olSourceVector ref={fPropSourceRef}  strategy={bbox}  loader={fPropLoaderFunc}></olSourceVector>
           </olLayerVector>
           <olLayerVector ref={fPropVectorLayerLabelRef}>
             <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
