@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AreaMapWorkspan } from "./area-map-workspan";
 import { PropertiesMapWorkspan } from "./properties-map-workspan";
 import { CompanyMapWorkspan } from "./company-map-workspan";
+import { LandingMapWorkspan } from "./landing-map-workspan";
 
 export const WorkspanSelector = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,9 @@ export const WorkspanSelector = () => {
       </div>
       <div style={{ display: selectedMap === "properties" ? "block" : "none" }}>
         <PropertiesMapWorkspan />
+      </div>
+      <div style={{ display: selectedMap === "landing" ? "block" : "none" }}>
+        <LandingMapWorkspan />
       </div>
     </div>
   );

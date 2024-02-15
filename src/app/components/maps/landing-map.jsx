@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useCallback, useEffect, useState } from "react";
+import   { Suspense, useCallback, useEffect, useState } from "react";
 import "ol/ol.css";
 import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
@@ -46,6 +46,7 @@ import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
 import { areaMApPropertyVectorRendererFuncV2Highlight, areaMApPropertyVectorRendererFuncV2_labels, areaMapAssetVectorLayerStyleFunctionHighlited, areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited, areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight, styleFunctionClaimHighlight } from "./area-map-styles/area-map-styles";
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
+import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -302,7 +303,7 @@ function inchesPreUnit(unit) {
 }
 
 
-export const AreaMap = () => {
+export const LandingMap = () => {
   let pathname = "";
   try {
     pathname = window.location.href;
@@ -342,25 +343,63 @@ export const AreaMap = () => {
    const [ fPropertyObject, setfPropertyObject]=useState()
    const [ syncPropertyObject, setsyncPropertyObject]=useState()
    const [ claimObject, setclaimObject]=useState()
+
+   const [distance, setDistance] = useState(40);
+    const [minDistance, setMinDistance] = useState(20);
+    const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
    
+    const getSyncPropertiesGeometry = async () => { 
+    
 
-   useEffect(()=>{
-    if(navigatedFPropertyRef.current){
-    const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
+      const f = async () => {
+        const res = await fetch(
+          `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property`,
+          { cache: "no-store" }
+        );
+        const d = await res.json();
+        console.log("loading all spf0")
+        // console.log("fps", d);
+        // console.log("fps", d.data);
+
+        // setFeaturedCompanies(d.data);
+        // d.data[0].json_build_object.features.map((i) =>
+        //   console.log("i", i.properties.colour)
+        // ); setSyncPropertyFeatures
+
+        const gj = {
+          type: "FeatureCollection",
+          crs: {
+            type: "name",
+            properties: {
+              name: "EPSG:3857",
+            },
+          },
+          features: d.data[0].json_build_object.features,
+        };
+        setsyncPropertyFeatures(gj);
+        console.log("loading all spf01")
+       
+      };
+      f().catch(console.error);
+    };
+
+  //  useEffect(()=>{
+  //   if(navigatedFPropertyRef.current){
+  //   const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
 
 
    
-     const selectStyle = new Style({ zIndex: 1 });
-    selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+  //    const selectStyle = new Style({ zIndex: 1 });
+  //   selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
      
 
      
     
-     fp?.setStyle(selectStyle);
-    }
+  //    fp?.setStyle(selectStyle);
+  //   }
 
-   },[navigatedFPropId])
+  //  },[navigatedFPropId])
 
 
   useEffect(() => {
@@ -614,14 +653,14 @@ export const AreaMap = () => {
 
 
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
-  const areaZoomLevel = useSelector(
-    (state) => state.mapSelectorReducer.areaZoomLevel
+  const landingMapZoomLevel = useSelector(
+    (state) => state.mapSelectorReducer.landingMapZoomLevel
   );
-  const areaInitialCenter = useSelector(
-    (state) => state.mapSelectorReducer.areaInitialCenter
+  const landingMapInitialCenter = useSelector(
+    (state) => state.mapSelectorReducer.landingMapInitialCenter
   );
-  const isAreaSideNavOpen = useSelector(
-    (state) => state.areaMapReducer.isAreaSideNavOpen
+  const isLandingMapSideNavOpen = useSelector(
+    (state) => state.areaMapReducer.isLandingMapSideNavOpen
   );
 
   
@@ -640,12 +679,12 @@ export const AreaMap = () => {
   const claimVectorImgLayerRef = useRef(null);
   const areaBoundaryImgSourceRef = useRef(null);
   const areaBoundaryImgLayerRef = useRef(null);
-  // const allSyncPropVectorLayerRef = useRef(null);
-  // const allSyncPropSourceRef = useRef(null);
+  const allSyncPropVectorLayerRef = useRef(null);
+  const allSyncPropSourceRef = useRef(null);
 
-  const syncPropertyFeatures = useSelector(
-    (state) => state.areaMapReducer.syncPropertyFeatures
-  );
+  // const syncPropertyFeatures = useSelector(
+  //   (state) => state.areaMapReducer.syncPropertyFeatures
+  // );
   const featuredPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.featuredPropertyFeatures
   );
@@ -701,23 +740,23 @@ export const AreaMap = () => {
   
   
   useEffect(() => {
-     syncPropSourceRef?.current?.clear();
+    console.log("loading all spf1")
     if (syncPropertyFeatures?.features) {
       
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
-      syncPropSourceRef?.current?.addFeatures(e);
+      allSyncPropSourceRef?.current?.addFeatures(e);
     }
 
-    if (syncPropSourceRef.current) {
-      const p1 = syncPropSourceRef.current?.getExtent()[0];
-      if (p1 != Infinity) {
-        mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
-          padding: [200, 200, 200, 200],
-          duration: 3000,
-        });
-      }
-    }
+    // if (allSyncPropSourceRef.current) {
+    //   const p1 = syncPropSourceRef.current?.getExtent()[0];
+    //   if (p1 != Infinity) {
+    //     mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
+    //       padding: [200, 200, 200, 200],
+    //       duration: 3000,
+    //     });
+    //   }
+    // }
   }, [syncPropertyFeatures]);
 
   useEffect(() => {
@@ -789,7 +828,7 @@ export const AreaMap = () => {
 
   useEffect(() => {
     mouseScrollEvent();
-
+    getSyncPropertiesGeometry();
   }, []);
 
   useEffect(() => {
@@ -811,9 +850,9 @@ export const AreaMap = () => {
   useEffect(() => {
     let newUrl;
     if (areaName == "") {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
+      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
     } else {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}&co=${areaCountry}&ma=${areaName}`;
+      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}&co=${areaCountry}&ma=${areaName}`;
     }
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
@@ -850,7 +889,7 @@ export const AreaMap = () => {
   //   dispatch(setIsSideNavOpen(!tmpValue));
   //   const newUrl = `${
   //     window.location.pathname
-  //   }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+  //   }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
   //   window.history.replaceState({}, "", newUrl);
   //   // dispatch(setUrlUpdate());
   // };
@@ -859,15 +898,11 @@ export const AreaMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    if (areaName == "") {
+    
       newUrl = `${
         window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
-    } else {
-      newUrl = `${
-        window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isAreaSideNavOpen}&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
-    }
+      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+   
     window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
   };
@@ -877,14 +912,14 @@ export const AreaMap = () => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
     if (areaName == "") {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
     } else {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${lyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaName}`;
+      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     window.history.replaceState({}, "", newUrl);
   };
   const openAreaNav = () => {
-    const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+    const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
     dispatch(setIsAreaSideNavOpen(true));
   };
@@ -1512,7 +1547,7 @@ export const AreaMap = () => {
                 onClick={onClickViewMinusZoom}
               />
             </Button>
-            {/* {!isAreaSideNavOpen && isSideNavOpen ? (
+            {/* {!isLandingMapSideNavOpen && isSideNavOpen ? (
               <Button
                 variant="bordered"
                 className="bg-blue-900 mt-12 -ml-5 rotate-90"
@@ -1626,7 +1661,7 @@ export const AreaMap = () => {
           ref={mapRef}
           style={{
             width: isSideNavOpen ? "80vw" : "100vw",
-            // width: `${isAreaSideNavOpen ? "75vw" : "100vw"}`,
+            // width: `${isLandingMapSideNavOpen ? "75vw" : "100vw"}`,
             height: "90vh",
           }}
           controls={[]}
@@ -1646,9 +1681,9 @@ export const AreaMap = () => {
           <olView
             ref={mapViewRef}
             initialCenter={[0, 0]}
-            center={areaInitialCenter}
+            center={landingMapInitialCenter}
             initialZoom={2}
-            zoom={areaZoomLevel}
+            zoom={landingMapZoomLevel}
             onchange={onViewChange}
           />
 
@@ -1709,11 +1744,20 @@ export const AreaMap = () => {
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
-          <olLayerVector
-            ref={syncPropVectorLayerRef}
-            style={styleFunctionSyncProperties}
+                  
+            <olLayerVector
+            ref={allSyncPropVectorLayerRef}
+            style={commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction}
+           
           >
-            <olSourceVector ref={syncPropSourceRef}></olSourceVector>
+            {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
+
+              <olSourceCluster distance={distance} minDistance={minDistance}>
+                <olSourceVector ref={allSyncPropSourceRef}>
+                  {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+                </olSourceVector>
+              </olSourceCluster>
+            
           </olLayerVector>
 
 

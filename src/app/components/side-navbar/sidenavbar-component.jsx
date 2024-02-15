@@ -45,6 +45,7 @@ import {
   setsearchParamCommodityList,
   setpropertySearchQuery,
 } from "../../../store/properties-map/properties-map-slice";
+import LandingBottomSideComp from "./bottom-components/landing-bottom-side-component";
 
 // } from "../../../store/area-map/area-map-slice";
 
@@ -124,6 +125,9 @@ const SideNavbar = () => {
     } else if (selectedValue == "properties") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     } else if (selectedValue == "company") {
+      newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
+    } else if (selectedValue == "landing") {
+      console.log("hit-sidenavbar-compo")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     }
     window.history.replaceState({}, "", newUrl);
@@ -222,6 +226,14 @@ const SideNavbar = () => {
                       className="w-full"
                     >
                       <CompanyBottomSideComp />
+                    </div>
+                    <div
+                      style={{
+                        display: selectedMap === "landing" ? "flex" : "none",
+                      }}
+                      className="w-full"
+                    >
+                      <LandingBottomSideComp />
                     </div>
                   </div>
               </div>

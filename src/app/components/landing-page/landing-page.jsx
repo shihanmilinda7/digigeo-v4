@@ -50,11 +50,12 @@ export const LandingPage = () => {
   const areaCountry = searchParams.get("co");
 
   useEffect(() => {
-    console.log("mapType", mapType);
+     
     updateRedux();
   }, []);
 
   const updateRedux = async () => {
+    //console.log("mapType",mapType)
     if (mapType) {
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));
@@ -107,6 +108,18 @@ export const LandingPage = () => {
           break;
 
         default:
+            dispatch(
+              setIsSideNavOpen(String(isNavOpen).toLowerCase() === "true")
+            );
+            dispatch(
+              setIsPropertiesSideNavOpen(
+                String(isSecondNavOpen).toLowerCase() === "true"
+              )
+            );
+            dispatch(setPropertiesLyrs(mapLyrs));
+            dispatch(setPropertiesZoomLevel(mapZoom));
+            const tmpMapCenter4 = mapCenter.split(",").map(Number);
+            dispatch(setPropertiesInitialCenter(tmpMapCenter4));
           break;
       }
       const newUrl = `${window.location.pathname}?t=${mapType}&sn=${isNavOpen}&sn2=${isSecondNavOpen}&lyrs=${mapLyrs}&z=${mapZoom}&c=${mapCenter}`;
