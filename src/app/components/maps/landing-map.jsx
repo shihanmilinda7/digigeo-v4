@@ -385,10 +385,10 @@ export const LandingMap = () => {
       setsyncPropertyFeatures(gj);
       console.log("loading all spf01");
     };
-
-    for (let index = 0; index <= 100; index++) {
-      f(100, index).catch(console.error);
-    }
+f(10662, 0).catch(console.error);
+    // for (let index = 0; index <= 100; index++) {
+    //   f(100, index).catch(console.error);
+    // }
   }, []);
 
   // const getFeaturedCompanyGeometry = async () => {
