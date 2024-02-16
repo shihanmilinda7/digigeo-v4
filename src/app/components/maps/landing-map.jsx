@@ -359,7 +359,7 @@ export const LandingMap = () => {
   const getSyncPropertiesGeometry = useCallback(async () => {
     const f = async (limit, offset) => {
       const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property/${limit}/${offset}`,
+        `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property`,
         { cache: "no-store" }
       );
       const d = await res.json();

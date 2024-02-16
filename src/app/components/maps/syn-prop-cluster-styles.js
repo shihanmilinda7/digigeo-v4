@@ -7,7 +7,7 @@ import { toContext } from "ol/render";
 
 export const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
   (feature, resolution) => {
-    console.log("qqqq");
+   
     //console.log("feature:", feature);
     //  let spanClaim1 = document.getElementById("spanClaimsLayerVisibility");
     //  spanClaim1.textContent = "visibility";
@@ -182,6 +182,7 @@ export const commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction =
 
     let textObj;
     const size = feature.get("features").length;
+    console.log("size -rtt",size)
     if (size == 1) {
       const propName = feature.get("features")[0].get("prop_name");
       textObj = new Text({
