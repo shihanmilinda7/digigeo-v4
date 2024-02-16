@@ -1,6 +1,6 @@
 "use client";
 
-import   { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import "ol/ol.css";
 import { Map } from "@react-ol/fiber";
 import { useRef } from "react";
@@ -39,11 +39,18 @@ import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
-import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
-import { flyTo } from "./fly"
- 
+import { all, bbox, bbox as bboxStrategy } from "ol/loadingstrategy";
+import { flyTo } from "./fly";
+
 import AreaMapClickPopup from "./area-map-popup/area-map-click-popup";
-import { areaMApPropertyVectorRendererFuncV2Highlight, areaMApPropertyVectorRendererFuncV2_labels, areaMapAssetVectorLayerStyleFunctionHighlited, areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited, areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight, styleFunctionClaimHighlight } from "./area-map-styles/area-map-styles";
+import {
+  areaMApPropertyVectorRendererFuncV2Highlight,
+  areaMApPropertyVectorRendererFuncV2_labels,
+  areaMapAssetVectorLayerStyleFunctionHighlited,
+  areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited,
+  areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight,
+  styleFunctionClaimHighlight,
+} from "./area-map-styles/area-map-styles";
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
@@ -294,14 +301,13 @@ const INCHES_PER_METRE = 39.37;
 function inchesPreUnit(unit) {
   return METERS_PER_UNIT[unit] * INCHES_PER_METRE;
 }
- function mapRatioScale({ map, toRound = true }) {
+function mapRatioScale({ map, toRound = true }) {
   const resolution = map.getView().getResolution();
   const unit = map.getView().getProjection().getUnits();
 
   let scale = resolution * inchesPreUnit(unit) * DOTS_PER_INCH;
   return toRound ? Math.round(scale) : scale;
 }
-
 
 export const LandingMap = () => {
   let pathname = "";
@@ -312,7 +318,7 @@ export const LandingMap = () => {
   const router = useRouter();
   const [center, setCenter] = useState("");
   const [zoom, setZoom] = useState("");
-   
+
   const [clickDataLoaded, setclickDataLoaded] = useState(false);
 
   const mapRef = useRef();
@@ -329,7 +335,9 @@ export const LandingMap = () => {
   const areaFlyToLocation = useSelector(
     (state) => state.areaMapReducer.areaFlyToLocation
   );
-  const navigatedFPropId = useSelector((state) => state.areaMapReducer.navigatedFPropId);
+  const navigatedFPropId = useSelector(
+    (state) => state.areaMapReducer.navigatedFPropId
+  );
 
   //
   const [coordinates, setCoordinates] = useState(undefined);
@@ -338,51 +346,51 @@ export const LandingMap = () => {
   const [mapScale, setmapScale] = useState(0);
   const [lat, setlat] = useState(0);
   const [long, setlong] = useState(0);
-   
-   const [ assetObject, setassetObject]=useState()
-   const [ fPropertyObject, setfPropertyObject]=useState()
-   const [ syncPropertyObject, setsyncPropertyObject]=useState()
-   const [ claimObject, setclaimObject]=useState()
 
-   const [distance, setDistance] = useState(40);
-    const [minDistance, setMinDistance] = useState(20);
-    const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
-   
-    const getSyncPropertiesGeometry = async () => { 
-    
+  const [assetObject, setassetObject] = useState();
+  const [fPropertyObject, setfPropertyObject] = useState();
+  const [syncPropertyObject, setsyncPropertyObject] = useState();
+  const [claimObject, setclaimObject] = useState();
 
-      const f = async () => {
-        const res = await fetch(
-          `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property`,
-          { cache: "no-store" }
-        );
-        const d = await res.json();
-        console.log("loading all spf0")
-        // console.log("fps", d);
-        // console.log("fps", d.data);
+  const [distance, setDistance] = useState(40);
+  const [minDistance, setMinDistance] = useState(20);
+  const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
 
-        // setFeaturedCompanies(d.data);
-        // d.data[0].json_build_object.features.map((i) =>
-        //   console.log("i", i.properties.colour)
-        // ); setSyncPropertyFeatures
+  const getSyncPropertiesGeometry = useCallback(async () => {
+    const f = async (limit, offset) => {
+      const res = await fetch(
+        `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property/${limit}/${offset}`,
+        { cache: "no-store" }
+      );
+      const d = await res.json();
+      console.log("loading all spf0");
+      // console.log("fps", d);
+      // console.log("fps", d.data);
 
-        const gj = {
-          type: "FeatureCollection",
-          crs: {
-            type: "name",
-            properties: {
-              name: "EPSG:3857",
-            },
+      // setFeaturedCompanies(d.data);
+      // d.data[0].json_build_object.features.map((i) =>
+      //   console.log("i", i.properties.colour)
+      // ); setSyncPropertyFeatures
+
+      const gj = {
+        type: "FeatureCollection",
+        crs: {
+          type: "name",
+          properties: {
+            name: "EPSG:3857",
           },
-          features: d.data[0].json_build_object.features,
-        };
-        setsyncPropertyFeatures(gj);
-        console.log("loading all spf01")
-       
+        },
+        features: d.data[0].json_build_object.features,
       };
-      f().catch(console.error);
-  };
-  
+      setsyncPropertyFeatures(gj);
+      console.log("loading all spf01");
+    };
+
+    for (let index = 0; index <= 100; index++) {
+      f(100, index).catch(console.error);
+    }
+  }, []);
+
   // const getFeaturedCompanyGeometry = async () => {
   //       //view_hotplay_table_with_sponsor_prop
   //   const f = async () => {
@@ -391,7 +399,7 @@ export const LandingMap = () => {
   //       { cache: "no-store" }
   //     );
   //    const d = await res.json();
-     
+
   //     const gj = {
   //       type: "FeatureCollection",
   //       crs: {
@@ -411,58 +419,48 @@ export const LandingMap = () => {
   //   f().catch(console.error);
   // };
 
-    const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
-      console.log("hit fprop", extent);
-      const url =
-        `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
-        `/${extent.join("/")}`;
-      // console.log("url", url);
-      fetch(url, {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-         
-          if (json.data) {
-           
-            if (json.data[0].json_build_object.features) {
-              const features = new GeoJSON().readFeatures(
-                json.data[0].json_build_object
-              );
-              //console.log("hit claims3")
-              fPropSourceRef.current.addFeatures(features);
+  const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
+    console.log("hit fprop", extent);
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            fPropSourceRef.current.addFeatures(features);
 
-              //console.log("bbsync uni tbl01_claims   features count", features.count);
-            }
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
-        });
-    }, []);
-  
+        }
+      });
+  }, []);
 
   //  useEffect(()=>{
   //   if(navigatedFPropertyRef.current){
   //   const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
 
-
-   
   //    const selectStyle = new Style({ zIndex: 1 });
   //   selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
-     
-
-     
-    
   //    fp?.setStyle(selectStyle);
   //   }
 
   //  },[navigatedFPropId])
-
 
   useEffect(() => {
     dispatch(setclickassetObject(assetObject));
@@ -477,227 +475,205 @@ export const LandingMap = () => {
   }, [fPropertyObject]);
 
   useEffect(() => {
-      dispatch(setclickclaimObject(claimObject));
+    dispatch(setclickclaimObject(claimObject));
   }, [claimObject]);
-
-   
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
     setCoordinates(coordinate);
   }, []);
 
-  
- const onPointerMove = useCallback((e) => {
-
+  const onPointerMove = useCallback((e) => {
     //console.log("pm-1",evt)
 
-    
- 
-    
     // curAMapResolution = areaView.getResolution();
 
     const coordinate1 = mapRef.current.getCoordinateFromPixel(e.pixel);
     const c = toLonLat(coordinate1);
     // araemap_status_bar_lon.innerHTML = c[0].toFixed(4);
     // araemap_status_bar_lat.innerHTML = c[1].toFixed(4);
-    setlong( c[0].toFixed(4))
-    setlat( c[1].toFixed(4))
+    setlong(c[0].toFixed(4));
+    setlat(c[1].toFixed(4));
 
-     
-   
-      // console.log("pmov-zoom end-cal started-1");
-      if (selectedFPropRef.current ) {
-        // console.log("pmov-remove applied style-4-1-x1");
-        selectedFPropRef.current.setStyle(undefined);
-        selectedFPropRef.current = null;
-      }
-      if (selectedClaimRef.current  ) {
-        selectedClaimRef.current.setStyle(undefined);
-        selectedClaimRef.current = null;
-      }
-      if (selectedAssetRef.current  ) {
-        selectedAssetRef.current.setStyle(undefined);
-        selectedAssetRef.current = null;
-      }
+    // console.log("pmov-zoom end-cal started-1");
+    if (selectedFPropRef.current) {
+      // console.log("pmov-remove applied style-4-1-x1");
+      selectedFPropRef.current.setStyle(undefined);
+      selectedFPropRef.current = null;
+    }
+    if (selectedClaimRef.current) {
+      selectedClaimRef.current.setStyle(undefined);
+      selectedClaimRef.current = null;
+    }
+    if (selectedAssetRef.current) {
+      selectedAssetRef.current.setStyle(undefined);
+      selectedAssetRef.current = null;
+    }
 
-      if (selectedSynPropRef.current ) {
-        selectedSynPropRef.current.setStyle(undefined);
-        selectedSynPropRef.current = null;
-      }
-      if (selectedSynOutLineRef.current  ) {
-        selectedSynOutLineRef.current.setStyle(undefined);
-        selectedSynOutLineRef.current = null;
-      }
-      // let fcount = 0;
-      mapRef.current.forEachFeatureAtPixel(e.pixel, function (f, layer) {
+    if (selectedSynPropRef.current) {
+      selectedSynPropRef.current.setStyle(undefined);
+      selectedSynPropRef.current = null;
+    }
+    if (selectedSynOutLineRef.current) {
+      selectedSynOutLineRef.current.setStyle(undefined);
+      selectedSynOutLineRef.current = null;
+    }
+    // let fcount = 0;
+    mapRef.current.forEachFeatureAtPixel(e.pixel, function (f, layer) {
       //  fcount++;
 
-        //  console.log("pmov-features@pixel-loop-init-2");
-        // console.log("layer", layer.get("id1"));
-        let fill; //
+      //  console.log("pmov-features@pixel-loop-init-2");
+      // console.log("layer", layer.get("id1"));
+      let fill; //
 
-        // if (layer.get("id1") == "boundary") {
-        if (f.get("ft") == 0) {
-          //   console.log("bo");
-          //  fill = new Fill({
-          //    color: "rgba(255, 255, 255, 0)",
-          //  });
-
-          // const selectStyleArea = new Style({
-          //   text: new Text({
-          //     text: f.get("area_name"),
-          //     fill: new Fill({ color: "#0000FF" }),
-          //     offsetX: 0,
-          //     offsetY: 0,
-          //   }),
-          //   fill,
-          //   stroke: new Stroke({
-          //     color: "rgba(0, 0,255, 1.0)",
-          //     width: 5,
-          //   }),
-          // });
-
-          // selectedArea = f;
-          // //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)"); f.get("ft"== 1
-          // //layer.get("id1") == "fproperty_areamap"
-          // f.setStyle(selectStyleArea);
-          // } else if (layer.get("id1") == "fproperty_areamap") {
-        } else if (f.get("ft") == 1) {
-          // console.log("pmov-fp found-3-0");
-          //f is a area boundary
-          //  console.log("qwerty");
-          //  if (selectedFProp && !(selectedFProp === f)) {
-          //    console.log("pmov-remove applied style-4-2");
-          //   //  console.log("a");
-          //    if (selectedFProp !== null) {
-          //      selectedFProp.setStyle(undefined);
-          //      selectedFProp = null;
-          //    }
-          //  } else {
-          //console.log("pmov-apply new style-4-1");
-          //  console.log("b");
-          const selectStyle = new Style({zIndex:1});
-          selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
-          f.setStyle(selectStyle);
-          selectedFPropRef.current = f;
-          // }
-        } else if (f.get("ft") == 2) {
-          // console.log("pmov-sync prop found-3-1");
-
-          f.setStyle(
-            areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited
-          );
-          selectedSynPropRef.current = f;
-
-          //  if (selectedFProp !== null) {
-          //       console.log("pmov-remove applied style-4-1-x1");
-          //      selectedFProp.setStyle(undefined);
-          //      selectedFProp = null;
-          //    }
-          //  console.log("spt");
-        } else if (f.get("ft") == 3) {
-             f.setStyle(
-               areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight
-             );
-             selectedSynOutLineRef.current = f;
-          //  if (selectedFProp !== null) { 
-          //       console.log("pmov-remove applied style-4-1-x1");
-          //      selectedFProp.setStyle(undefined);
-          //      selectedFProp = null;
-          //    }
-          // console.log("spo");
-        } else if (f.get("ft") == 4) {
-          //  if (selectedFProp !== null) {
-          //       console.log("pmov-remove applied style-4-1-x1");
-          //      selectedFProp.setStyle(undefined);
-          //      selectedFProp = null;
-          //  }
-
-          // console.log("assetf");
-          //  const selectStyle = new Style({});
-          //  selectStyle.setRenderer(
-          //    areaMapAssetVectorLayerStyleFunctionHighlited
-          //  );
-          f.setStyle(areaMapAssetVectorLayerStyleFunctionHighlited);
-          selectedAssetRef.current = f;
-          // const selectStyle = new Style({}); areaMapAssetVectorLayerStyleFunctionHighlited
-          // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
-          // f.setStyle(selectStyle);
-          // selectedFProp = f;
-        }
-        else if (f.get("ft") == 5) {
-           f.setStyle(styleFunctionClaimHighlight);
-          selectedClaimRef.current = f;
-
-        }
-        else {
-          // console.log("pmov-other layer found-5");
-          // console.log("layer", layer.get("id1"));
-          // console.log("xx");
-          //fproperty_areamap_labels
-          //  if (layer.get("id1") != "fproperty_areamap_labels") {
-          //    if (selectedFProp !== null) {
-          //      console.log("pmov-remove applied style-4-1-x1");
-          //      selectedFProp.setStyle(undefined);
-          //      selectedFProp = null;
-          //    }
-          //  }
-        }
-
-        //      const selectStyle = new Style({
-        //        stroke: new Stroke({
-        //          color: "rgba(0, 0,255, 1.0)",
-        //          width: 5,
-        //        }),
-        //      });
-        //      selectedFProp = f;
-        //      //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)");
-        //      f.setStyle(selectStyle);
-        //   selectedFProp = f;
-
-        // change cursor
-        // var viewport = map.getViewport();
-
-        //  if (f && f.getGeometry().getType() === "Polygon") {
-        //    // console.log("ffff",f.get("area_name"));
-        //    if (areaSearchInput.value != f.get("area_name")) {
-        //      // Check if the mouse pointer is inside the polygon
-        //      const coordinate = map.getCoordinateFromPixel(e.pixel);
-        //      const geometry = f.getGeometry();
-        //      if (geometry.intersectsCoordinate(coordinate)) {
-        //        // Add the 'inside-polygon-cursor' class to the viewport
-        //        viewport.classList.add("inside-polygon-cursor");
-        //        return;
-        //      } else {
-        //        viewport.classList.remove("inside-polygon-cursor");
-        //      }
-        //    } else {
-        //      // console.log("f.id_.slice(0, 5) ",f.id_.slice(0, 5)  )
-        //      viewport.classList.remove("inside-polygon-cursor");
+      // if (layer.get("id1") == "boundary") {
+      if (f.get("ft") == 0) {
+        //   console.log("bo");
+        //  fill = new Fill({
+        //    color: "rgba(255, 255, 255, 0)",
+        //  });
+        // const selectStyleArea = new Style({
+        //   text: new Text({
+        //     text: f.get("area_name"),
+        //     fill: new Fill({ color: "#0000FF" }),
+        //     offsetX: 0,
+        //     offsetY: 0,
+        //   }),
+        //   fill,
+        //   stroke: new Stroke({
+        //     color: "rgba(0, 0,255, 1.0)",
+        //     width: 5,
+        //   }),
+        // });
+        // selectedArea = f;
+        // //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)"); f.get("ft"== 1
+        // //layer.get("id1") == "fproperty_areamap"
+        // f.setStyle(selectStyleArea);
+        // } else if (layer.get("id1") == "fproperty_areamap") {
+      } else if (f.get("ft") == 1) {
+        // console.log("pmov-fp found-3-0");
+        //f is a area boundary
+        //  console.log("qwerty");
+        //  if (selectedFProp && !(selectedFProp === f)) {
+        //    console.log("pmov-remove applied style-4-2");
+        //   //  console.log("a");
+        //    if (selectedFProp !== null) {
+        //      selectedFProp.setStyle(undefined);
+        //      selectedFProp = null;
         //    }
         //  } else {
-        //    // console.log("dddddd-f.id_.slice", f.id_.slice(0, 5));
-        //    viewport.classList.add("inside-polygon-cursor");
+        //console.log("pmov-apply new style-4-1");
+        //  console.log("b");
+        const selectStyle = new Style({ zIndex: 1 });
+        selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+        f.setStyle(selectStyle);
+        selectedFPropRef.current = f;
+        // }
+      } else if (f.get("ft") == 2) {
+        // console.log("pmov-sync prop found-3-1");
+
+        f.setStyle(areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited);
+        selectedSynPropRef.current = f;
+
+        //  if (selectedFProp !== null) {
+        //       console.log("pmov-remove applied style-4-1-x1");
+        //      selectedFProp.setStyle(undefined);
+        //      selectedFProp = null;
+        //    }
+        //  console.log("spt");
+      } else if (f.get("ft") == 3) {
+        f.setStyle(
+          areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight
+        );
+        selectedSynOutLineRef.current = f;
+        //  if (selectedFProp !== null) {
+        //       console.log("pmov-remove applied style-4-1-x1");
+        //      selectedFProp.setStyle(undefined);
+        //      selectedFProp = null;
+        //    }
+        // console.log("spo");
+      } else if (f.get("ft") == 4) {
+        //  if (selectedFProp !== null) {
+        //       console.log("pmov-remove applied style-4-1-x1");
+        //      selectedFProp.setStyle(undefined);
+        //      selectedFProp = null;
         //  }
 
-        return true;
-      });
-      //console.log("fcount", fcount);
-   
+        // console.log("assetf");
+        //  const selectStyle = new Style({});
+        //  selectStyle.setRenderer(
+        //    areaMapAssetVectorLayerStyleFunctionHighlited
+        //  );
+        f.setStyle(areaMapAssetVectorLayerStyleFunctionHighlited);
+        selectedAssetRef.current = f;
+        // const selectStyle = new Style({}); areaMapAssetVectorLayerStyleFunctionHighlited
+        // selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+        // f.setStyle(selectStyle);
+        // selectedFProp = f;
+      } else if (f.get("ft") == 5) {
+        f.setStyle(styleFunctionClaimHighlight);
+        selectedClaimRef.current = f;
+      } else {
+        // console.log("pmov-other layer found-5");
+        // console.log("layer", layer.get("id1"));
+        // console.log("xx");
+        //fproperty_areamap_labels
+        //  if (layer.get("id1") != "fproperty_areamap_labels") {
+        //    if (selectedFProp !== null) {
+        //      console.log("pmov-remove applied style-4-1-x1");
+        //      selectedFProp.setStyle(undefined);
+        //      selectedFProp = null;
+        //    }
+        //  }
+      }
+
+      //      const selectStyle = new Style({
+      //        stroke: new Stroke({
+      //          color: "rgba(0, 0,255, 1.0)",
+      //          width: 5,
+      //        }),
+      //      });
+      //      selectedFProp = f;
+      //      //selectStyle.getFill().setColor("rgba(255, 255, 255, 0)");
+      //      f.setStyle(selectStyle);
+      //   selectedFProp = f;
+
+      // change cursor
+      // var viewport = map.getViewport();
+
+      //  if (f && f.getGeometry().getType() === "Polygon") {
+      //    // console.log("ffff",f.get("area_name"));
+      //    if (areaSearchInput.value != f.get("area_name")) {
+      //      // Check if the mouse pointer is inside the polygon
+      //      const coordinate = map.getCoordinateFromPixel(e.pixel);
+      //      const geometry = f.getGeometry();
+      //      if (geometry.intersectsCoordinate(coordinate)) {
+      //        // Add the 'inside-polygon-cursor' class to the viewport
+      //        viewport.classList.add("inside-polygon-cursor");
+      //        return;
+      //      } else {
+      //        viewport.classList.remove("inside-polygon-cursor");
+      //      }
+      //    } else {
+      //      // console.log("f.id_.slice(0, 5) ",f.id_.slice(0, 5)  )
+      //      viewport.classList.remove("inside-polygon-cursor");
+      //    }
+      //  } else {
+      //    // console.log("dddddd-f.id_.slice", f.id_.slice(0, 5));
+      //    viewport.classList.add("inside-polygon-cursor");
+      //  }
+
+      return true;
+    });
+    //console.log("fcount", fcount);
+
     // console.log("pmove- end fun",)
-
-   
- });
-  
-    
-   const onViewChange = useCallback((e) => {
-     const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
- 
   });
-  
 
+  const onViewChange = useCallback((e) => {
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
+  });
 
   useEffect(() => {
     if (areaFlyToLocation?.length > 0)
@@ -711,9 +687,6 @@ export const LandingMap = () => {
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
 
-
-
-
   const mapLyrs = useSelector((state) => state.mapSelectorReducer.areaLyrs);
   const landingMapZoomLevel = useSelector(
     (state) => state.mapSelectorReducer.landingMapZoomLevel
@@ -724,8 +697,6 @@ export const LandingMap = () => {
   const isLandingMapSideNavOpen = useSelector(
     (state) => state.areaMapReducer.isLandingMapSideNavOpen
   );
-
-  
 
   const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
@@ -757,20 +728,14 @@ export const LandingMap = () => {
     (state) => state.areaMapReducer.assetFeatures
   );
 
- 
-
-
   const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
   const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
-
-
 
   // const areaZoomMode = useSelector(
   //   (state) => state.areaMapReducer.areaZoomMode
   // );
-//set styles
+  //set styles
   useEffect(() => {
- 
     const style = new Style({});
     style.setRenderer(areaMApPropertyVectorRendererFuncV2);
 
@@ -783,28 +748,22 @@ export const LandingMap = () => {
     fPropVectorLayerLabelRef.current?.setStyle(style);
   }, [fPropVectorLayerLabelRef.current]);
 
-
-    useEffect(() => {
- 
+  useEffect(() => {
     // const style = new Style({});
     // style.setRenderer(areaMApPropertyVectorRendererFuncV2);
-      claimLinkVectorLayerRef.current?.setOpacity(0.2)
-    claimLinkVectorLayerRef.current?.setStyle(areaMap_tbl_sync_claimlink_VectorLayerStyleFunction);
+    claimLinkVectorLayerRef.current?.setOpacity(0.2);
+    claimLinkVectorLayerRef.current?.setStyle(
+      areaMap_tbl_sync_claimlink_VectorLayerStyleFunction
+    );
   }, [claimLinkVectorLayerRef.current]);
 
-
-  
   useEffect(() => {
-    
-
     claimVectorImgLayerRef.current?.setOpacity(0.5);
-  }, [claimVectorImgLayerRef.current])
-  
-  
+  }, [claimVectorImgLayerRef.current]);
+
   useEffect(() => {
-    console.log("loading all spf1")
+    console.log("loading all spf1");
     if (syncPropertyFeatures?.features) {
-      
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
       allSyncPropSourceRef?.current?.addFeatures(e);
@@ -824,16 +783,11 @@ export const LandingMap = () => {
   useEffect(() => {
     fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
-      
       const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      navigatedFPropertyRef.current = e
+      navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
     }
-
-    
-
-
 
     //  if (fPropSourceRef.current) {
     //    const p1= fPropSourceRef.current?.getExtent()[0]
@@ -848,9 +802,8 @@ export const LandingMap = () => {
   }, [featuredPropertyFeatures]);
 
   useEffect(() => {
-     claimLinkSourceRef?.current?.clear();
+    claimLinkSourceRef?.current?.clear();
     if (syncClaimLinkPropertyFeatures?.features) {
-     
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
 
       claimLinkSourceRef?.current?.addFeatures(e);
@@ -868,11 +821,10 @@ export const LandingMap = () => {
   }, [syncClaimLinkPropertyFeatures]);
 
   useEffect(() => {
-     assetSourceRef?.current?.clear();
+    assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
-     
       const e = new GeoJSON().readFeatures(assetFeatures);
-       
+
       assetSourceRef?.current?.addFeatures(e);
     }
 
@@ -891,7 +843,6 @@ export const LandingMap = () => {
   useEffect(() => {
     mouseScrollEvent();
     getSyncPropertiesGeometry();
-   
   }, []);
 
   useEffect(() => {
@@ -961,15 +912,14 @@ export const LandingMap = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
     let newUrl;
-    
-      newUrl = `${
-        window.location.pathname
-      }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
-   
+
+    newUrl = `${
+      window.location.pathname
+    }?t=${selectedMap}&sn=${!tmpValue}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+
     window.history.replaceState({}, "", newUrl);
     // dispatch(setUrlUpdate());
   };
-
 
   const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
@@ -987,7 +937,7 @@ export const LandingMap = () => {
     dispatch(setIsAreaSideNavOpen(true));
   };
 
-   const image = new Icon({
+  const image = new Icon({
     src: "./sync-prop.svg",
     scale: 1,
   });
@@ -1008,18 +958,21 @@ export const LandingMap = () => {
   //   return s;
   // };
 
-    const styleFunctionSyncProperties = (feature, resolution) => {
-      //console.log("resolution",resolution)
-      let t=""
-      if( resolution< 300)
-       t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
-      const s = new Style({
-      text:new Text({
+  const styleFunctionSyncProperties = (feature, resolution) => {
+    //console.log("resolution",resolution)
+    let t = "";
+    if (resolution < 300)
+      t =
+        feature.get("prop_name") +
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        "";
+    const s = new Style({
+      text: new Text({
         text: t.toString(),
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
         offsetX: 0,
         offsetY: -10,
-        font :  "14px serif",
+        font: "14px serif",
       }),
       image,
       stroke: new Stroke({
@@ -1091,8 +1044,7 @@ export const LandingMap = () => {
     areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible);
   }, [areaAreaBoundaryLayerVisible]);
 
-  
-    //asset type visibility useEffects
+  //asset type visibility useEffects
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
@@ -1360,13 +1312,10 @@ export const LandingMap = () => {
       });
   }, []);
 
-  //single click -  
+  //single click -
   useEffect(() => {
     let clickedOnFeatureTmp = false;
     const fetchData = async () => {
-    
-      
-
       let extentDim;
       const viewResolution = mapViewRef?.current?.getResolution();
       if (viewResolution < 15) {
@@ -1394,8 +1343,8 @@ export const LandingMap = () => {
         assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
       if (selAssetFeatures.length > 0) {
-        console.log("asset found")
-        clickedOnFeatureTmp = true
+        console.log("asset found");
+        clickedOnFeatureTmp = true;
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
         let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
         let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
@@ -1404,7 +1353,7 @@ export const LandingMap = () => {
         let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
         let country = selAssetFeatures?.[0]?.get("country") ?? "";
         let region = selAssetFeatures?.[0]?.get("region") ?? "";
-      const assetObject1 = {
+        const assetObject1 = {
           asset_name,
           assetalias,
           asset_type,
@@ -1414,8 +1363,7 @@ export const LandingMap = () => {
           country,
           region,
         };
-      setassetObject(assetObject1);
-       
+        setassetObject(assetObject1);
       } else {
         dispatch(setclickassetObject(undefined));
       }
@@ -1423,8 +1371,8 @@ export const LandingMap = () => {
         fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
       if (selFPropertyFeatures.length > 0) {
         //console.log("fprop found")
-         clickedOnFeatureTmp = true
-       // console.log("selFPropertyFeatures", selFPropertyFeatures);
+        clickedOnFeatureTmp = true;
+        // console.log("selFPropertyFeatures", selFPropertyFeatures);
         let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
 
         let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
@@ -1464,9 +1412,9 @@ export const LandingMap = () => {
           return sponsors;
         };
         //console.log("hotplayid",hotplayid)
-        const dd = await getData(hotplayid) 
+        const dd = await getData(hotplayid);
         //console.log("dd",dd)
-        const d= dd?.[0] 
+        const d = dd?.[0];
 
         const sponsoredowners = d?.sponsor ?? "";
         let commo_ref = d?.commo_ref ?? "";
@@ -1477,8 +1425,7 @@ export const LandingMap = () => {
         let prop_exturl = d?.prop_exturl ?? "";
         let sale_name = d?.sale_name ?? "";
         let profile = d?.profile ?? "";
-        
-         
+
         const fPropertyObject1 = {
           sponsoredowners,
           prop_name,
@@ -1490,10 +1437,9 @@ export const LandingMap = () => {
           prop_exturl,
           sale_name,
           propertyid,
-          profile
+          profile,
         };
         setfPropertyObject(fPropertyObject1);
-        
       } else {
         dispatch(setclickfPropertyObject(undefined));
       }
@@ -1505,8 +1451,8 @@ export const LandingMap = () => {
 
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
-        console.log("sync prop found")
-          clickedOnFeatureTmp = true
+        console.log("sync prop found");
+        clickedOnFeatureTmp = true;
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
         let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
@@ -1524,7 +1470,6 @@ export const LandingMap = () => {
           area,
         };
         setsyncPropertyObject(syncPropertyObject1);
-       
       } else {
         dispatch(setclicksyncPropertyObject(undefined));
       }
@@ -1533,50 +1478,41 @@ export const LandingMap = () => {
           coordinates
         ) ?? [];
       if (claimFeatures.length > 0) {
-        console.log("claim found")
-          clickedOnFeatureTmp = true
+        console.log("claim found");
+        clickedOnFeatureTmp = true;
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
         const claimObject1 = { ownerref, claimno };
-        setclaimObject(claimObject1)
-      
+        setclaimObject(claimObject1);
       } else {
         dispatch(setclickclaimObject(undefined));
       }
 
       console.log("111");
     };
- 
-    if (coordinates ) {
+
+    if (coordinates) {
       fetchData();
-       setclickedOnFeature(clickedOnFeatureTmp)
-      if( clickedOnFeatureTmp){
+      setclickedOnFeature(clickedOnFeatureTmp);
+      if (clickedOnFeatureTmp) {
         setclickDataLoaded(true);
-       
       }
       //  console.log("222")
     }
   }, [coordinates]);
- 
-  const onClickViewPlusZoom = ()=>{
-       const curZoom = mapViewRef.current.getZoom();
-        mapViewRef.current.setZoom(curZoom + 1);
 
-    
-  }
-    const onClickViewMinusZoom = ()=>{
-       const curZoom = mapViewRef.current.getZoom();
-        mapViewRef.current.setZoom(curZoom - 1);
-  }
+  const onClickViewPlusZoom = () => {
+    const curZoom = mapViewRef.current.getZoom();
+    mapViewRef.current.setZoom(curZoom + 1);
+  };
+  const onClickViewMinusZoom = () => {
+    const curZoom = mapViewRef.current.getZoom();
+    mapViewRef.current.setZoom(curZoom - 1);
+  };
 
-      const onClickViewInitZoom = ()=>{
-        
-        mapViewRef.current.setZoom(3.25);
-  }
-
-    
-
-
+  const onClickViewInitZoom = () => {
+    mapViewRef.current.setZoom(3.25);
+  };
 
   return (
     <div className="flex">
@@ -1594,8 +1530,9 @@ export const LandingMap = () => {
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`}
-              onClick={onClickViewInitZoom}
+              <GiEarthAmerica
+                className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewInitZoom}
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
@@ -1688,7 +1625,6 @@ export const LandingMap = () => {
             border: "1px solid #cccccc",
             minWidth: "400px",
             color: "black",
-           
           }}
         >
           <button
@@ -1708,7 +1644,7 @@ export const LandingMap = () => {
             ✖
           </button>
           <div id="popup-contenta">
-            {/* <p>Info:</p> */} 
+            {/* <p>Info:</p> */}
             {clickDataLoaded && (
               <AreaMapClickPopup
                 claimObj={claimObject}
@@ -1792,9 +1728,16 @@ export const LandingMap = () => {
             ></olSourceVector>
           </olLayerVectorImage>
 
-          <olLayerVector ref={fPropVectorLayerRef}   minResolution={0}
-            maxResolution={150}>
-            <olSourceVector ref={fPropSourceRef}  strategy={bbox}  loader={fPropLoaderFunc}></olSourceVector>
+          <olLayerVector
+            ref={fPropVectorLayerRef}
+            minResolution={0}
+            maxResolution={150}
+          >
+            <olSourceVector
+              ref={fPropSourceRef}
+              strategy={bbox}
+              loader={fPropLoaderFunc}
+            ></olSourceVector>
           </olLayerVector>
           <olLayerVector ref={fPropVectorLayerLabelRef}>
             <olSourceVector ref={fPropSourceLabelRef}></olSourceVector>
@@ -1808,23 +1751,21 @@ export const LandingMap = () => {
           >
             <olSourceVector ref={assetSourceRef}></olSourceVector>
           </olLayerVector>
-                  
-            <olLayerVector
+
+          <olLayerVector
             ref={allSyncPropVectorLayerRef}
-            style={commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction}
-           
+            style={
+              commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction
+            }
           >
             {/* <olSourceVector ref={syncPropSourceRef}></olSourceVector> */}
 
-              <olSourceCluster distance={distance} minDistance={minDistance}>
-                <olSourceVector ref={allSyncPropSourceRef}>
-                  {/* <PointsAtCoordinates coordinates={coordinates} /> */}
-                </olSourceVector>
-              </olSourceCluster>
-            
+            <olSourceCluster distance={distance} minDistance={minDistance}>
+              <olSourceVector ref={allSyncPropSourceRef}>
+                {/* <PointsAtCoordinates coordinates={coordinates} /> */}
+              </olSourceVector>
+            </olSourceCluster>
           </olLayerVector>
-
-
         </Map>
       </div>
     </div>
