@@ -710,7 +710,7 @@ f(10662, 0).catch(console.error);
     if(fPropVectorLayerRef.current.isVisible()){
       dispatch(setIsLandingMapSideNavOpen(true));
       const vf =  fPropSourceRef.current.getFeaturesInExtent(mapRef.current.getView().calculateExtent());
-      const vfObjs= vf?.map(f=> { return {companyid:f.get("companyid"),colour:f.get("colour"),company2:f.get("sponsors")}})
+      const vfObjs= vf?.map(f=> { return {id:f.get("id"),companyid:f.get("companyid"),colour:f.get("colour"),company2:f.get("sponsors")}})
 
       dispatch(setFPropertyFeatures(vfObjs));
       

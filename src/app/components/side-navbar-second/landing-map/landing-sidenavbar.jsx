@@ -333,7 +333,7 @@ const LandingMapSideNavbar = () => {
                     <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
                       {featuredCompanies?.map((i) => (
                         <LmapFeaturedCompanyDetailDiv
-                          key={i.colour}
+                          key={i.id}
                           title={i.company2}
                           companyid={i.companyid}
                           // onClick={() => console.log(featuredCompanies)}
