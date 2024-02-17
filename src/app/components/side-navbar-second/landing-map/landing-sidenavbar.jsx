@@ -94,13 +94,13 @@ const LandingMapSideNavbar = () => {
    const [featuredCompanies, setFeaturedCompanies] = useState([]);
 
    useEffect(()=>{
-    if(featuredPropertyFeatures){
-     const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
+     if (featuredPropertyFeatures) {
+       const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
      
-     const a= Object.keys(result).map(k=> result[k][0]  )
+       const a = Object.keys(result).map(k => result[k][0])
 
-    setFeaturedCompanies(a)
-    }
+       setFeaturedCompanies(a)
+     }
     // console.log("ppo",featuredPropertyFeatures)
    },[featuredPropertyFeatures])
   //areal load
