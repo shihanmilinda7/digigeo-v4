@@ -24,6 +24,14 @@ import {
   setclickfPropertyObject,
   setclicksyncPropertyObject,
 } from "../../../store/area-map/area-map-slice";
+import {
+  setIsLandingMapSideNavOpen,
+  setFPropertyFeatures,
+  // setclickassetObject,
+  // setclickclaimObject,
+  // setclickfPropertyObject,
+  // setclicksyncPropertyObject,
+} from "../../../store/landing-map/landing-map-slice";
 import GeoJSON from "ol/format/GeoJSON";
 
 import {
@@ -54,6 +62,7 @@ import {
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
+import LandingMapSideNavbar from "../side-navbar-second/landing-map/landing-sidenavbar";
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -255,7 +264,7 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   //       width: 3,
   //     }),
   //   });
-  // }
+  // }  
   // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
   //   image = new Icon({
   //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
@@ -356,6 +365,30 @@ export const LandingMap = () => {
   const [minDistance, setMinDistance] = useState(20);
   const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
 
+    const syncPropSourceRef = useRef(null);
+  const syncPropVectorLayerRef = useRef(null);
+  const fPropSourceRef = useRef(null);
+  const fPropVectorLayerRef = useRef(null);
+  const fPropSourceLabelRef = useRef(null);
+  const fPropVectorLayerLabelRef = useRef(null);
+  const assetSourceRef = useRef(null);
+  const assetLayerRef = useRef(null);
+  const claimLinkSourceRef = useRef(null);
+  const claimLinkVectorLayerRef = useRef(null);
+  const claimVectorImgSourceRef = useRef(null);
+  const claimVectorImgLayerRef = useRef(null);
+  const areaBoundaryImgSourceRef = useRef(null);
+  const areaBoundaryImgLayerRef = useRef(null);
+  const allSyncPropVectorLayerRef = useRef(null);
+  const allSyncPropSourceRef = useRef(null);
+
+ 
+  
+
+
+ 
+
+
   const getSyncPropertiesGeometry = useCallback(async () => {
     const f = async (limit, offset) => {
       const res = await fetch(
@@ -413,7 +446,7 @@ f(10662, 0).catch(console.error);
 
   //    // const e =   new GeoJSON().readFeatures(gj)
 
-  //     dispatch(setFPropertyFeatures(gj));
+  //     dispatch(setFPropertyFeatures(gj));  
   //   };
 
   //   f().catch(console.error);
@@ -673,6 +706,18 @@ f(10662, 0).catch(console.error);
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
     setmapScale(scale.toFixed(0));
+
+    if(fPropVectorLayerRef.current.isVisible()){
+      dispatch(setIsLandingMapSideNavOpen(true));
+      const vf =  fPropSourceRef.current.getFeaturesInExtent(mapRef.current.getView().calculateExtent());
+      const vfObjs= vf?.map(f=> { return {companyid:f.get("companyid"),colour:f.get("colour"),company2:f.get("sponsors")}})
+
+      dispatch(setFPropertyFeatures(vfObjs));
+      
+    }else{
+      dispatch(setIsLandingMapSideNavOpen(false));
+    }
+
   });
 
   useEffect(() => {
@@ -698,29 +743,14 @@ f(10662, 0).catch(console.error);
     (state) => state.areaMapReducer.isLandingMapSideNavOpen
   );
 
-  const syncPropSourceRef = useRef(null);
-  const syncPropVectorLayerRef = useRef(null);
-  const fPropSourceRef = useRef(null);
-  const fPropVectorLayerRef = useRef(null);
-  const fPropSourceLabelRef = useRef(null);
-  const fPropVectorLayerLabelRef = useRef(null);
-  const assetSourceRef = useRef(null);
-  const assetLayerRef = useRef(null);
-  const claimLinkSourceRef = useRef(null);
-  const claimLinkVectorLayerRef = useRef(null);
-  const claimVectorImgSourceRef = useRef(null);
-  const claimVectorImgLayerRef = useRef(null);
-  const areaBoundaryImgSourceRef = useRef(null);
-  const areaBoundaryImgLayerRef = useRef(null);
-  const allSyncPropVectorLayerRef = useRef(null);
-  const allSyncPropSourceRef = useRef(null);
+
 
   // const syncPropertyFeatures = useSelector(
   //   (state) => state.areaMapReducer.syncPropertyFeatures
   // );
-  const featuredPropertyFeatures = useSelector(
-    (state) => state.areaMapReducer.featuredPropertyFeatures
-  );
+  // const featuredPropertyFeatures = useSelector(
+  //   (state) => state.landingMapReducer.featuredPropertyFeatures
+  // );
   const syncClaimLinkPropertyFeatures = useSelector(
     (state) => state.areaMapReducer.syncClaimLinkPropertyFeatures
   );
@@ -780,26 +810,17 @@ f(10662, 0).catch(console.error);
     // }
   }, [syncPropertyFeatures]);
 
-  useEffect(() => {
-    fPropSourceRef?.current?.clear();
-    if (featuredPropertyFeatures?.features) {
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
-      navigatedFPropertyRef.current = e;
-      fPropSourceRef?.current?.addFeatures(e);
-      fPropSourceLabelRef?.current?.addFeatures(e);
-    }
+  // useEffect(() => {
+  //   fPropSourceRef?.current?.clear();
+  //   if (featuredPropertyFeatures?.features) {
+  //     const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+  //     navigatedFPropertyRef.current = e;
+  //     fPropSourceRef?.current?.addFeatures(e);
+  //     fPropSourceLabelRef?.current?.addFeatures(e);
+  //   }
 
-    //  if (fPropSourceRef.current) {
-    //    const p1= fPropSourceRef.current?.getExtent()[0]
-    //    if (p1 != Infinity) {
-    //      mapRef.current?.getView()?.fit(fPropSourceRef.current?.getExtent(), {
-    //        padding: [200, 200, 200, 200],
-    //        duration: 3000,
-    //      });
-    //    }
-
-    //  }
-  }, [featuredPropertyFeatures]);
+ 
+  // }, [featuredPropertyFeatures]);
 
   useEffect(() => {
     claimLinkSourceRef?.current?.clear();
@@ -840,9 +861,12 @@ f(10662, 0).catch(console.error);
     // }
   }, [assetFeatures]);
 
+
+  // init useeffect
   useEffect(() => {
     mouseScrollEvent();
     getSyncPropertiesGeometry();
+    
   }, []);
 
   useEffect(() => {
@@ -1516,7 +1540,7 @@ f(10662, 0).catch(console.error);
 
   return (
     <div className="flex">
-      <AreaSideNavbar />
+      <LandingMapSideNavbar />
       <div className="relative">
         <div className="w-12 absolute left-0 top-0 z-50 ml-2">
           <div className="flex flex-col gap-4 mt-2">

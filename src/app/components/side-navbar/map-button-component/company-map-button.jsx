@@ -81,8 +81,8 @@ const CompanyMapButton = ({ onClick }) => {
           onClick={onClick}
           className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
             selectedMap === "company"
-              ? " text-white bg-blue-900 w-10/12"
-              : " text-blue-900 bg-white w-full"
+              ? " text-white bg-amber-600 w-10/12"
+              : " text-blue-900 bg-amber-400 w-full"
           } text-sm sm:text-sm hover:bg-blue-500 py-2 transition duration-150 ease-in`}
         >
           <AiTwotoneGold className="h-6 w-6 ml-2" />

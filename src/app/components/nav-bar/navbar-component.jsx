@@ -84,7 +84,7 @@ const HomeNavbar = () => {
           justify-between
           w-full
           h-[10vh]
-          text-lg text-gray-700
+          text-lg text-white
           bg-blue-900 p-4 border border-gray-200 shadow-md
           dark:bg-black dark:border-gray-800
         "
@@ -92,7 +92,7 @@ const HomeNavbar = () => {
         <div className="flex">
           <Link href="/">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               width={121}
               height={35}
               alt="Picture of the author"
@@ -103,6 +103,7 @@ const HomeNavbar = () => {
           </Link>
           {/* <img src="/logo.png"></img> */}
         </div>
+        <div>{"Discover the World's Mines!"}</div> 
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

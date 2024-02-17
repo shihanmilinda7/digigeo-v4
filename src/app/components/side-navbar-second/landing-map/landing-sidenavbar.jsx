@@ -29,15 +29,15 @@ import {
   setareaFpropLayerVisible,
   setsyncClaimLinkPropertyFeatures,
 } from "../../../../store/area-map/area-map-slice";
-import TreeView from "../../common-comp/treeview";
+// import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
-import AreaTreeView from "./area-tree-view";
-import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
+// import AreaTreeView from "./area-tree-view";
+import LmapFeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
-import AreaFCompanyPopup from "./area-fcompany-popup";
+import LmapFCompanyPopup from "./lmap-fcompany-popup";
 
-const XLandingMapSideNavbar = () => {
+const LandingMapSideNavbar = () => {
   let pathname = "";
   const dispatch = useDispatch();
   const router = useRouter();
@@ -51,22 +51,24 @@ const XLandingMapSideNavbar = () => {
       pathname = pathname.substring(0, r);
     }
   }
-
+  
   const [isSecondSideOpen, setIsSecondSideOpen] = useState(false);
   const [treeViewData, settreeViewData] = useState();
-
+  
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
   );
-
+  
   const isSideNavOpen = useSelector(
     (state) => state.mapSelectorReducer.isSideNavOpen
   );
   const isLandingMapSideNavOpen = useSelector(
     (state) => state.landingMapReducer.isLandingMapSideNavOpen
   );
-
-  const landingMapLyrs = useSelector((state) => state.mapSelectorReducer.landingMapLyrs);
+  
+  const landingMapLyrs = useSelector(
+    (state) => state.mapSelectorReducer.landingMapLyrs
+  );
   const landingMapZoomLevel = useSelector(
     (state) => state.mapSelectorReducer.landingMapZoomLevel
   );
@@ -75,30 +77,48 @@ const XLandingMapSideNavbar = () => {
     (state) => state.mapSelectorReducer.landingMapInitialCenter
   );
 
-//   const areaName = useSelector((state) => state.landingMapReducer.areaMiningArea);
-//   const areaCountry = useSelector((state) => state.landingMapReducer.areaCountry);
+  //   const areaName = useSelector((state) => state.landingMapReducer.areaMiningArea);
+  //   const areaCountry = useSelector((state) => state.landingMapReducer.areaCountry);
 
   const syncPropertyFeatures = useSelector(
     (state) => state.landingMapReducer.syncPropertyFeatures
   );
 
-  const [featuredCompanies, setFeaturedCompanies] = useState([]);
+   const featuredPropertyFeatures = useSelector(
+     (state) => state.landingMapReducer.featuredPropertyFeatures
+  );
+
+
+  
+
+   const [featuredCompanies, setFeaturedCompanies] = useState([]);
+
+   useEffect(()=>{
+    if(featuredPropertyFeatures){
+     const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
+     
+     const a= Object.keys(result).map(k=> result[k][0]  )
+
+    setFeaturedCompanies(a)
+    }
+    // console.log("ppo",featuredPropertyFeatures)
+   },[featuredPropertyFeatures])
   //areal load
-//   useEffect(() => {
-//     if (areaName) {
-//       getFeaturedCompanyDetails();
-//       getSyncPropertiesGeometry();
-//       getFeaturedCompanyGeometry();
-//       getClaimLinkPropertiesGeometry();
-//       getAssetsGeometry();
-//     } else {
-//       setFeaturedCompanies([]);
-//       dispatch(setSyncPropertyFeatures({}));
-//       dispatch(setFPropertyFeatures({}));
-//       dispatch(setAssetFeatures({}));
-//       dispatch(setsyncClaimLinkPropertyFeatures({}));
-//     }
-//   }, [areaName]);
+  //   useEffect(() => {
+  //     if (areaName) {
+  //       getFeaturedCompanyDetails();
+  //       getSyncPropertiesGeometry();
+  //       getFeaturedCompanyGeometry();
+  //       getClaimLinkPropertiesGeometry();
+  //       getAssetsGeometry();
+  //     } else {
+  //       setFeaturedCompanies([]);
+  //       dispatch(setSyncPropertyFeatures({}));
+  //       dispatch(setFPropertyFeatures({}));
+  //       dispatch(setAssetFeatures({}));
+  //       dispatch(setsyncClaimLinkPropertyFeatures({}));
+  //     }
+  //   }, [areaName]);
 
   const closeSecondNavBar = () => {
     // setIsSecondSideOpen(false);
@@ -110,8 +130,8 @@ const XLandingMapSideNavbar = () => {
     }
     window.history.replaceState({}, "", newUrl);
     dispatch(setIsAreaSideNavOpen(false));
-    };
-    
+  };
+
   const getFeaturedCompanyDetails = async () => {
     const f = async () => {
       console.log("areaName", areaName);
@@ -124,7 +144,7 @@ const XLandingMapSideNavbar = () => {
 
       setFeaturedCompanies(d.data);
       // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
+      //   console.log("i", i.properties.colour) featuredPropertyFeatures
       // );
     };
 
@@ -256,6 +276,10 @@ const XLandingMapSideNavbar = () => {
     (state) => state.landingMapReducer.popupFcompanyId
   );
 
+  // useEffect(()=>{
+
+  // },[featuredPropertyFeatures])
+
   return (
     <section className="flex gap-6">
       <div className={`duration-500 flex w-auto`}>
@@ -307,8 +331,8 @@ const XLandingMapSideNavbar = () => {
                     eyeState={landingMapFpropLayerVisible}
                   >
                     <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
-                      {featuredCompanies.map((i) => (
-                        <FeaturedCompanyDetailDiv
+                      {featuredCompanies?.map((i) => (
+                        <LmapFeaturedCompanyDetailDiv
                           key={i.colour}
                           title={i.company2}
                           companyid={i.companyid}
@@ -318,13 +342,13 @@ const XLandingMapSideNavbar = () => {
                             className={`w-4 h-4`}
                             style={{ backgroundColor: `${i.colour}` }}
                           ></div>
-                        </FeaturedCompanyDetailDiv>
+                        </LmapFeaturedCompanyDetailDiv>
                       ))}
                     </div>
                   </AccordionItemWithEye>
                   <AccordionItemWithEye title="All Companies">
                     <div className="overflow-y-auto max-h-[25vh]">
-                      <AreaTreeView syncPropFeatues={syncPropertyFeatures} />
+                      {/* <AreaTreeView syncPropFeatues={syncPropertyFeatures} /> */}
                     </div>
                   </AccordionItemWithEye>
                   {/* <AccordionItemWithEye title="All Companies">
@@ -336,8 +360,8 @@ const XLandingMapSideNavbar = () => {
           </div>
         </div>
       </div>
-      {popupFcompanyId > 0 && <AreaFCompanyPopup />}
+      {popupFcompanyId > 0 && <LmapFCompanyPopup />}
     </section>
   );
 };
-export default XLandingMapSideNavbar;
+export default LandingMapSideNavbar;
