@@ -270,7 +270,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         }
       );
       const d = await res.json();
-      console.log("d.data", d.data,)
       setpropertyNameList(d.data);
       settotalResultCount(d.count)
          
@@ -351,11 +350,9 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
   ];
 
   const handleFilterByAssetTypeChange = (selectedOptions) => {
-    console.log("selectedOptions1",selectedOptions)
     setassetTypeList(selectedOptions);
   };
   const handleFilterByCommodityChange = (selectedOptions) => {
-    console.log("selectedOptions2",selectedOptions)
     setcommodityList(selectedOptions);
   };
  
@@ -441,7 +438,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                 }
               );
            const d = await res.json();
-           console.log("d.data",d.data.length,)
               setpropertyMasterNameList(d.data);
          }else{
           setpropertyMasterNameList([]);
@@ -508,7 +504,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
     let query;
     setCurrentPage(1)
     if (assetTypeListParam?.length > 0 || commodityListParam?.length > 0) {
-      console.log("asset search")
       setsearchType("asset")
       propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
      countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
@@ -519,7 +514,6 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
         query = buildSqlWhereClause([propName, countryName,stProvName,areaName,assetTypeList,commodityList])
      
     } else {
-       console.log("prop search")
       setsearchType("property")
      propName = {columnName:"hybridsearchcol" ,searchValue:propNameLikeParam,dataType:"string", matchType:"ilike",stringCompareFunc:"" , wildcard:"%", wildcardPosition:"both"}
      countryName = {columnName:"country", searchValue: countryParam, dataType: "string", matchType: "="  }
@@ -867,13 +861,11 @@ const PropertiesFilter = ({ isOpenIn, closePopup }) => {
                         label="Country"
                         className="w-1/2"
                         onSelectionChange={(e) => {
-                          console.log("onchange2",e)
                           setCountry(e);
                            setCountryTemp(e)
                         }}
                         defaultSelectedKey={country}
                         onValueChange={(e)=>{
-                          console.log("onchange",e)
                           setCountryTemp(e)
                         }} 
                         inputValue={countryTemp ?? ""}

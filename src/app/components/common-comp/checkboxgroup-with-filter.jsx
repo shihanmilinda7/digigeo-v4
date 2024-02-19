@@ -58,7 +58,6 @@ const CheckboxGroupWithFilter = ({ options, onChange,selectedValues }) => {
     // else {
     //   setFilteredOptions(uniqueOptions);
     // }
-    console.log("list",uniqueOptions)
     // Update the 'isYesButton' state based on the selected uniqueOptions
    
   }, [filter,  selectedOptions]);

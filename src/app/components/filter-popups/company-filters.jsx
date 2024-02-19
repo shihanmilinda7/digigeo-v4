@@ -74,7 +74,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
   },[companyName])
 
   useEffect(() => {
-      console.log("companyStockcode",companyStockcode)
     setStockcode(companyStockcode)
 
   },[companyStockcode])
@@ -116,12 +115,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
     setIsOpen(isOpenIn);
   }, [isOpenIn]);
   useEffect(() => {
-     console.log("set companyidLocal to",companyidLocal )
     // dispatch(setcompanyId(companyidLocal));
     const c = companyList.find(c=> c.companyid==companyidLocal)
     if(c){
       // dispatch(setcompanyName(c.name));
-      console.log("set stockcode to",c.stockcode)
       setStockcode(c.stockcode)
       setCompany(c.name)
     }
@@ -180,7 +177,6 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
       const d = await res.json();
       setCompanyList(d.data);
        setStockcodeList(d.data);
-      console.log("clist",d.data)
     };
     if (debouncedSearch) {
       f().catch(console.error);
@@ -250,13 +246,11 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                       selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                           console.log("onInputChange-> ",e)
                          setSearch(e)
                          setCompany(e);
                         
                       }}
                       onSelectionChange={(e) => {
-                         console.log("onSelectionChange-> ",e)
                          setCompanyidLocal(e)
                          const c = companyList.find(c=> c.companyid==e)
                          if(c){
@@ -286,12 +280,10 @@ const CompanyFilter = ({ isOpenIn, closePopup }) => {
                       className="max-w-xs"
                        selectedKey={companyidLocal}
                       onInputChange={(e) => {
-                          console.log("s code",e)
                          setSearchStockcode(e)
                          setStockcode(e);
                       }}
                       onSelectionChange={(e) => {
-                         console.log("sel sel-ch",e)
                          setCompanyidLocal(e)
                       
                       }}

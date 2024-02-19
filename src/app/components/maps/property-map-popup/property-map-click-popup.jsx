@@ -3,8 +3,8 @@ import React from 'react'
 import PropertyMapClickPopupHeaderRow from './property-map-click-popup-header-row';
 import PropertyMapClickPopupRow from './property-map-click-popup-row';
 import { useSelector } from 'react-redux';
-
 import { Arimo } from "next/font/google";
+import { Tabs, Tab } from "@nextui-org/react";
 
 const arimo = Arimo({
   subsets: ['latin'],
@@ -33,9 +33,10 @@ const PropertyMapClickPopup = ({}) => {
     
 
 
-    <div  className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}>
-      
-      {syncPropObj && <div>
+    // <div  className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}>
+      <Tabs aria-label="Options" color="primary" variant="solid">
+      {syncPropObj && Object.keys(syncPropObj).length > 0 &&
+        <Tab key="Property" title="Property">
           <PropertyMapClickPopupHeaderRow label="Property Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
                 <PropertyMapClickPopupRow label={"Name:"} value={syncPropObj.prop_name}/>
@@ -44,9 +45,10 @@ const PropertyMapClickPopup = ({}) => {
                 <PropertyMapClickPopupRow label={"State/Prov:"} value={syncPropObj.state_prov}/>
                 <PropertyMapClickPopupRow label={"Country:"} value={syncPropObj.country} />
           </div>
-        </div>
+        </Tab>
       }
-        {fpropObj  && <div >
+      {fpropObj && Object.keys(fpropObj).length > 0 &&
+        <Tab key="fprop" title="Featured Property">
             <PropertyMapClickPopupHeaderRow label="Featured Property Info" />
             <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
               <PropertyMapClickPopupRow label={"Sponsored owners:"} value={fpropObj.sponsoredowners} url={fpropObj.profile }/>
@@ -60,9 +62,10 @@ const PropertyMapClickPopup = ({}) => {
               <PropertyMapClickPopupRow label={"External Property Page:"} value={fpropObj.prop_exturl} url={fpropObj.prop_exturl } /> 
          
             </div>
-         </div>
+         </Tab>
       }
-      {assetObj  && <div>
+      {assetObj  && Object.keys(assetObj).length > 0 && 
+       <Tab key="asset" title="Asset">
               <PropertyMapClickPopupHeaderRow label="Asset Info" />
               <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
                 <PropertyMapClickPopupRow label={"Asset Name:"} value={assetObj.asset_name} />
@@ -71,15 +74,17 @@ const PropertyMapClickPopup = ({}) => {
                 <PropertyMapClickPopupRow label={"Commodities:"} value={assetObj.commodities} />
                 <PropertyMapClickPopupRow label={"Region:"} value={assetObj.region} />
               </div>
-      </div>}
-       {claimObj  && <div>
-        <PropertyMapClickPopupHeaderRow label="Claim Info" />
+      </Tab>}
+       {claimObj  &&  Object.keys(claimObj).length > 0 && 
+  <Tab key="claim" title="Claim">
+          <PropertyMapClickPopupHeaderRow label="Claim Info" />
           <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
             <PropertyMapClickPopupRow label={"Owner:"} value={claimObj.ownerref} />
             <PropertyMapClickPopupRow label={"Claimn no:"} value={claimObj.claimno} />
           </div>
-      </div>}
-    </div>
+      </Tab>}
+    {/* </div> */}
+    </Tabs>
   )
 }
 

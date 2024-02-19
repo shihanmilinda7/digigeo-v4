@@ -396,14 +396,7 @@ export const LandingMap = () => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      console.log("loading all spf0");
-      // console.log("fps", d);
-      // console.log("fps", d.data);
-
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
+     
 
       const gj = {
         type: "FeatureCollection",
@@ -416,7 +409,6 @@ export const LandingMap = () => {
         features: d.data[0].json_build_object.features,
       };
       setsyncPropertyFeatures(gj);
-      console.log("loading all spf01");
     };
 f(10662, 0).catch(console.error);
     // for (let index = 0; index <= 100; index++) {
@@ -453,7 +445,6 @@ f(10662, 0).catch(console.error);
   // };
 
   const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("hit fprop", extent);
     const url =
       `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
       `/${extent.join("/")}`;
@@ -792,7 +783,6 @@ f(10662, 0).catch(console.error);
   }, [claimVectorImgLayerRef.current]);
 
   useEffect(() => {
-    console.log("loading all spf1");
     if (syncPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
@@ -1199,7 +1189,6 @@ f(10662, 0).catch(console.error);
   // }
 
   const styleFunctionAreaBoundary = (feature) => {
-    console.log("sf");
     const s = new Style({
       stroke: new Stroke({
         color: "blue",
@@ -1304,7 +1293,6 @@ f(10662, 0).catch(console.error);
   };
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("hit claims", extent);
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
@@ -1320,17 +1308,13 @@ f(10662, 0).catch(console.error);
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log("hit claims2.0", json);
         if (json.data) {
-          console.log("hit claims2.1");
           if (json.data[0].json_build_object.features) {
             const features = new GeoJSON().readFeatures(
               json.data[0].json_build_object
             );
-            //console.log("hit claims3")
             claimVectorImgSourceRef.current.addFeatures(features);
 
-            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
@@ -1367,7 +1351,6 @@ f(10662, 0).catch(console.error);
         assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
       if (selAssetFeatures.length > 0) {
-        console.log("asset found");
         clickedOnFeatureTmp = true;
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
         let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
@@ -1475,7 +1458,6 @@ f(10662, 0).catch(console.error);
 
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
-        console.log("sync prop found");
         clickedOnFeatureTmp = true;
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
@@ -1502,7 +1484,6 @@ f(10662, 0).catch(console.error);
           coordinates
         ) ?? [];
       if (claimFeatures.length > 0) {
-        console.log("claim found");
         clickedOnFeatureTmp = true;
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
@@ -1512,7 +1493,6 @@ f(10662, 0).catch(console.error);
         dispatch(setclickclaimObject(undefined));
       }
 
-      console.log("111");
     };
 
     if (coordinates) {

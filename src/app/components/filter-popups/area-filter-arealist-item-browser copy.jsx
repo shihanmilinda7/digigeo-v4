@@ -22,13 +22,11 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
   
   
      useEffect(() => {
-       console.log("set ffilterd init ",areaList)
       setfilteredAreaList(areaList)
      },[areaList])
     useEffect(()=>{
          
       const result = Object.groupBy(filteredAreaList, ({ country }) => country);
-     console.log("set gropued1 ",result)
 
       setgroupedAreaList(result)
 
@@ -42,7 +40,6 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
     );
   useEffect(() => {
    
-    console.log("selectedValue", selectedValue)
     if (selectedValue.length>0){
       const a = areaList.find(a=> a.gid == selectedValue[0] )
       if(a){

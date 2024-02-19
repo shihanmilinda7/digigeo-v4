@@ -55,7 +55,6 @@ export const LandingPage = () => {
   }, []);
 
   const updateRedux = async () => {
-    console.log("mapType",mapType)
     if (mapType) {
       dispatch(setAreaZoomMode("custom"));
       dispatch(setSelectedMap(mapType));

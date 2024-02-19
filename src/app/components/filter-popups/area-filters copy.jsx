@@ -132,7 +132,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //on change miningArea
   useEffect(() => {
     const s = getSearchQuery(country, miningArea);
-    console.log("searchQuery-area", s);
     setsearchQuery(s);
 
     //clear popup area list
@@ -145,12 +144,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   //on country change areal load
   useEffect(() => {
     if (!country) {
-      console.log("css", country);
       // setAreaList([]);
       setpropertyList([]);
       setareaInfo("Type an Area name...");
       // console.log("alist",allAreaList)
-      console.log("pok7");
       setfilteredAreaList(allAreaList);
       return;
     }
@@ -282,7 +279,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         return { country: c };
       })
     );
-    console.log("pok5");
     if (areaName) {
       setfilteredAreaList(
         allAreaList.filter(
@@ -337,13 +333,10 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                       label="Select a country"
                       className="max-w-xs"
                       onInputChange={(e) => {
-                        console.log("pok9", e);
                         if (e) {
                           const fa = allAreaList.filter((a) => a.country == e);
-                          console.log("pok2");
                           setfilteredAreaList(fa);
                         } else {
-                          console.log("pok3");
                           setfilteredAreaList([...allAreaList]);
                           // setAreaList([]);
                           setareaInfo("Type An Area Name...");

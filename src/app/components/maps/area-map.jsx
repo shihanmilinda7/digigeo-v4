@@ -1125,7 +1125,6 @@ export const AreaMap = () => {
   // }
 
   const styleFunctionAreaBoundary = (feature) => {
-    console.log("sf");
     const s = new Style({
       stroke: new Stroke({
         color: "blue",
@@ -1230,11 +1229,9 @@ export const AreaMap = () => {
   };
 
   const claimLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("hit claims", extent);
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
-    // console.log("url", url);
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1246,17 +1243,13 @@ export const AreaMap = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log("hit claims2.0", json);
         if (json.data) {
-          console.log("hit claims2.1");
           if (json.data[0].json_build_object.features) {
             const features = new GeoJSON().readFeatures(
               json.data[0].json_build_object
             );
-            //console.log("hit claims3")
             claimVectorImgSourceRef.current.addFeatures(features);
 
-            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
@@ -1296,7 +1289,6 @@ export const AreaMap = () => {
         assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
       if (selAssetFeatures.length > 0) {
-        console.log("asset found")
         clickedOnFeatureTmp = true
         let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
         let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
@@ -1407,7 +1399,6 @@ export const AreaMap = () => {
 
       // console.log("selSyncPropFeatures?.[0]", selSyncPropFeatures?.[0]);
       if (selSyncPropFeatures.length > 0) {
-        console.log("sync prop found")
           clickedOnFeatureTmp = true
         const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
         const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
@@ -1435,7 +1426,6 @@ export const AreaMap = () => {
           coordinates
         ) ?? [];
       if (claimFeatures.length > 0) {
-        console.log("claim found")
           clickedOnFeatureTmp = true
         let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
         const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
@@ -1446,7 +1436,6 @@ export const AreaMap = () => {
         dispatch(setclickclaimObject(undefined));
       }
 
-      console.log("111");
     };
  
     if (coordinates ) {

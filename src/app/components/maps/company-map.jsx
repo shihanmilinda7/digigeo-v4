@@ -354,18 +354,14 @@ export const CompanyMap = () => {
   const [popup, setPopup] = useState();
 
    useEffect(() => {
-    console.log("fp added0",navigatedFPropId)
      if (navigatedFPropertyRef.current) {
-       console.log("fp added1")
        const fp = navigatedFPropertyRef.current.find(
          (f) => f.get("id") == navigatedFPropId
        );
 
-       console.log("fp added2");
        const selectStyle = new Style({ zIndex: 1 });
        selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
-       console.log("fp added3", fp);
        fp?.setStyle(selectStyle);
      }
    }, [navigatedFPropId]);
@@ -1102,7 +1098,6 @@ export const CompanyMap = () => {
   // }
 
     const styleFunctionAreaBoundary =   (feature) => {
-     console.log("sf");
     const s = new Style({
        
       stroke: new Stroke({
@@ -1210,7 +1205,6 @@ export const CompanyMap = () => {
 
   
     const claimLoaderFunc = useCallback((extent, resolution, projection) =>  {
-    console.log("hit claims",extent)
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
@@ -1226,17 +1220,13 @@ export const CompanyMap = () => {
     })
       .then((response) => response.json())
       .then((json) => {
-          console.log("hit claims2.0",json)
         if (json.data) {
-             console.log("hit claims2.1")
           if (json.data[0].json_build_object.features) {
             const features = new GeoJSON().readFeatures(
               json.data[0].json_build_object
             );
-              //console.log("hit claims3")
             claimVectorImgSourceRef.current.addFeatures(features);
 
-            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
@@ -1303,7 +1293,6 @@ export const CompanyMap = () => {
     fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
     if(selFPropertyFeatures.length>0){
       clickedOnFeatureTmp = true
-        console.log("selFPropertyFeatures",selFPropertyFeatures)
   let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
   
   let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
@@ -1378,7 +1367,6 @@ export const CompanyMap = () => {
   const selSyncPropFeatures =
       syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-      console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
     if(selSyncPropFeatures.length>0){ 
       clickedOnFeatureTmp = true
      const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";

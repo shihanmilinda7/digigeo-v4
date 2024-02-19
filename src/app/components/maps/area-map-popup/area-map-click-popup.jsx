@@ -4,7 +4,6 @@ import AreaMapClickPopupHeaderRow from './area-map-click-popup-header-row';
 import AreaMapClickPopupRow from './area-map-click-popup-row';
 import AreaMapClickPopupRowMultiValue from './area-map-click-popup-row-multiValue';
 import { useSelector } from 'react-redux';
-
 import { Arimo } from "next/font/google";
 import { Tabs, Tab } from "@nextui-org/react";
 
@@ -31,7 +30,6 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
   const [resourcesFormated, setresourcesFormated] = useState([]);
 
   useEffect(() => {
-    console.log("fpropObj2",fpropObj)
     function numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

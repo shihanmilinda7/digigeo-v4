@@ -198,7 +198,6 @@ export const PropertiesMap = () => {
      
 
      
-     console.log("fSelected",fp)
      fp?.setStyle(selectStyle);
     }
 
@@ -211,7 +210,6 @@ export const PropertiesMap = () => {
 
   const onPointerMove = useCallback((e) => {
 
-    //console.log("pm-1",evt)
 
     
  
@@ -419,7 +417,6 @@ export const PropertiesMap = () => {
 
 
   useEffect(() => {
-    console.log("aaaa")
     if (propertyFlyToLocation?.length > 0) {
       flyTo(mapViewRef?.current, propertyFlyToLocation, () => { });
     }
@@ -479,7 +476,6 @@ export const PropertiesMap = () => {
   );
 
     useEffect(() => {
-     console.log("ue2",)
     //set style
     const style = new Style({});
     style.setRenderer(propertyMApFPropertyVectorRendererFuncV2);
@@ -522,7 +518,6 @@ export const PropertiesMap = () => {
     if (syncClaimLinkPropertyFeatures?.features) {
       
       const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
-      console.log("eee",e )
       claimLinkSourceRef?.current?.addFeatures(e);
     }
     // if (claimLinkSourceRef.current) {
@@ -699,7 +694,6 @@ export const PropertiesMap = () => {
   };
 
      const styleFunctionSyncClaimLinkProperties = (feature) => {
-     console.log("sqw");
     const s = new Style({
      
       stroke: new Stroke({
@@ -977,7 +971,6 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
     claimLinkVectorLayerRef?.current?.setVisible(propertyMapSyncClaimLinkLayerVisible);
   }, [propertyMapSyncClaimLinkLayerVisible]);
   useEffect(() => {
-     console.log("asdf",)
     syncPropVectorLayerRef?.current?.setVisible(propertyMapSyncPropLayerVisible);
   }, [propertyMapSyncPropLayerVisible]);
   useEffect(() => {
@@ -1109,7 +1102,6 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
 
   const styleFunctionAreaBoundary = (feature) => {
-    console.log("sf");
     const s = new Style({
       stroke: new Stroke({
         color: "blue",
@@ -1148,7 +1140,6 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
 
 
     const claimLoaderFunc = useCallback((extent, resolution, projection) => {
-    console.log("hit claims", extent);
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
@@ -1164,24 +1155,19 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
     })
       .then((response) => response.json())
       .then((json) => {
-        console.log("hit claims2.0", json);
         if (json.data) {
-          console.log("hit claims2.1");
           if (json.data[0].json_build_object.features) {
             const features = new GeoJSON().readFeatures(
               json.data[0].json_build_object
             );
-            //console.log("hit claims3")
             claimVectorImgSourceRef.current.addFeatures(features);
 
-            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
         }
       });
     }, []);
   
       const styleFunctionClaim = (feature, resolution) => {
-    // console.log("sf claims")
     const colour = "#D3D3D3"; //feature.values_.colour;
     //console.log("colour", colour);
     // const fill = new Fill({
@@ -1250,7 +1236,6 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
     useEffect( () => {
  let clickedOnFeatureTmp = false;
     const fetchData = async()=>{
-      console.log("qqq1")
        setclickedOnFeature(false)
      let assetObject, fPropertyObject,syncPropertyObject,claimObject
     
@@ -1385,7 +1370,6 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   const selSyncPropFeatures =
       syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-      console.log("selSyncPropFeatures?.[0]",selSyncPropFeatures?.[0])
     if(selSyncPropFeatures.length>0){ 
        clickedOnFeatureTmp = true
      const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";

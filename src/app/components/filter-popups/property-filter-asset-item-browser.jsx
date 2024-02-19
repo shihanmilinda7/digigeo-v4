@@ -20,7 +20,6 @@ const XPropertyFilterAssetItemBrowser = ({properties,totalResultCount,curPageHan
   }, [selectedKeys])
 
   useEffect(() => {
-    console.log("currentPage-asset",currentPage)
     //  propertyid,
     // propsearchcol,country,state_prov, area,assetlist
     curPageHandler(currentPage)
