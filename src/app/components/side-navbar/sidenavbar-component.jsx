@@ -178,9 +178,9 @@ const SideNavbar = () => {
           <div
             className={`${isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"}`}
           >
-              {/* <div className="ml-2 mr-2 mt-1 mb-1 flex items-center justify-center border-b-2">
-                <span className="font-bold">Overview</span>
-              </div> */}
+              <div className="ml-2 mr-2 mt-1  flex items-center justify-center border-b-2">
+                <span className="font-bold">Filters</span>
+              </div>
               {/* <div className="m-2">
                 <Input
                   // list={list}
@@ -195,7 +195,7 @@ const SideNavbar = () => {
                 />
               </div> */}
               <div>
-                  <div className="flex flex-col gap-2 p-2 ">
+                  <div className="flex flex-col gap-2 px-1 ">
                     <AreaMapButton onClick={() => selectMapHandler("area")} />
                     <PropertiesMapButton
                       onClick={() => selectMapHandler("properties")}
@@ -250,9 +250,9 @@ const SideNavbar = () => {
                   </button>
                 </div>
               </div>
-          </div>
+          </div>   {/* coloumn */}
           {/* <div className="mt-4 flex flex-col gap-4 relative"></div> */}
-        </div>
+        </div> 
       // {/* </div> */}
     // </section>
   );
