@@ -63,6 +63,9 @@ import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 import LandingMapSideNavbar from "../side-navbar-second/landing-map/landing-sidenavbar";
+import {Spinner} from "@nextui-org/react";
+import DialogStartup from "@/app/utils/dialog/dialog-startup";
+
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -364,6 +367,7 @@ export const LandingMap = () => {
   const [distance, setDistance] = useState(40);
   const [minDistance, setMinDistance] = useState(20);
   const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
+  const [syncPropsLoaded, setsyncPropsLoaded] = useState(false);
 
     const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
@@ -782,11 +786,20 @@ f(10662, 0).catch(console.error);
     claimVectorImgLayerRef.current?.setOpacity(0.5);
   }, [claimVectorImgLayerRef.current]);
 
+  // useEffect((()=>{
+  //   if (syncPropsLoaded) {
+      
+  //   }
+
+  // }
+  // ,[syncPropsLoaded]))
+
   useEffect(() => {
     if (syncPropertyFeatures?.features) {
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
       allSyncPropSourceRef?.current?.addFeatures(e);
+      setsyncPropsLoaded(true)
     }
 
     // if (allSyncPropSourceRef.current) {
@@ -1772,6 +1785,14 @@ f(10662, 0).catch(console.error);
           </olLayerVector>
         </Map>
       </div>
+      {!syncPropsLoaded && <DialogStartup
+        title="Loading the World's Mining data...."
+        onClose={() => console.log("close")}
+        onOk={() => console.log("ok")}
+        showDialog={!syncPropsLoaded}
+      >
+        <Spinner />
+      </DialogStartup>}
     </div>
   );
 };
