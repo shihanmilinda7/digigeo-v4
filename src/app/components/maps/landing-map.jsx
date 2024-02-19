@@ -1755,7 +1755,7 @@ f(10662, 0).catch(console.error);
           <olLayerVector
             ref={fPropVectorLayerRef}
             minResolution={0}
-            maxResolution={150}
+            maxResolution={300}
           >
             <olSourceVector
               ref={fPropSourceRef}

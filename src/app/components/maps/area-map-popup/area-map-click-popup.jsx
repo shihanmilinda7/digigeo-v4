@@ -6,6 +6,7 @@ import AreaMapClickPopupRowMultiValue from './area-map-click-popup-row-multiValu
 import { useSelector } from 'react-redux';
 
 import { Arimo } from "next/font/google";
+import { Tabs, Tab } from "@nextui-org/react";
 
 const arimo = Arimo({
   subsets: ['latin'],
@@ -77,112 +78,128 @@ const AreaMapClickPopup = ({ claimObj, fpropObj, assetObj, syncPropObj }) => {
   }, [fpropObj]);
 
   return (
-    <div
-      className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}
-    >
-      { syncPropObj && Object.keys(syncPropObj).length>0 && (
-        <div>
-          <AreaMapClickPopupHeaderRow label="Property Info" />
-          <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-            <AreaMapClickPopupRow
-              label={"Name:"}
-              value={syncPropObj.prop_name}
-            />
-            <AreaMapClickPopupRow
-              label={"Owners:"}
-              value={syncPropObj.owners}
-            />
-            <AreaMapClickPopupRow label={"Area:"} value={syncPropObj.area} />
-            <AreaMapClickPopupRow
-              label={"State/Prov:"}
-              value={syncPropObj.state_prov}
-            />
-            <AreaMapClickPopupRow
-              label={"Country:"}
-              value={syncPropObj.country}
-            />
-          </div>
-        </div>
-      )}
-      {fpropObj && Object.keys(fpropObj).length>0 && (
-        <div>
-          <AreaMapClickPopupHeaderRow label="Featured Property Info" />
-          <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-            <AreaMapClickPopupRow
-              label={"Sponsored owners:"}
-              value={fpropObj.sponsoredowners}
-              url={fpropObj.profile}
-            />
-            <AreaMapClickPopupRow
-              label={"Property Name:"}
-              value={fpropObj.prop_name}
-            />
-            <AreaMapClickPopupRow
-              label={"Commodity:"}
-              value={fpropObj.commo_ref}
-            />
-            <AreaMapClickPopupRow
-              label={"Asset List:"}
-              value={fpropObj.assets}
-            />
-            <AreaMapClickPopupRowMultiValue
-              label={"Resources:"}
-              value={resourcesFormated}
-            />
-            <AreaMapClickPopupRow
-              label={"Map Area:"}
-              value={fpropObj.map_area}
-            />
-            <AreaMapClickPopupRow
-              label={"Map Event:"}
-              value={fpropObj.sale_name}
-            />
-            <AreaMapClickPopupRow
-              label={"Ownership:"}
-              value={fpropObj.owners}
-            />
+    // <div
+    //   className={`flex-col max-h-unit-9xl overflow-auto m-2  ${arimo.className}`}
+    // >
+    <Tabs aria-label="Options" color="primary" variant="solid">
+      {syncPropObj && Object.keys(syncPropObj).length > 0 && (
+        <Tab key="Property" title="Property">
+          <div>
+            <AreaMapClickPopupHeaderRow label="Property Info" />
+            <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
               <AreaMapClickPopupRow
-              label={"External Property Page:"}
-              value={fpropObj.prop_exturl ? "Open Url" : ""}
-              url={fpropObj.prop_exturl}
-            />
+                label={"Name:"}
+                value={syncPropObj.prop_name}
+              />
+              <AreaMapClickPopupRow
+                label={"Owners:"}
+                value={syncPropObj.owners}
+              />
+              <AreaMapClickPopupRow label={"Area:"} value={syncPropObj.area} />
+              <AreaMapClickPopupRow
+                label={"State/Prov:"}
+                value={syncPropObj.state_prov}
+              />
+              <AreaMapClickPopupRow
+                label={"Country:"}
+                value={syncPropObj.country}
+              />
+            </div>
           </div>
-        </div>
+        </Tab>
       )}
-      { assetObj && Object.keys(assetObj).length>0 && (
-        <div>
-          <AreaMapClickPopupHeaderRow label="Asset Info" />
-          <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-            <AreaMapClickPopupRow
-              label={"Asset Name:"}
-              value={assetObj.asset_name}
-            />
-            <AreaMapClickPopupRow
-              label={"Alias:"}
-              value={assetObj.assetalias}
-            />
-            <AreaMapClickPopupRow label={"Type:"} value={assetObj.asset_type} />
-            <AreaMapClickPopupRow
-              label={"Commodities:"}
-              value={assetObj.commodities}
-            />
-            <AreaMapClickPopupRow label={"Region:"} value={assetObj.region} />
+      {fpropObj && Object.keys(fpropObj).length > 0 && (
+        <Tab key="fprop" title="Featured Property">
+          <div>
+            <AreaMapClickPopupHeaderRow label="Featured Property Info" />
+            <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
+              <AreaMapClickPopupRow
+                label={"Sponsored owners:"}
+                value={fpropObj.sponsoredowners}
+                url={fpropObj.profile}
+              />
+              <AreaMapClickPopupRow
+                label={"Property Name:"}
+                value={fpropObj.prop_name}
+              />
+              <AreaMapClickPopupRow
+                label={"Commodity:"}
+                value={fpropObj.commo_ref}
+              />
+              <AreaMapClickPopupRow
+                label={"Asset List:"}
+                value={fpropObj.assets}
+              />
+              <AreaMapClickPopupRowMultiValue
+                label={"Resources:"}
+                value={resourcesFormated}
+              />
+              <AreaMapClickPopupRow
+                label={"Map Area:"}
+                value={fpropObj.map_area}
+              />
+              <AreaMapClickPopupRow
+                label={"Map Event:"}
+                value={fpropObj.sale_name}
+              />
+              <AreaMapClickPopupRow
+                label={"Ownership:"}
+                value={fpropObj.owners}
+              />
+              <AreaMapClickPopupRow
+                label={"External Property Page:"}
+                value={fpropObj.prop_exturl ? "Open Url" : ""}
+                url={fpropObj.prop_exturl}
+              />
+            </div>
           </div>
-        </div>
+        </Tab>
       )}
-      {claimObj && Object.keys(claimObj).length>0 && (
-        <div>
-          <AreaMapClickPopupHeaderRow label="Claim Info" />
-          <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
-            <AreaMapClickPopupRow label={"Owner:"} value={claimObj.ownerref} />
-            <AreaMapClickPopupRow
-              label={"Claim no:"}
-              value={claimObj.claimno}
-            />
+      {assetObj && Object.keys(assetObj).length > 0 && (
+        <Tab key="asset" title="Asset">
+          <div>
+            <AreaMapClickPopupHeaderRow label="Asset Info" />
+            <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
+              <AreaMapClickPopupRow
+                label={"Asset Name:"}
+                value={assetObj.asset_name}
+              />
+              <AreaMapClickPopupRow
+                label={"Alias:"}
+                value={assetObj.assetalias}
+              />
+              <AreaMapClickPopupRow
+                label={"Type:"}
+                value={assetObj.asset_type}
+              />
+              <AreaMapClickPopupRow
+                label={"Commodities:"}
+                value={assetObj.commodities}
+              />
+              <AreaMapClickPopupRow label={"Region:"} value={assetObj.region} />
+            </div>
           </div>
-        </div>
+        </Tab>
       )}
-    </div>
+      {claimObj && Object.keys(claimObj).length > 0 && (
+        <Tab key="claim" title="Claim">
+          <div>
+            <AreaMapClickPopupHeaderRow label="Claim Info" />
+            <div className="[&>*:nth-child(odd)]:bg-gray-200 [&>*:nth-child(even)]:bg-gray-300">
+              <AreaMapClickPopupRow
+                label={"Owner:"}
+                value={claimObj.ownerref}
+              />
+              <AreaMapClickPopupRow
+                label={"Claim no:"}
+                value={claimObj.claimno}
+              />
+            </div>
+          </div>
+        </Tab>
+      )}
+    </Tabs>
+    //  </div>
   );
 };
 

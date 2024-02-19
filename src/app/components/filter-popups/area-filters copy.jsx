@@ -69,8 +69,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
       transform: "translate(-50%, -50%)",
       backgroundColor: "transparent",
       border: "none",
-      width:"40vw",
-      
     },
   };
 
@@ -314,8 +312,8 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         style={customStyles}
         ariaHideApp={false}
       >
-        <div className="flex-col gap-2  bg-white rounded-lg overflow-y-hidden min-h-[60vh] px-4 pb-4">
-          <div className="flex items-center justify-center mb-4">
+        <div className="bg-white rounded-lg overflow-y-hidden  ">
+          <div className="flex items-center justify-center">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
               Exploration Area Filters
             </span>
@@ -324,133 +322,129 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
           </div>
-          {/* <div className="flex items-center justify-center pl-8   overflow-x-hidden"> */}
-          {/* <div className="mx-auto w-full max-w-[950px] min-w-[400px] min-h-[350px]"> */}
-          {/* <div className="-mx-3 flex flex-wrap"> */}
-          {/* <div className="w-full flex  first-line: gap-3 space-between "> */}
-          {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
+          <div className="flex items-center justify-center pl-8   overflow-x-hidden">
+            <div className="mx-auto w-full max-w-[950px] min-w-[400px] min-h-[350px]">
+              <div className="-mx-3 flex flex-wrap">
+                <div className="w-full flex  first-line: gap-3 space-between ">
+                  {/* <span className="text-base font-semibold leading-none text-gray-900 mt-3 border-b-2 border-gray-900 w-fit">
                     Exploration Areas
                   </span> */}
-          {/* <div className="flex-col gap-2   w-[16vw]"> */}
-          <div className="flex    justify-around  ">
-            <div>
-              <span className="block">Filter By Country</span>
-              <Autocomplete
-                allowsEmptyCollection={true}
-                allowsCustomValue={true}
-                label="Select a country"
-                className="max-w-xs"
-                onInputChange={(e) => {
-                  console.log("pok9", e);
-                  if (e) {
-                    const fa = allAreaList.filter((a) => a.country == e);
-                    console.log("pok2");
-                    setfilteredAreaList(fa);
-                  } else {
-                    console.log("pok3");
-                    setfilteredAreaList([...allAreaList]);
-                    // setAreaList([]);
-                    setareaInfo("Type An Area Name...");
-                    setMiningArea("");
-                  }
-                  setCountry(e);
+                  <div className="flex-col gap-2   w-[16vw]">
+                    <span className="block">Filter By Country</span>
+                    <Autocomplete
+                      allowsEmptyCollection={true}
+                      allowsCustomValue={true}
+                      label="Select a country"
+                      className="max-w-xs"
+                      onInputChange={(e) => {
+                        console.log("pok9", e);
+                        if (e) {
+                          const fa = allAreaList.filter((a) => a.country == e);
+                          console.log("pok2");
+                          setfilteredAreaList(fa);
+                        } else {
+                          console.log("pok3");
+                          setfilteredAreaList([...allAreaList]);
+                          // setAreaList([]);
+                          setareaInfo("Type An Area Name...");
+                          setMiningArea("");
+                        }
+                        setCountry(e);
 
-                  // if(!e){
+                        // if(!e){
 
-                  //    setMiningArea("")
-                  // }
-                }}
-                inputValue={country}
-                defaultSelectedKey={country}
-              >
-                {countryList.map((countryObj) => (
-                  <AutocompleteItem
-                    key={countryObj.country}
-                    value={countryObj.country}
-                  >
-                    {countryObj.country}
-                  </AutocompleteItem>
-                ))}
-              </Autocomplete>
-            </div>
-            <div>
-              <span className="block">Filter By Exploration Area Name</span>
-              <Autocomplete
-                inputValue={miningArea}
-                allowsEmptyCollection={true}
-                allowsCustomValue
-                label={areaInfo}
-                className="max-w-xs"
-                defaultSelectedKey={miningArea}
-                onInputChange={(e) => {
-                  const r = new RegExp(e, "i");
-                  const fa = allAreaList.filter((a) => {
-                    if (country) {
-                      return (
-                        a.area_name.search(r) != -1 && a.country == country
-                      );
-                    } else {
-                      return a.area_name.search(r) != -1;
+                        //    setMiningArea("")
+                        // }
+                      }}
+                      inputValue={country}
+                      defaultSelectedKey={country}
+                    >
+                      {countryList.map((countryObj) => (
+                        <AutocompleteItem
+                          key={countryObj.country}
+                          value={countryObj.country}
+                        >
+                          {countryObj.country}
+                        </AutocompleteItem>
+                      ))}
+                    </Autocomplete>
+                    <span className="block">
+                      Filter By Exploration Area Name
+                    </span>
+                    <Autocomplete
+                      inputValue={miningArea}
+                      allowsEmptyCollection={true}
+                      allowsCustomValue
+                      label={areaInfo}
+                      className="max-w-xs"
+                      defaultSelectedKey={miningArea}
+                      onInputChange={(e) => {
+                        const r = new RegExp(e, "i");
+                        const fa = allAreaList.filter((a) => {
+                          if (country) {
+                            return (
+                              a.area_name.search(r) != -1 &&
+                              a.country == country
+                            );
+                          } else {
+                            return a.area_name.search(r) != -1;
+                          }
+                        });
+                        console.log("pok1");
+                        setfilteredAreaList(fa);
+                        setMiningArea(e);
+                      }}
+                    >
+                      {/* {areaList.map((areaObj) => (
+                        <AutocompleteItem
+                          key={areaObj.area_name}
+                          value={areaObj.area_name}
+                        >
+                          {areaObj.area_name}
+                        </AutocompleteItem>
+                      ))} */}
+                    </Autocomplete>
+                    <section className="flex items-center justify-between mt-3 fixed bottom-8 border-t-2 border-gray-300 ">
+                      <div className="mt-2">
+                        <Chip
+                          color="default"
+                          variant="light"
+                          className="cursor-pointer"
+                          onClick={resetHandler}
+                        >
+                          Reset
+                        </Chip>
+                      </div>
+                      <div className="mt-2">
+                        <Chip
+                          isDisabled={!(country && miningArea)}
+                          color="primary"
+                          className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
+                          onClick={searchAction}
+                        >
+                          Search
+                        </Chip>
+                      </div>
+                    </section>
+                    `
+                  </div>
+                  <div className="w-[16vw]">
+                    {
+                      <div className="flex-col gap-32">
+                        <div className="border-solid border   w-full bg-white rounded-lg m-2  ">
+                          <AreaFilterAreaListItemBrowser
+                            areaList={filteredAreaList}
+                            countryHandler={setCountry}
+                            areaHandler={setMiningArea}
+                          />
+                        </div>
+                      </div>
                     }
-                  });
-                  console.log("pok1");
-                  setfilteredAreaList(fa);
-                  setMiningArea(e);
-                }}
-              >
-                {/* {areaList.map((areaObj) => (
-                          <AutocompleteItem
-                            key={areaObj.area_name}
-                            value={areaObj.area_name}
-                          >
-                            {areaObj.area_name}
-                          </AutocompleteItem>
-                        ))} */}
-              </Autocomplete>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <AreaFilterAreaListItemBrowser
-            areaList={filteredAreaList}
-            countryHandler={setCountry}
-            areaHandler={setMiningArea}
-          />
-          <section className="flex items-center justify-between mt-3 bottom-8 border-t-2 border-gray-300 w-full">
-            <div className="mt-2">
-              <Chip
-                color="default"
-                variant="light"
-                className="cursor-pointer"
-                onClick={resetHandler}
-              >
-                Reset
-              </Chip>
-            </div>
-            <div className="mt-2">
-              <Chip
-                isDisabled={!(country && miningArea)}
-                color="primary"
-                className="cursor-pointer hover:bg-blue-600 custom-button-1 bg-blue-700"
-                onClick={searchAction}
-              >
-                Search
-              </Chip>
-            </div>
-          </section>
-
-          {/* </div> */}
-          {/* <div className="w-[16vw]"> */}
-
-          {/* <div className="flex-col gap-32"> */}
-          {/* // <div className="border-solid border   w-full bg-white rounded-lg m-2  "> */}
-
-          {/* </div> */}
-          {/* </div> */}
-
-          {/* </div> */}
-          {/* </div> */}
-          {/* </div> */}
-          {/* </div> */}
-          {/* </div> */}
         </div>
       </Modal>
     </div>
