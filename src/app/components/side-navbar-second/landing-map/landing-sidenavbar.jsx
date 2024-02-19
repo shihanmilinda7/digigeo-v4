@@ -96,10 +96,10 @@ const LandingMapSideNavbar = () => {
    useEffect(()=>{
      if (featuredPropertyFeatures) {
        const result = Object.groupBy(featuredPropertyFeatures, ({ companyid }) => companyid);
-     
-       const a = Object.keys(result).map(k => result[k][0])
-
-       setFeaturedCompanies(a)
+       //console.log("result11", result);
+       const a = Object.keys(result).map(k => result[k][0]);
+       console.log("result12", a);
+       setFeaturedCompanies(a);
      }
     // console.log("ppo",featuredPropertyFeatures)
    },[featuredPropertyFeatures])
@@ -132,24 +132,24 @@ const LandingMapSideNavbar = () => {
     dispatch(setIsAreaSideNavOpen(false));
   };
 
-  const getFeaturedCompanyDetails = async () => {
-    const f = async () => {
-      console.log("areaName", areaName);
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      // console.log("fps", d);
+  // const getFeaturedCompanyDetails = async () => {
+  //   const f = async () => {
+  //     console.log("areaName", areaName);
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/hotplayfcompanylist/${areaName}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const d = await res.json();
+  //     // console.log("fps", d);
 
-      setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour) featuredPropertyFeatures
-      // );
-    };
+  //     setFeaturedCompanies(d.data);
+  //     // d.data[0].json_build_object.features.map((i) =>
+  //     //   console.log("i", i.properties.colour) featuredPropertyFeatures
+  //     // );
+  //   };
 
-    f().catch(console.error);
-  };
+  //   f().catch(console.error);
+  // };
 
   const getClaimLinkPropertiesGeometry = async () => {
     const f = async () => {
@@ -209,13 +209,7 @@ const LandingMapSideNavbar = () => {
         { cache: "no-store" }
       );
       const d = await res.json();
-      // console.log("fps", d);
-      // console.log("fps", d.data);
-
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
+    
 
       const gj = {
         type: "FeatureCollection",
@@ -242,10 +236,7 @@ const LandingMapSideNavbar = () => {
       // console.log("fps", d);
       console.log("assets", d.data);
 
-      // setFeaturedCompanies(d.data);
-      // d.data[0].json_build_object.features.map((i) =>
-      //   console.log("i", i.properties.colour)
-      // ); setSyncPropertyFeatures
+     
 
       const gj = {
         type: "FeatureCollection",
@@ -334,7 +325,7 @@ const LandingMapSideNavbar = () => {
                       {featuredCompanies?.map((i) => (
                         <LmapFeaturedCompanyDetailDiv
                           key={i.id}
-                          title={i.company2}
+                          title={i.company2 + i.companyid + "-" +i.id }
                           companyid={i.companyid}
                           // onClick={() => console.log(featuredCompanies)}
                         >

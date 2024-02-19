@@ -345,10 +345,10 @@ export const LandingMap = () => {
   const dispatch = useDispatch();
 
   const areaFlyToLocation = useSelector(
-    (state) => state.areaMapReducer.areaFlyToLocation
+    (state) => state.landingMapReducer.areaFlyToLocation
   );
   const navigatedFPropId = useSelector(
-    (state) => state.areaMapReducer.navigatedFPropId
+    (state) => state.landingMapReducer.navigatedFPropId
   );
 
   //
@@ -444,6 +444,7 @@ f(10662, 0).catch(console.error);
             );
             //console.log("hit claims3")
             fPropSourceRef.current.addFeatures(features);
+            fPropSourceLabelRef.current.addFeatures(features);
 
             //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
@@ -738,29 +739,29 @@ f(10662, 0).catch(console.error);
     (state) => state.mapSelectorReducer.landingMapInitialCenter
   );
   const isLandingMapSideNavOpen = useSelector(
-    (state) => state.areaMapReducer.isLandingMapSideNavOpen
+    (state) => state.landingMapReducer.isLandingMapSideNavOpen
   );
 
 
 
   // const syncPropertyFeatures = useSelector(
-  //   (state) => state.areaMapReducer.syncPropertyFeatures
+  //   (state) => state.landingMapReducer.syncPropertyFeatures
   // );
   // const featuredPropertyFeatures = useSelector(
   //   (state) => state.landingMapReducer.featuredPropertyFeatures
   // );
   const syncClaimLinkPropertyFeatures = useSelector(
-    (state) => state.areaMapReducer.syncClaimLinkPropertyFeatures
+    (state) => state.landingMapReducer.syncClaimLinkPropertyFeatures
   );
   const assetFeatures = useSelector(
-    (state) => state.areaMapReducer.assetFeatures
+    (state) => state.landingMapReducer.assetFeatures
   );
 
-  const areaName = useSelector((state) => state.areaMapReducer.areaMiningArea);
-  const areaCountry = useSelector((state) => state.areaMapReducer.areaCountry);
+  // const areaName = useSelector((state) => state.landingMapReducer.areaMiningArea);
+  // const areaCountry = useSelector((state) => state.landingMapReducer.areaCountry);
 
   // const areaZoomMode = useSelector(
-  //   (state) => state.areaMapReducer.areaZoomMode
+  //   (state) => state.landingMapReducer.areaZoomMode
   // );
   //set styles
   useEffect(() => {
@@ -893,11 +894,12 @@ f(10662, 0).catch(console.error);
 
   useEffect(() => {
     let newUrl;
-    if (areaName == "") {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
-    } else {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}&co=${areaCountry}&ma=${areaName}`;
-    }
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
+    // if (areaName == "") {
+    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}`;
+    // } else {
+    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${mapLyrs}&z=${zoom}&c=${center}&co=${areaCountry}&ma=${areaName}`;
+    // }
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
 
@@ -954,11 +956,12 @@ f(10662, 0).catch(console.error);
   const setLyrs = (lyrs) => {
     dispatch(setAreaLyrs(lyrs));
     let newUrl;
-    if (areaName == "") {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
-    } else {
-      newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}&co=${areaCountry}&ma=${areaName}`;
-    }
+    newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+    // if (areaName == "") {
+    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}`;
+    // } else {
+    //   newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isLandingMapSideNavOpen}&lyrs=${lyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter} `;
+    // }
     window.history.replaceState({}, "", newUrl);
   };
   const openAreaNav = () => {
@@ -1018,67 +1021,67 @@ f(10662, 0).catch(console.error);
   };
 
   //layer visibilty redux states
-  const areaFpropLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaFpropLayerVisible
+  const landingMapFpropLayerVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapFpropLayerVisible
   );
-  const areaAssetLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetLayerVisible
+  const landingMapAssetLayerVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetLayerVisible
   );
-  const areaSyncPropLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaSyncPropLayerVisible
+  const landingMapSyncPropLayerVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapSyncPropLayerVisible
   );
-  const areaSyncClaimLinkLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaSyncClaimLinkLayerVisible
+  const landingMapSyncClaimLinkLayerVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapSyncClaimLinkLayerVisible
   );
-  const areaClaimLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaClaimLayerVisible
+  const landingMapClaimLayerVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapClaimLayerVisible
   );
   const areaAreaBoundaryLayerVisible = useSelector(
-    (state) => state.areaMapReducer.areaAreaBoundaryLayerVisible
+    (state) => state.landingMapReducer.landingMapAreaBoundaryLayerVisible
   );
 
   //asset type visibilty redux states
-  const areaAssetOpMineVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetOpMineVisible
+  const landingMapAssetOpMineVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetOpMineVisible
   );
-  const areaAssetDepositsVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetDepositsVisible
+  const landingMapAssetDepositsVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetDepositsVisible
   );
-  const areaAssetZoneVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetZoneVisible
+  const landingMapAssetZoneVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetZoneVisible
   );
-  const areaAssetHistoricalVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetHistoricalVisible
+  const landingMapAssetHistoricalVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetHistoricalVisible
   );
-  const areaAssetOccurrenceVisible = useSelector(
-    (state) => state.areaMapReducer.areaAssetOccurrenceVisible
+  const landingMapAssetOccurrenceVisible = useSelector(
+    (state) => state.landingMapReducer.landingMapAssetOccurrenceVisible
   );
 
   //layer visibility useEffects
   useEffect(() => {
-    fPropVectorLayerRef?.current?.setVisible(areaFpropLayerVisible);
-  }, [areaFpropLayerVisible]);
+    fPropVectorLayerRef?.current?.setVisible(landingMapFpropLayerVisible);
+  }, [landingMapFpropLayerVisible]);
   useEffect(() => {
-    claimLinkVectorLayerRef?.current?.setVisible(areaSyncClaimLinkLayerVisible);
-  }, [areaSyncClaimLinkLayerVisible]);
+    claimLinkVectorLayerRef?.current?.setVisible(landingMapSyncClaimLinkLayerVisible);
+  }, [landingMapSyncClaimLinkLayerVisible]);
   useEffect(() => {
-    syncPropVectorLayerRef?.current?.setVisible(areaSyncPropLayerVisible);
-  }, [areaSyncPropLayerVisible]);
+    syncPropVectorLayerRef?.current?.setVisible(landingMapSyncPropLayerVisible);
+  }, [landingMapSyncPropLayerVisible]);
   useEffect(() => {
-    assetLayerRef?.current?.setVisible(areaAssetLayerVisible);
-  }, [areaAssetLayerVisible]);
+    assetLayerRef?.current?.setVisible(landingMapAssetLayerVisible);
+  }, [landingMapAssetLayerVisible]);
   useEffect(() => {
-    claimVectorImgLayerRef?.current?.setVisible(areaClaimLayerVisible);
-  }, [areaClaimLayerVisible]);
+    claimVectorImgLayerRef?.current?.setVisible(landingMapClaimLayerVisible);
+  }, [landingMapClaimLayerVisible]);
   useEffect(() => {
-    areaBoundaryImgLayerRef?.current?.setVisible(areaAreaBoundaryLayerVisible);
+    areaBoundaryImgLayerRef?.current?.setVisible(landingMapAreaBoundaryLayerVisible);
   }, [areaAreaBoundaryLayerVisible]);
 
   //asset type visibility useEffects
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
-      if (areaAssetOpMineVisible) {
+      if (landingMapAssetOpMineVisible) {
         fs.forEach((f) => {
           if (f.get("asset_type") == "Operating Mine") {
             f.setStyle(null);
@@ -1092,12 +1095,12 @@ f(10662, 0).catch(console.error);
         });
       }
     }
-  }, [areaAssetOpMineVisible]);
+  }, [landingMapAssetOpMineVisible]);
 
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
-      if (areaAssetDepositsVisible) {
+      if (landingMapAssetDepositsVisible) {
         fs.forEach((f) => {
           if (f.get("asset_type") == "Deposit") {
             f.setStyle(null);
@@ -1111,12 +1114,12 @@ f(10662, 0).catch(console.error);
         });
       }
     }
-  }, [areaAssetDepositsVisible]);
+  }, [landingMapAssetDepositsVisible]);
 
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
-      if (areaAssetZoneVisible) {
+      if (landingMapAssetZoneVisible) {
         fs.forEach((f) => {
           if (f.get("asset_type") == "Zone") {
             f.setStyle(null);
@@ -1130,12 +1133,12 @@ f(10662, 0).catch(console.error);
         });
       }
     }
-  }, [areaAssetZoneVisible]);
+  }, [landingMapAssetZoneVisible]);
 
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
-      if (areaAssetHistoricalVisible) {
+      if (landingMapAssetHistoricalVisible) {
         fs.forEach((f) => {
           if (f.get("asset_type") == "Historical Mine") {
             f.setStyle(null);
@@ -1149,12 +1152,12 @@ f(10662, 0).catch(console.error);
         });
       }
     }
-  }, [areaAssetHistoricalVisible]);
+  }, [landingMapAssetHistoricalVisible]);
 
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
-      if (areaAssetOccurrenceVisible) {
+      if (landingMapAssetOccurrenceVisible) {
         fs.forEach((f) => {
           if (f.get("asset_type") == "Occurrence") {
             f.setStyle(null);
@@ -1168,7 +1171,7 @@ f(10662, 0).catch(console.error);
         });
       }
     }
-  }, [areaAssetOccurrenceVisible]);
+  }, [landingMapAssetOccurrenceVisible]);
 
   //claim loader
   // const claimLoaderFunc1 = (extent, resolution, projection)=> {

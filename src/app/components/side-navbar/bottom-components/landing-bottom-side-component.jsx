@@ -126,10 +126,10 @@ const LandingBottomSideComp = () => {
     dispatch(setlandingMapAssetDepositsVisible(!landingMapAssetDepositsVisible));
   };
   const setlandingMapAssetZoneVisibility = (e) => {
-    dispatch(setareaAssetZoneVisible(!landingMapAssetZoneVisible));
+    dispatch(setlandingMapAssetZoneVisible(!landingMapAssetZoneVisible));
   };
   const setlandingMapAssetHistoricalVisibility = (e) => {
-    dispatch(setareaAssetHistoricalVisible(!landingMapAssetHistoricalVisible));
+    dispatch(setlandingMapAssetHistoricalVisible(!landingMapAssetHistoricalVisible));
   };
   const setlandingMapAssetOccurrenceVisibility = (e) => {
     dispatch(setlandingMapAssetOccurrenceVisible(!landingMapAssetOccurrenceVisible));
