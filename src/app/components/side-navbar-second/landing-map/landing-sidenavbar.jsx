@@ -281,8 +281,8 @@ const LandingMapSideNavbar = () => {
   // },[featuredPropertyFeatures])
 
   return (
-    <section className="flex gap-6">
-      <div className={`duration-500 flex w-auto`}>
+    <section className="flex gap-6 h-[90vh]">
+      <div className={`duration-500 flex w-auto h-full`}>
         <div
           className={`
           ${
@@ -320,17 +320,17 @@ const LandingMapSideNavbar = () => {
               />
             </div>
           </div>
-          <div className="mt-4 flex flex-col gap-4 relative">
+          <div className="mt-4 flex flex-col gap-4 relative h-full">
             {/* <TreeView data={treeData} /> */}
             <div>
               <Accordion>
-                <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-6 ">
                   <AccordionItemWithEye
                     title="Featured Companies"
                     onClick={setlandingMapFpropLayerVisibility}
                     eyeState={landingMapFpropLayerVisible}
                   >
-                    <div className="flex flex-col gap-1 overflow-y-auto max-h-[40vh]">
+                    <div className="flex flex-col gap-1 overflow-y-scroll h-[75vh] mb-1">
                       {featuredCompanies?.map((i) => (
                         <LmapFeaturedCompanyDetailDiv
                           key={i.id}
@@ -346,11 +346,11 @@ const LandingMapSideNavbar = () => {
                       ))}
                     </div>
                   </AccordionItemWithEye>
-                  <AccordionItemWithEye title="All Companies">
+                  {/* <AccordionItemWithEye title="All Companies">
                     <div className="overflow-y-auto max-h-[25vh]">
-                      {/* <AreaTreeView syncPropFeatues={syncPropertyFeatures} /> */}
+                       <AreaTreeView syncPropFeatues={syncPropertyFeatures} /> 
                     </div>
-                  </AccordionItemWithEye>
+                  </AccordionItemWithEye> */}
                   {/* <AccordionItemWithEye title="All Companies">
                       {JSON.stringify(syncPropertyFeatures)}
                     </AccordionItemWithEye> */}
