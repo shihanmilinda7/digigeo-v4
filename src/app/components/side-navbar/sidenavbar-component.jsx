@@ -178,9 +178,10 @@ const SideNavbar = () => {
           <div
             className={`${isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"}`}
           >
-              <div className="ml-2 mr-2 mt-1  flex items-center justify-center border-b-2">
-                <span className="font-bold">Filters</span>
-              </div>
+              <div>
+                <div className="ml-2 mr-2 mt-1  flex items-center justify-center border-b-2">
+                  <span className="font-bold">Filters</span>
+                </div>
               {/* <div className="m-2">
                 <Input
                   // list={list}
@@ -194,7 +195,7 @@ const SideNavbar = () => {
                   startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
                 />
               </div> */}
-              <div>
+               
                   <div className="flex flex-col gap-2 px-1 ">
                     <AreaMapButton onClick={() => selectMapHandler("area")} />
                     <PropertiesMapButton
@@ -202,6 +203,7 @@ const SideNavbar = () => {
                     />
                     <CompanyMapButton onClick={() => selectMapHandler("company")} />
                   </div>
+              
                   <div className="flex flex-col items-center justify-center">
                     <div
                       style={{
@@ -236,7 +238,7 @@ const SideNavbar = () => {
                       <LandingBottomSideComp />
                     </div>
                   </div>
-              </div>
+                </div>
 
               <div className="w-full pb-1 pl-2 pr-2 pt-2">
                 <div className="flex justify-center">
