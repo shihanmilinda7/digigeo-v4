@@ -60,6 +60,9 @@ const CompanyMapButton = ({ onClick }) => {
   const isCompanySideNavOpen = useSelector(
     (state) => state.companyMapReducer.isCompanySideNavOpen
   );
+  const companyId = useSelector(
+    (state) => state.companyMapReducer.companyId
+  );
 
   const [isOpenIn, setIsOpenIn] = useState();
 
@@ -104,7 +107,7 @@ const CompanyMapButton = ({ onClick }) => {
       </div>
       <div
         className={`${
-          selectedMap === "company" && !isCompanySideNavOpen
+          selectedMap === "company" && !isCompanySideNavOpen && companyId
             ? // &&
               // areaCountry != "" &&
               // areaState != ""

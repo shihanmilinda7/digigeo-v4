@@ -66,7 +66,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
     //  console.log("c",selectedValue?.[0]?.toString()?.substr(p+1))
     // console.log("a", selectedValue?.[0]?.toString()?.substr(0, p))
     
-
+    
     //  countryHandler(selectedValue?.[0]?.toString()?.substr(p+1))
     //  areaHandler(selectedValue?.[0]?.toString()?.substr(0,p))
     

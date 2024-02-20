@@ -55,6 +55,11 @@ const PropertiesMapButton = ({ onClick }) => {
   const isPropertiesSideNavOpen = useSelector(
     (state) => state.propertiesMapReducer.isPropertiesSideNavOpen
   );
+ 
+  const propertySearchQuery = useSelector(
+      (state) => state.propertiesMapReducer.propertySearchQuery
+  );
+  
   const [isOpenIn, setIsOpenIn] = useState();
 
   const closePopup = () => {
@@ -98,7 +103,7 @@ const PropertiesMapButton = ({ onClick }) => {
       </div>
       <div
         className={`${
-          selectedMap === "properties" && !isPropertiesSideNavOpen
+          selectedMap === "properties" && !isPropertiesSideNavOpen &&  propertySearchQuery
             ? // &&
               // areaCountry != "" &&
               // areaState != ""
