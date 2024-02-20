@@ -226,6 +226,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
   // }, [miningArea])
 
   const searchAction = async () => {
+     
     if (country && miningArea) {
       dispatch(setAreaZoomMode("extent"));
       const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=true&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${country}&ma=${miningArea}`;
@@ -313,12 +314,18 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
         <div className="flex-col gap-2  bg-white rounded-lg overflow-y-hidden min-h-[60vh] px-4 pb-4">
           <div className="flex items-center justify-center mb-4">
             <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
-              Exploration Area Filters
+               Filters
             </span>
             <AiOutlineCloseCircle
               onClick={closePopup}
               className="h-6 w-6 cursor-pointer absolute right-0 mt-2 mr-6"
             />
+          </div>
+           <div className="flex items-center justify-start mb-4">
+            <span className="text-base font-semibold leading-none text-gray-900 select-none flex item-center justify-center uppercase mt-3">
+               Exploration Areas
+            </span>
+           
           </div>
           {/* <div className="flex items-center justify-center pl-8   overflow-x-hidden"> */}
           {/* <div className="mx-auto w-full max-w-[950px] min-w-[400px] min-h-[350px]"> */}
@@ -330,11 +337,12 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
           {/* <div className="flex-col gap-2   w-[16vw]"> */}
           <div className="flex    justify-around  ">
             <div>
-              <span className="block">Filter By Country</span>
+              <span className="block">Country</span>
               <Autocomplete
+                variant="bordered"
                 allowsEmptyCollection={true}
                 allowsCustomValue={true}
-                label="Select a country"
+                // label="Select a country"
                 className="max-w-xs"
                 onInputChange={(e) => {
                   if (e) {
@@ -367,12 +375,13 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
               </Autocomplete>
             </div>
             <div>
-              <span className="block">Filter By Exploration Area Name</span>
+              <span className="block">Mining Area</span>
               <Autocomplete
+                variant="bordered"
                 inputValue={miningArea}
                 allowsEmptyCollection={true}
                 allowsCustomValue
-                label={areaInfo}
+                // label={areaInfo}
                 className="max-w-xs"
                 defaultSelectedKey={miningArea}
                 onInputChange={(e) => {
@@ -386,7 +395,6 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                       return a.area_name.search(r) != -1;
                     }
                   });
-                  console.log("pok1");
                   setfilteredAreaList(fa);
                   setMiningArea(e);
                 }}
@@ -406,6 +414,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
             areaList={filteredAreaList}
             countryHandler={setCountry}
             areaHandler={setMiningArea}
+            searchAction={searchAction}
           />
           <section className="flex items-center justify-between mt-3 bottom-8 border-t-2 border-gray-300 w-full">
             <div className="mt-2">
@@ -418,7 +427,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
                 Reset
               </Chip>
             </div>
-            <div className="mt-2">
+            {/* <div className="mt-2">
               <Chip
                 isDisabled={!(country && miningArea)}
                 color="primary"
@@ -427,7 +436,7 @@ const AreaFilter = ({ isOpenIn, closePopup }) => {
               >
                 Search
               </Chip>
-            </div>
+            </div> */}
           </section>
 
           {/* </div> */}

@@ -1036,7 +1036,7 @@ f(10662, 0).catch(console.error);
   const landingMapClaimLayerVisible = useSelector(
     (state) => state.landingMapReducer.landingMapClaimLayerVisible
   );
-  const areaAreaBoundaryLayerVisible = useSelector(
+  const landingMapAreaBoundaryLayerVisible = useSelector(
     (state) => state.landingMapReducer.landingMapAreaBoundaryLayerVisible
   );
 
@@ -1065,7 +1065,9 @@ f(10662, 0).catch(console.error);
     claimLinkVectorLayerRef?.current?.setVisible(landingMapSyncClaimLinkLayerVisible);
   }, [landingMapSyncClaimLinkLayerVisible]);
   useEffect(() => {
-    syncPropVectorLayerRef?.current?.setVisible(landingMapSyncPropLayerVisible);
+    allSyncPropVectorLayerRef?.current?.setVisible(
+      landingMapSyncPropLayerVisible
+    );
   }, [landingMapSyncPropLayerVisible]);
   useEffect(() => {
     assetLayerRef?.current?.setVisible(landingMapAssetLayerVisible);
@@ -1075,7 +1077,7 @@ f(10662, 0).catch(console.error);
   }, [landingMapClaimLayerVisible]);
   useEffect(() => {
     areaBoundaryImgLayerRef?.current?.setVisible(landingMapAreaBoundaryLayerVisible);
-  }, [areaAreaBoundaryLayerVisible]);
+  }, [landingMapAreaBoundaryLayerVisible]);
 
   //asset type visibility useEffects
   useEffect(() => {

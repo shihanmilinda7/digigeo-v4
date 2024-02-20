@@ -21,14 +21,13 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
+ 
 import {
-  setAssetFeatures,
-  setFPropertyFeatures,
-  setIsAreaSideNavOpen,
-  setSyncPropertyFeatures,
-  setareaFpropLayerVisible,
-  setsyncClaimLinkPropertyFeatures,
-} from "../../../../store/area-map/area-map-slice";
+  setIsLandingMapSideNavOpen,
+ 
+  setlandingMapFpropLayerVisible,
+ 
+} from "../../../../store/landing-map/landing-map-slice";
 // import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
@@ -129,7 +128,7 @@ const LandingMapSideNavbar = () => {
       newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=false&lyrs=${landingMapLyrs}&z=${landingMapZoomLevel}&c=${landingMapInitialCenter}&co=${areaCountry}&ma=${areaName}`;
     }
     window.history.replaceState({}, "", newUrl);
-    dispatch(setIsAreaSideNavOpen(false));
+    dispatch(setIsLandingMapSideNavOpen(false));
   };
 
   // const getFeaturedCompanyDetails = async () => {
@@ -151,108 +150,108 @@ const LandingMapSideNavbar = () => {
   //   f().catch(console.error);
   // };
 
-  const getClaimLinkPropertiesGeometry = async () => {
-    const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      // console.log("fps", d);
+  // const getClaimLinkPropertiesGeometry = async () => {
+  //   const f = async () => {
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/tbl_sync_claimlink/${areaName}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const d = await res.json();
+  //     // console.log("fps", d);
 
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setsyncClaimLinkPropertyFeatures(gj));
-    };
+  //     const gj = {
+  //       type: "FeatureCollection",
+  //       crs: {
+  //         type: "name",
+  //         properties: {
+  //           name: "EPSG:3857",
+  //         },
+  //       },
+  //       features: d.data[0].json_build_object.features,
+  //     };
+  //     dispatch(setsyncClaimLinkPropertyFeatures(gj));
+  //   };
 
-    f().catch(console.error);
-  };
-  const getFeaturedCompanyGeometry = async () => {
-    //view_hotplay_table_with_sponsor_prop
-    const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
+  //   f().catch(console.error);
+  // };
+  // const getFeaturedCompanyGeometry = async () => {
+  //   //view_hotplay_table_with_sponsor_prop
+  //   const f = async () => {
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/view_hotplay_table_with_sponsor/${areaName}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const d = await res.json();
 
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
+  //     const gj = {
+  //       type: "FeatureCollection",
+  //       crs: {
+  //         type: "name",
+  //         properties: {
+  //           name: "EPSG:3857",
+  //         },
+  //       },
+  //       features: d.data[0].json_build_object.features,
+  //     };
 
-      // const e =   new GeoJSON().readFeatures(gj)
+  //     // const e =   new GeoJSON().readFeatures(gj)
 
-      dispatch(setFPropertyFeatures(gj));
-    };
+  //     dispatch(setFPropertyFeatures(gj));
+  //   };
 
-    f().catch(console.error);
-  };
-  const getSyncPropertiesGeometry = async () => {
-    const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_area/${areaName}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
+  //   f().catch(console.error);
+  // };
+  // const getSyncPropertiesGeometry = async () => {
+  //   const f = async () => {
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/tbl_sync_property_area/${areaName}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const d = await res.json();
     
 
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setSyncPropertyFeatures(gj));
-      console.log("gj", gj);
-    };
-    f().catch(console.error);
-  };
-  const getAssetsGeometry = async () => {
-    const f = async () => {
-      const res = await fetch(
-        `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
-        { cache: "no-store" }
-      );
-      const d = await res.json();
-      // console.log("fps", d);
-      console.log("assets", d.data);
+  //     const gj = {
+  //       type: "FeatureCollection",
+  //       crs: {
+  //         type: "name",
+  //         properties: {
+  //           name: "EPSG:3857",
+  //         },
+  //       },
+  //       features: d.data[0].json_build_object.features,
+  //     };
+  //     dispatch(setSyncPropertyFeatures(gj));
+  //     console.log("gj", gj);
+  //   };
+  //   f().catch(console.error);
+  // };
+  // const getAssetsGeometry = async () => {
+  //   const f = async () => {
+  //     const res = await fetch(
+  //       `https://atlas.ceyinfo.cloud/matlas/assetgeomsbyarea/${areaName}`,
+  //       { cache: "no-store" }
+  //     );
+  //     const d = await res.json();
+  //     // console.log("fps", d);
+  //     console.log("assets", d.data);
 
      
 
-      const gj = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: d.data[0].json_build_object.features,
-      };
-      dispatch(setAssetFeatures(gj));
-      //console.log("gj", gj);
-    };
-    f().catch(console.error);
-  };
+  //     const gj = {
+  //       type: "FeatureCollection",
+  //       crs: {
+  //         type: "name",
+  //         properties: {
+  //           name: "EPSG:3857",
+  //         },
+  //       },
+  //       features: d.data[0].json_build_object.features,
+  //     };
+  //     dispatch(setAssetFeatures(gj));
+  //     //console.log("gj", gj);
+  //   };
+  //   f().catch(console.error);
+  // };
 
   const landingMapFpropLayerVisible = useSelector(
     (state) => state.landingMapReducer.landingMapFpropLayerVisible
@@ -260,7 +259,7 @@ const LandingMapSideNavbar = () => {
 
   const setlandingMapFpropLayerVisibility = (e) => {
     console.log("setareaFpropLayerVisibility");
-    dispatch(setareaFpropLayerVisible(!landingMapFpropLayerVisible));
+    dispatch(setlandingMapFpropLayerVisible(!landingMapFpropLayerVisible));
   };
 
   const popupFcompanyId = useSelector(

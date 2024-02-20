@@ -1,16 +1,17 @@
 import {Listbox, ListboxItem, cn,ListboxSection} from "@nextui-org/react";
 import {ListboxWrapper} from "./ListboxWrapper";
-import { useMemo, useState,useEffect } from "react";
+import { useMemo, useState,useEffect,useCallback } from "react";
 import { Pagination, Button } from "@nextui-org/react";
  import {Chip} from "@nextui-org/react";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, RadioGroup, Radio} from "@nextui-org/react";
-
+import Image from "next/image";
  
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid 
-const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) => {
+const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,searchAction}) => {
      const [currentPage, setCurrentPage] =  useState(1);
      const [groupedAreaList, setgroupedAreaList] =  useState({});
      const [filteredAreaList, setfilteredAreaList] =  useState([]);
+     const [startSearch, setstartSearch] =  useState(false);
 
     //  const [selectedKeys, setSelectedKeys] = useState(new Set([]));
       const [selectedValue, setselectedValue] = useState(0);
@@ -44,19 +45,21 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
    
     
     if (selectedValue){
-      const a = areaList.find(a=> a.gid == selectedValue  )
+      const a = areaList.find(a => a.gid == selectedValue)
+      console.log("ppp22",a)
       if(a){
         countryHandler(a.country)
         areaHandler(a.area_name)
-
+       
         //console.log("poi",areaList.filter(f => f.area_name == a.area_name))
       
-        setfilteredAreaList(areaList.filter(f => f.area_name == a.area_name))
+       // setfilteredAreaList(areaList.filter(f => f.area_name == a.area_name))
    
 
         // console.log("qq1-country",a.country)
         // console.log("qq1-area", a.area_name);
       }
+       setstartSearch(true)
     }
 
     //  const p = selectedValue?.[0]?.toString()?.search(/#/)
@@ -66,16 +69,25 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
 
     //  countryHandler(selectedValue?.[0]?.toString()?.substr(p+1))
     //  areaHandler(selectedValue?.[0]?.toString()?.substr(0,p))
-     
+    
   }, [selectedValue])
 
-  // useEffect(() => {
- 
-  //   curPageHandler(currentPage)
-   
-  // }, [currentPage])
-  
 
+
+  useEffect(() => {
+     
+      if(startSearch){
+         console.log("ppp55","search started")
+        searchAction();
+      }
+   
+  }, [startSearch])
+  
+const flytoHandler = useCallback((id)=>{
+  console.log("ppp1",id)
+  setselectedValue(id)
+  
+},[])
 
     
     return (
@@ -84,14 +96,15 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
         <Table
           color={"primary"}
           selectionMode="single"
-          defaultSelectedKeys={["2"]}
+          // defaultSelectedKeys={["2"]}
           aria-label="Example static collection table"
-          onSelectionChange={(e)=>{setselectedValue(e.currentKey);}}
+          // onSelectionChange={(e)=>{setselectedValue(e.currentKey);}}
         >
           <TableHeader>
             <TableColumn>Area Name</TableColumn>
             <TableColumn>Country</TableColumn>
             <TableColumn>State/Prov</TableColumn>
+            <TableColumn></TableColumn>
           </TableHeader>
           <TableBody>
             {Object.keys(groupedAreaList).map(
@@ -105,6 +118,17 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler}) 
                       <TableCell>{`${a.area_name}`}</TableCell>
                       <TableCell>{`${a.country}`}</TableCell>
                       <TableCell>{`${"stp"}`}</TableCell>
+                      <TableCell> <Image
+                          src="./navigation.svg"
+                          width={15}
+                          height={15}
+                          alt="prop"
+                          className=" cursor-pointer hover:scale-125 "
+                          onClick={(e) => {
+                            flytoHandler(a.gid);
+                          }}
+                          />
+                      </TableCell>
                     </TableRow>
                   );
                 })
