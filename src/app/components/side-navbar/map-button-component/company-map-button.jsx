@@ -24,7 +24,7 @@ import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
 import CompanyFilter from "../../filter-popups/company-filters";
-import { setIsCompanySideNavOpen } from "../../../../store/company-map/company-map-slice";
+import { setIsCompanySideNavOpen,setcompanyId,setcompanyName, setcompanyStockcode} from "../../../../store/company-map/company-map-slice";
 
 const CompanyMapButton = ({ onClick }) => {
   let pathname = "";
@@ -69,6 +69,13 @@ const CompanyMapButton = ({ onClick }) => {
   const closePopup = () => {
     setIsOpenIn(false);
   };
+
+    const resetFilters=()=>{
+    dispatch(setcompanyId(0));
+    dispatch(setcompanyName(""));
+    dispatch(setcompanyStockcode(""));
+  }
+
 
   const openCompanyNav = () => {
     let newUrl;
@@ -115,14 +122,17 @@ const CompanyMapButton = ({ onClick }) => {
             : "hidden"
         } `}
       >
+        <div  >
         <Chip
           color="default"
           variant="light"
           className="cursor-pointer"
           size="sm"
+           onClick={resetFilters}
         >
           Reset
         </Chip>
+        </div>
         <Chip
           color="primary"
           variant="bordered"

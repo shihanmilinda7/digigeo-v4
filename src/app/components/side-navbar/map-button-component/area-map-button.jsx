@@ -13,7 +13,7 @@ import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
 import LayerVisibleDiv from "../../common-comp/layer-visible-eye";
 import { AiFillAppstore } from "react-icons/ai";
-import { setIsAreaSideNavOpen } from "../../../../store/area-map/area-map-slice";
+import { setIsAreaSideNavOpen,setAreaCountry, setAreaMiningArea} from "../../../../store/area-map/area-map-slice";
 import { MdLocationOn } from "react-icons/md";
 import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
@@ -58,6 +58,11 @@ const AreaMapButton = ({ onClick }) => {
   const closePopup = () => {
     setIsOpenIn(false);
   };
+
+  const resetFilters=()=>{
+    dispatch(setAreaCountry(""));
+    dispatch(setAreaMiningArea(""));
+  }
 
   const openAreaNav = () => {
     let newUrl;
@@ -110,14 +115,17 @@ const AreaMapButton = ({ onClick }) => {
             : "hidden"
         } `}
       >
+        
         <Chip
           color="default"
           variant="light"
           className="cursor-pointer"
           size="sm"
+          onClick={resetFilters}
         >
           Reset
         </Chip>
+       
         <Chip
           color="primary"
           variant="bordered"

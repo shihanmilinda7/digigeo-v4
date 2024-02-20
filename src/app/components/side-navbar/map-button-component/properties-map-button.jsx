@@ -19,7 +19,10 @@ import AreaFilter from "../../filter-popups/area-filters";
 import { FaFilter } from "react-icons/fa";
 import { Chip } from "@nextui-org/react";
 import PropertiesFilter from "../../filter-popups/properties-filters";
-import { setIsPropertiesSideNavOpen } from "../../../../store/properties-map/properties-map-slice";
+import { setIsPropertiesSideNavOpen, setpropertySearchQuery,
+  setsearchParamPropertyName,setsearchParamCountry,setsearchParamStateProv,
+  setsearchParamMiningArea,setsearchParamAssetTypeList,setsearchParamCommodityList
+} from "../../../../store/properties-map/properties-map-slice";
 
 const PropertiesMapButton = ({ onClick }) => {
   let pathname = "";
@@ -65,6 +68,17 @@ const PropertiesMapButton = ({ onClick }) => {
   const closePopup = () => {
     setIsOpenIn(false);
   };
+
+   const resetFilters=()=>{
+    dispatch(setpropertySearchQuery(""));
+    dispatch(setsearchParamPropertyName(""));
+    dispatch(setsearchParamCountry(""));
+    dispatch(setsearchParamStateProv(""));
+    dispatch(setsearchParamMiningArea(""));
+    dispatch(setsearchParamAssetTypeList([]));
+    dispatch(setsearchParamCommodityList([]));
+  }
+
 
   const openPropertiesNav = () => {
     let newUrl;
@@ -116,6 +130,7 @@ const PropertiesMapButton = ({ onClick }) => {
           variant="light"
           className="cursor-pointer"
           size="sm"
+          onClick={resetFilters}
         >
           Reset
         </Chip>
