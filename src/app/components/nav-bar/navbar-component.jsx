@@ -92,7 +92,7 @@ const HomeNavbar = () => {
         <div className="flex">
           <Link href="/">
             <Image
-              src="/logo.webp"
+              src="/DigiGeoData_white.webp"
               width={121}
               height={35}
               alt="Picture of the author"
@@ -103,7 +103,7 @@ const HomeNavbar = () => {
           </Link>
           {/* <img src="/logo.png"></img> */}
         </div>
-        <div>{"Discover the World's Mines!"}</div> 
+        <div>{"Discover the World's Mines!"}</div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,11 @@ const HomeNavbar = () => {
                 variant="light"
                 color="primary"
                 aria-label="Home"
-                onClick={()=> router.push("/?t=area&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634")}
+                onClick={() =>
+                  router.push(
+                    "/?t=area&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634"
+                  )
+                }
               >
                 <AiFillHome className="h-6 w-6 dark:text-white text-white" />
               </Button>
@@ -151,7 +155,7 @@ const HomeNavbar = () => {
                 variant="light"
                 color="primary"
                 aria-label="Like"
-                 onClick={showHelp}
+                onClick={showHelp}
               >
                 <AiFillQuestionCircle className="h-6 w-6 dark:text-white text-white" />
               </Button>
@@ -168,11 +172,10 @@ const HomeNavbar = () => {
             </li>
 
             <li>
-              <Button variant="light" color="primary"   onClick={showDisclaimer}>
+              <Button variant="light" color="primary" onClick={showDisclaimer}>
                 <span className="font-semibold dark:text-white text-white">
                   Disclaimer
                 </span>
-              
               </Button>
             </li>
             {/* <li>
@@ -181,31 +184,40 @@ const HomeNavbar = () => {
           </ul>
         </div>
       </nav>
-      { disclaimerStatus && (<DialogCommonComponent  
-              title={"Disclaimer"}
-              onClose={setdisclaimerStatus }
-              showDialog={disclaimerStatus }
-              onOk={()=>{}}>
-        <span>  The colours of the polygons on the interactive map and the legend
-          correspond to the properties on the map that the companies have an
-          interest in. If a property is striped with two col urs, then both
-          companies represented by the colours have an interest of some type in
-          that property. Any information that is used from this map should be
-          verified by the user with the participating companies. This map has
-          been produced from the most current information available to
-          DigiGeoData. Every attempt has been made to ensure the content,
-          accuracy and completeness of this map. DigiGeoData assumes no
-          responsibility for any errors, omissions and inaccuracies in the
-          information provided. This map is copyright by DigiGeoData and
-          reprinting or any form of reproduction must have prior permission.</span>
-      </DialogCommonComponent>)}
-        { helpDialogStatus && (<DialogCommonComponent  
-              title={"Help"}
-              onClose={sethelpDialogStatus }
-              showDialog={helpDialogStatus }
-              onOk={()=>{}}>
-        <span>  Stay tuned for our Help Center.</span>
-         </DialogCommonComponent>)}
+      {disclaimerStatus && (
+        <DialogCommonComponent
+          title={"Disclaimer"}
+          onClose={setdisclaimerStatus}
+          showDialog={disclaimerStatus}
+          onOk={() => {}}
+        >
+          <span>
+            {" "}
+            The colours of the polygons on the interactive map and the legend
+            correspond to the properties on the map that the companies have an
+            interest in. If a property is striped with two col urs, then both
+            companies represented by the colours have an interest of some type
+            in that property. Any information that is used from this map should
+            be verified by the user with the participating companies. This map
+            has been produced from the most current information available to
+            DigiGeoData. Every attempt has been made to ensure the content,
+            accuracy and completeness of this map. DigiGeoData assumes no
+            responsibility for any errors, omissions and inaccuracies in the
+            information provided. This map is copyright by DigiGeoData and
+            reprinting or any form of reproduction must have prior permission.
+          </span>
+        </DialogCommonComponent>
+      )}
+      {helpDialogStatus && (
+        <DialogCommonComponent
+          title={"Help"}
+          onClose={sethelpDialogStatus}
+          showDialog={helpDialogStatus}
+          onOk={() => {}}
+        >
+          <span> Stay tuned for our Help Center.</span>
+        </DialogCommonComponent>
+      )}
     </header>
   );
 };
