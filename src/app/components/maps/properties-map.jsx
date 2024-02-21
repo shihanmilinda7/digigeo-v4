@@ -1571,7 +1571,7 @@ const propertyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
         <Map
           ref={mapRef}
           style={{
-            width: isSideNavOpen ? "80vw" : "100vw",
+            width: isSideNavOpen ? "85vw" : "100vw",
             height: "90vh",
           }}
           controls={[]}

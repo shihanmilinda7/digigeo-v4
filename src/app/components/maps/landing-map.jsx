@@ -1684,7 +1684,7 @@ f(10662, 0).catch(console.error);
         <Map
           ref={mapRef}
           style={{
-            width: isSideNavOpen ? "80vw" : "100vw",
+            width: isSideNavOpen ? "85vw" : "100vw",
             // width: `${isLandingMapSideNavOpen ? "75vw" : "100vw"}`,
             height: "90vh",
           }}
