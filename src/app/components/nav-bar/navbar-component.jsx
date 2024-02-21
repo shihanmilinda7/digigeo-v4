@@ -103,7 +103,7 @@ const HomeNavbar = () => {
           </Link>
           {/* <img src="/logo.png"></img> */}
         </div>
-        <div>{"Discover the World's Mines!"}</div>
+        <div>{"Digigeo Maps"}</div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"

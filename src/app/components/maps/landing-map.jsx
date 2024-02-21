@@ -1797,7 +1797,7 @@ f(10662, 0).catch(console.error);
         </Map>
       </div>
       {!syncPropsLoaded && <DialogStartup
-        title="Loading the World's Mining data...."
+        title="Loading...."
         onClose={() => console.log("close")}
         onOk={() => console.log("ok")}
         showDialog={!syncPropsLoaded}
