@@ -1543,7 +1543,7 @@ f(10662, 0).catch(console.error);
     <div className="flex">
       <LandingMapSideNavbar />
       <div className="relative">
-        <div className="w-12 absolute left-0 top-0 z-50 ml-2">
+        <div className="w-12 absolute left-0 top-0 z-50  ">
           <div className="flex flex-col gap-4 mt-2">
             <Button isIconOnly variant="bordered" className="bg-blue-900">
               <BsFillArrowLeftSquareFill

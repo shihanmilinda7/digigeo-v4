@@ -280,7 +280,7 @@ const LandingMapSideNavbar = () => {
               ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
               : ""
           } 
-            ml-2
+            
           ${
             isLandingMapSideNavOpen && isSideNavOpen
               ? "w-80 sm:w-72 mr-2"

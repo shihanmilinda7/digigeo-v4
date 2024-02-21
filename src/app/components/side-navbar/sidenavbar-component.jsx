@@ -171,7 +171,7 @@ const SideNavbar = () => {
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
             : ""
         } 
-          ml-2   h-full 
+             h-full 
         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
         >
@@ -179,7 +179,7 @@ const SideNavbar = () => {
             className={`${isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"}`}
           >
               <div>
-                <div className="ml-2 mr-2 mt-1  flex items-center justify-center border-b-2">
+                <div className="mr-2 mt-1  flex items-center justify-center border-b-2">
                   <span className="font-bold">Filters</span>
                 </div>
               {/* <div className="m-2">
