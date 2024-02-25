@@ -98,13 +98,12 @@ const HomeNavbar = () => {
               height={35}
               alt="logo DigiGeoData"
             />
-           
+
             {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
           </Link>
-            <Link href="/">
-          
+          <Link href="/">
             <Image
               src="/TNM_logo_large.webp"
               width={121}
@@ -117,7 +116,7 @@ const HomeNavbar = () => {
           </Link>
           {/* <img src="/logo.png"></img> */}
         </div>
-        <div>{"Digigeo Maps"}</div>
+        <div>{"Global Exploration Activities"}</div>
 
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -184,10 +183,8 @@ const HomeNavbar = () => {
                 aria-label="Like"
               >
                 <Link href="https://digigeodata.com/contact/" target="_blank">
-                   <MdEmail className="h-6 w-6 dark:text-white text-white" /> 
+                  <MdEmail className="h-6 w-6 dark:text-white text-white" />
                 </Link>
-              
-               
               </Button>
             </li>
 

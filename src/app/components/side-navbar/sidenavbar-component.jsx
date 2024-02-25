@@ -47,6 +47,8 @@ import {
 } from "../../../store/properties-map/properties-map-slice";
 import LandingBottomSideComp from "./bottom-components/landing-bottom-side-component";
 
+import Link from "next/link";
+
 // } from "../../../store/area-map/area-map-slice";
 
 const SideNavbar = () => {
@@ -166,9 +168,9 @@ const SideNavbar = () => {
   // };
   return (
     // <section className="flex gap-6 ">
-      // <div className={`duration-500 flex w-auto items-stretch`}>
-        <div
-          className={`
+    // <div className={`duration-500 flex w-auto items-stretch`}>
+    <div
+      className={`
         ${
           isSideNavOpen
             ? "bg-white dark:bg-black border-2 rounded-md border-blue-700"
@@ -177,15 +179,17 @@ const SideNavbar = () => {
              h-full 
         ${isSideNavOpen ? "w-80 sm:w-72 mr-2" : "w-0"} 
         duration-500`}
-        >
-          <div
-            className={`${isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"}`}
-          >
-              <div>
-                <div className="mr-2 mt-1  flex items-center justify-center border-b-2">
-                  <span className="font-bold">Filters</span>
-                </div>
-              {/* <div className="m-2">
+    >
+      <div
+        className={`${
+          isSideNavOpen ? " flex flex-col justify-between  h-full" : "hidden"
+        }`}
+      >
+        <div>
+          <div className="mr-2 mt-1  flex items-center justify-center border-b-2">
+            <span className="font-bold">Filters</span>
+          </div>
+          {/* <div className="m-2">
                 <Input
                   // list={list}
                   isClearable
@@ -198,67 +202,70 @@ const SideNavbar = () => {
                   startContent={<FaSearch className="h-4 w-4 text-gray-400" />}
                 />
               </div> */}
-               
-                  <div className="flex flex-col gap-2 px-1 ">
-                    <AreaMapButton onClick={() => selectMapHandler("area")} />
-                    <PropertiesMapButton
-                      onClick={() => selectMapHandler("properties")}
-                    />
-                    <CompanyMapButton onClick={() => selectMapHandler("company")} />
-                  </div>
-              
-                  <div className="flex flex-col items-center justify-center">
-                    <div
-                      style={{
-                        display: selectedMap === "area" ? "flex" : "none",
-                      }}
-                      className="w-full"
-                    >
-                      <AreaBottomSideComp />
-                    </div>
-                    <div
-                      style={{
-                        display: selectedMap === "properties" ? "flex" : "none",
-                      }}
-                      className="w-full"
-                    >
-                      <PropertiesBottomSideComp />
-                    </div>
-                    <div
-                      style={{
-                        display: selectedMap === "company" ? "flex" : "none",
-                      }}
-                      className="w-full"
-                    >
-                      <CompanyBottomSideComp />
-                    </div>
-                    <div
-                      style={{
-                        display: selectedMap === "landing" ? "flex" : "none",
-                      }}
-                      className="w-full"
-                    >
-                      <LandingBottomSideComp />
-                    </div>
-                  </div>
-                </div>
 
-              <div className="w-full pb-1 pl-2 pr-2 pt-2">
-                <div className="flex justify-center">
-                  <button
-              className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
-              onClick={resetAllFilters}
+          <div className="flex flex-col gap-2 px-1 ">
+            <AreaMapButton onClick={() => selectMapHandler("area")} />
+            <PropertiesMapButton
+              onClick={() => selectMapHandler("properties")}
+            />
+            <CompanyMapButton onClick={() => selectMapHandler("company")} />
+          </div>
+
+          <div className="flex flex-col items-center justify-center">
+            <div
+              style={{
+                display: selectedMap === "area" ? "flex" : "none",
+              }}
+              className="w-full"
+            >
+              <AreaBottomSideComp />
+            </div>
+            <div
+              style={{
+                display: selectedMap === "properties" ? "flex" : "none",
+              }}
+              className="w-full"
+            >
+              <PropertiesBottomSideComp />
+            </div>
+            <div
+              style={{
+                display: selectedMap === "company" ? "flex" : "none",
+              }}
+              className="w-full"
+            >
+              <CompanyBottomSideComp />
+            </div>
+            <div
+              style={{
+                display: selectedMap === "landing" ? "flex" : "none",
+              }}
+              className="w-full"
+            >
+              <LandingBottomSideComp />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full pb-1 pl-2 pr-2 pt-2">
+          <div className="flex justify-center">
+            <Link href="/?t=landing&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634">
+              <button
+                className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
+                // onClick={resetAllFilters}
               >
-                    <span className="uppercase font-semibold">
-                      Reset all filters
-                    </span>
-                  </button>
-                </div>
-              </div>
-          </div>   {/* coloumn */}
-          {/* <div className="mt-4 flex flex-col gap-4 relative"></div> */}
-        </div> 
-      // {/* </div> */}
+                <span className="uppercase font-semibold">
+                  Reset all filters
+                </span>
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>{" "}
+      {/* coloumn */}
+      {/* <div className="mt-4 flex flex-col gap-4 relative"></div> */}
+    </div>
+    // {/* </div> */}
     // </section>
   );
 };
