@@ -304,10 +304,10 @@ const LandingMapSideNavbar = () => {
                 )} */}
                 <span className="font-bold block">Exploration Activities</span>
               </div>
-              <AiOutlineCloseCircle
+              {/* <AiOutlineCloseCircle
                 onClick={closeSecondNavBar}
                 className="h-6 w-6 text-blue-700 cursor-pointer absolute right-0"
-              />
+              /> */}
             </div>
           </div>
           <div className="mt-4 flex flex-col gap-4 relative h-full">

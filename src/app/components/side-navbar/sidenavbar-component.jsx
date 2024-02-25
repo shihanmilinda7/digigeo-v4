@@ -150,6 +150,9 @@ const SideNavbar = () => {
       dispatch(setsearchParamMiningArea(""));
       dispatch(setsearchParamAssetTypeList([]));
       dispatch(setsearchParamCommodityList([]));
+
+      // 
+      router.push("/")
   }
   // const openAreaNav = () => {
   //   let newUrl;

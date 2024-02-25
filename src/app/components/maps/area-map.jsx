@@ -1485,8 +1485,9 @@ export const AreaMap = () => {
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
-              <GiEarthAmerica className={`text-white cursor-pointer h-6 w-6`}
-              onClick={onClickViewInitZoom}
+              <GiEarthAmerica
+                className={`text-white cursor-pointer h-6 w-6`}
+                onClick={onClickViewInitZoom}
               />
             </Button>
             <Button isIconOnly variant="bordered" className="bg-blue-900">
@@ -1579,7 +1580,6 @@ export const AreaMap = () => {
             border: "1px solid #cccccc",
             minWidth: "400px",
             color: "black",
-           
           }}
         >
           <button
@@ -1599,7 +1599,7 @@ export const AreaMap = () => {
             ✖
           </button>
           <div id="popup-contenta">
-            {/* <p>Info:</p> */} 
+            {/* <p>Info:</p> */}
             {clickDataLoaded && (
               <AreaMapClickPopup
                 claimObj={claimObject}
@@ -1701,11 +1701,11 @@ export const AreaMap = () => {
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
+            minResolution={0}
+            maxResolution={150}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
-
-
         </Map>
       </div>
     </div>

@@ -89,13 +89,26 @@ const HomeNavbar = () => {
           dark:bg-black dark:border-gray-800
         "
       >
-        <div className="flex">
+        <div className="flex items-center gap-1">
           <Link href="/">
             <Image
               src="/DigiGeoData_white.webp"
               width={121}
               height={35}
-              alt="Picture of the author"
+              alt="logo DigiGeoData"
+            />
+           
+            {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
+              DigiGeo<span className="text-white">Maps</span>
+            </span> */}
+          </Link>
+            <Link href="/">
+          
+            <Image
+              src="/TNM_logo_large.webp"
+              width={121}
+              height={35}
+              alt="log tnm"
             />
             {/* <span className="pl-1 mx-auto text-xl font-black leading-none text-white dark:text-white select-none  flex items-center justify-center">
               DigiGeo<span className="text-white">Maps</span>
@@ -146,7 +159,9 @@ const HomeNavbar = () => {
                   )
                 }
               >
-                <AiFillHome className="h-6 w-6 dark:text-white text-white" />
+                <Link href="https://digigeodata.com" target="_blank">
+                  <AiFillHome className="h-6 w-6 dark:text-white text-white" />
+                </Link>
               </Button>
             </li>
             <li>
@@ -167,7 +182,11 @@ const HomeNavbar = () => {
                 color="primary"
                 aria-label="Like"
               >
-                <MdEmail className="h-6 w-6 dark:text-white text-white" />
+                <Link href="https://digigeodata.com/contact/" target="_blank">
+                   <MdEmail className="h-6 w-6 dark:text-white text-white" /> 
+                </Link>
+              
+               
               </Button>
             </li>
 

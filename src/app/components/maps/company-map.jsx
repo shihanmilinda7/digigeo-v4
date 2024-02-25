@@ -1648,6 +1648,8 @@ export const CompanyMap = () => {
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
+                minResolution={0}
+            maxResolution={150}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
           </olLayerVector>
