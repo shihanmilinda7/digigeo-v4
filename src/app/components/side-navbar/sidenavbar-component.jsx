@@ -152,7 +152,7 @@ const SideNavbar = () => {
       dispatch(setsearchParamCommodityList([]));
 
       // 
-      router.push("/")
+      router.push("https://map.digigeodata.com")
   }
   // const openAreaNav = () => {
   //   let newUrl;
