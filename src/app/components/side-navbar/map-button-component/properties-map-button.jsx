@@ -96,7 +96,7 @@ const PropertiesMapButton = ({ onClick }) => {
             selectedMap === "properties"
               ? "   bg-amber-300 w-10/12"
               : "   bg-amber-200 w-full"
-          } text-sm sm:text-sm hover:bg-blue-900 py-2 transition duration-150 ease-in`}
+          } text-sm sm:text-sm hover:bg-blue-900 hover:text-white py-2 transition duration-150 ease-in`}
         >
           <BsFillBuildingsFill className="h-6 w-6 ml-2" />
           <span className="uppercase ml-2 font-semibold">Properties</span>
