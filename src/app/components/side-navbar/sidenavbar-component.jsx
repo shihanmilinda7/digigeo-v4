@@ -128,7 +128,7 @@ const SideNavbar = () => {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isPropertiesSideNavOpen}&lyrs=${propertiesLyrs}&z=${propertiesZoomLevel}&c=${propertiesInitialCenter}`;
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
-    } else if (selectedValue == "landing") {
+    } else   {
       console.log("hit-sidenavbar-compo")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     }
@@ -153,8 +153,9 @@ const SideNavbar = () => {
       dispatch(setsearchParamAssetTypeList([]));
       dispatch(setsearchParamCommodityList([]));
 
+      selectMapHandler("landing")
       // 
-      router.push("https://map.digigeodata.com")
+      //router.push("https://map.digigeodata.com")
   }
   // const openAreaNav = () => {
   //   let newUrl;
@@ -249,16 +250,16 @@ const SideNavbar = () => {
 
         <div className="w-full pb-1 pl-2 pr-2 pt-2">
           <div className="flex justify-center">
-            <Link href="/?t=landing&sn=true&sn2=false&lyrs=m&z=3.25&c=-10694872.010699773,7434223.337137634">
+            {/* <Link href="/"> */}
               <button
                 className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
-                // onClick={resetAllFilters}
+                 onClick={resetAllFilters}
               >
                 <span className="uppercase font-semibold">
                   Reset all filters
                 </span>
               </button>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </div>{" "}
