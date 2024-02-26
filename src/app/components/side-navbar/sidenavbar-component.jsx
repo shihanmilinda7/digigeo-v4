@@ -253,7 +253,8 @@ const SideNavbar = () => {
             {/* <Link href="/"> */}
               <button
                 className=" flex items-center justify-center border rounded-lg border-blue-700 focus:outline-none bg-blue-900 text-white text-sm sm:text-sm hover:bg-blue-400 py-2 w-full transition duration-150 ease-in"
-                 onClick={resetAllFilters}
+              onClick={resetAllFilters}
+              active={true}
               >
                 <span className="uppercase font-semibold">
                   Reset all filters
