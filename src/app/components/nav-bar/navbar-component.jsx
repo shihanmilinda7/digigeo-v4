@@ -90,11 +90,12 @@ const HomeNavbar = () => {
           dark:bg-black dark:border-gray-800
         "
       >
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-4 justify-center">
           <Link href="/">
             <Image
               src="/DigiGeoData_white.webp"
-              width={121}
+              width={130}
               height={35}
               alt="logo DigiGeoData"
             />
@@ -106,7 +107,7 @@ const HomeNavbar = () => {
           <Link href="/">
             <Image
               src="/TNM_logo_large.webp"
-              width={121}
+              width={200}
               height={35}
               alt="log tnm"
             />
@@ -114,6 +115,7 @@ const HomeNavbar = () => {
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
           </Link>
+          </div>
           {/* <img src="/logo.png"></img> */}
         </div>
         <div>{"Global Exploration Activities"}</div>

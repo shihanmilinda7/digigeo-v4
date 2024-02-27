@@ -1423,6 +1423,7 @@ export const CompanyMap = () => {
       const onClickViewInitZoom = ()=>{
         
         mapViewRef.current.setZoom(3.25);
+        mapViewRef.current.setCenter( [-10694872.010699773, 7434223.337137634]);
   }
 
 

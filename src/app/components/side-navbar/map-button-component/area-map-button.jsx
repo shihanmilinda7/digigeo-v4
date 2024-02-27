@@ -80,7 +80,7 @@ const AreaMapButton = ({ onClick }) => {
       <div className="flex justify-center gap-1 w-full">
         <button
           onClick={onClick}
-          className={`relative flex items-center bg-amber-400 border rounded-lg border-amber-800 focus:outline-none ${
+          className={`relative flex items-center  border rounded-lg border-amber-800 focus:outline-none ${
             selectedMap === "area"
               ? "  bg-amber-300 w-10/12 "
               : "  bg-amber-200 w-full"
