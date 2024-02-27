@@ -92,7 +92,7 @@ const HomeNavbar = () => {
       >
         <div className="flex items-center gap-2">
           <div className="flex gap-4 justify-center">
-          <Link href="/">
+          <Link href="/" className="flex items-center">
             <Image
               src="/DigiGeoData_white.webp"
               width={130}
@@ -104,7 +104,7 @@ const HomeNavbar = () => {
               DigiGeo<span className="text-white">Maps</span>
             </span> */}
           </Link>
-          <Link href="/">
+          <Link href="/" className="flex items-center">
             <Image
               src="/TNM_logo_large.webp"
               width={200}
