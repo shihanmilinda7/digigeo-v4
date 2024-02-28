@@ -121,6 +121,7 @@ const SideNavbar = () => {
     if (selectedValue == "area") {
       if (areaState == "") {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}`;
+        
       } else {
         newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isAreaSideNavOpen}&lyrs=${areaLyrs}&z=${areaZoomLevel}&c=${areaInitialCenter}&co=${areaCountry}&ma=${areaState}`;
       }
@@ -205,7 +206,10 @@ const SideNavbar = () => {
               </div> */}
 
           <div className="flex flex-col gap-2 px-1 ">
-            <AreaMapButton onClick={() => { selectMapHandler("area") }} />
+            <AreaMapButton onClick={() => {
+              selectMapHandler("area");
+              
+          }} />
             <PropertiesMapButton
               onClick={() => selectMapHandler("properties")}
             />

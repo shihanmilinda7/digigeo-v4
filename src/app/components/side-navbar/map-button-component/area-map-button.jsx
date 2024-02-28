@@ -75,11 +75,24 @@ const AreaMapButton = ({ onClick }) => {
     dispatch(setIsAreaSideNavOpen(true));
   };
 
+  // useEffect(()=>{
+  //   if(!areaState){
+  //      setIsOpenIn(true)
+  //   }
+  // },[]);
+
+  const onClickLocal=()=>{
+       if(!areaState){
+       setIsOpenIn(true)
+    }
+    onClick()
+  }
+
   return (
     <div className="flex justify-center gap-1 w-full flex-col">
       <div className="flex justify-center gap-1 w-full">
         <button
-          onClick={onClick}
+          onClick={onClickLocal}
           className={`relative flex items-center  border rounded-lg border-amber-800 focus:outline-none ${
             selectedMap === "area"
               ? "  bg-amber-300 w-10/12 "

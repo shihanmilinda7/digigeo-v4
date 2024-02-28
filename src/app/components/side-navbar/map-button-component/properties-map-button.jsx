@@ -87,11 +87,18 @@ const PropertiesMapButton = ({ onClick }) => {
     dispatch(setIsPropertiesSideNavOpen(true));
   };
 
+      const onClickLocal=()=>{
+       if(!propertySearchQuery){
+       setIsOpenIn(true)
+    }
+    onClick()
+  }
+
   return (
     <div className="flex justify-center gap-1 w-full flex-col">
       <div className="flex justify-center gap-1 w-full">
         <button
-          onClick={onClick}
+          onClick={onClickLocal}
           className={`relative flex items-center border rounded-lg border-blue-700 focus:outline-none ${
             selectedMap === "properties"
               ? "   bg-amber-300 w-10/12"
