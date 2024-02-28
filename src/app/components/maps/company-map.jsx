@@ -1414,19 +1414,34 @@ export const CompanyMap = () => {
   const onClickViewPlusZoom = ()=>{
        const curZoom = mapViewRef.current.getZoom();
         mapViewRef.current.setZoom(curZoom + 1);
+
+          const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
   }
     const onClickViewMinusZoom = ()=>{
        const curZoom = mapViewRef.current.getZoom();
         mapViewRef.current.setZoom(curZoom - 1);
+
+          const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
   }
 
       const onClickViewInitZoom = ()=>{
         
         mapViewRef.current.setZoom(3.25);
         mapViewRef.current.setCenter( [-10694872.010699773, 7434223.337137634]);
+
+          const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toFixed(0));
   }
 
+   useEffect(()=>{
+     if (mapViewRef.current) {
+       const scale = mapRatioScale({ map: mapRef.current });
+       setmapScale(scale.toFixed(0));
+     }
 
+  },[mapViewRef.current])
 
 
   return (

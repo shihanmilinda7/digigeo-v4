@@ -130,7 +130,7 @@ const SideNavbar = () => {
     } else if (selectedValue == "company") {
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     } else   {
-      console.log("hit-sidenavbar-compo")
+      // console.log("hit-sidenavbar-compo")
       newUrl = `${window.location.pathname}?t=${selectedValue}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${companyLyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     }
     window.history.replaceState({}, "", newUrl);

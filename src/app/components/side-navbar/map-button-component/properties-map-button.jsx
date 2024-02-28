@@ -87,7 +87,7 @@ const PropertiesMapButton = ({ onClick }) => {
     dispatch(setIsPropertiesSideNavOpen(true));
   };
 
-      const onClickLocal=()=>{
+  const onClickLocal=()=>{
        if(!propertySearchQuery){
        setIsOpenIn(true)
     }
