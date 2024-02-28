@@ -205,7 +205,7 @@ const SideNavbar = () => {
               </div> */}
 
           <div className="flex flex-col gap-2 px-1 ">
-            <AreaMapButton onClick={() => selectMapHandler("area")} />
+            <AreaMapButton onClick={() => { selectMapHandler("area") }} />
             <PropertiesMapButton
               onClick={() => selectMapHandler("properties")}
             />

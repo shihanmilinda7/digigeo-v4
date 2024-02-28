@@ -103,7 +103,7 @@ const flytoHandler = useCallback((id)=>{
           <TableHeader>
             <TableColumn>Area Name</TableColumn>
             <TableColumn>Country</TableColumn>
-            <TableColumn>State/Prov</TableColumn>
+            {/* <TableColumn>State/Prov</TableColumn> */}
             <TableColumn></TableColumn>
           </TableHeader>
           <TableBody>
@@ -117,7 +117,7 @@ const flytoHandler = useCallback((id)=>{
                     <TableRow key={a.gid}>
                       <TableCell>{`${a.area_name}`}</TableCell>
                       <TableCell>{`${a.country}`}</TableCell>
-                      <TableCell>{`${"stp"}`}</TableCell>
+                      {/* <TableCell>{`${"stp"}`}</TableCell> */}
                       <TableCell> <Image
                           src="./navigation.svg"
                           width={15}

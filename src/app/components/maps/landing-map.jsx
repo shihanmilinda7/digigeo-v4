@@ -412,6 +412,7 @@ export const LandingMap = () => {
                json.data[0].json_build_object
              );
              //console.log("hit claims3")
+             claimLinkSourceRef.current.clear();
              claimLinkSourceRef.current.addFeatures(features);
              
 
@@ -472,6 +473,8 @@ f(10662, 0).catch(console.error);
               json.data[0].json_build_object
             );
             //console.log("hit claims3")
+            fPropSourceRef?.current?.clear();
+            fPropSourceLabelRef?.current?.clear();
             fPropSourceRef.current.addFeatures(features);
             fPropSourceLabelRef.current.addFeatures(features);
 
@@ -504,6 +507,7 @@ f(10662, 0).catch(console.error);
                 json.data[0].json_build_object
               );
               //console.log("hit claims3")
+              assetSourceRef.current.clear();
               assetSourceRef.current.addFeatures(features);
 
               //console.log("bbsync uni tbl01_claims   features count", features.count);
