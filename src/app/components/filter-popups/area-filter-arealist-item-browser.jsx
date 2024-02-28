@@ -16,10 +16,13 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
     //  const [selectedKeys, setSelectedKeys] = useState(new Set([]));
       const [selectedValue, setselectedValue] = useState(0);
 
-    //  useEffect(()=>{
-    //    setfilteredAreaList(areaList)
+  useEffect(() => {
+       if (areaList?.length==0) {
+         
+       }
+       setfilteredAreaList(areaList)
 
-    //  },[areaList])
+     },[areaList])
   
   
   

@@ -18,10 +18,10 @@ const LayerVisibleDiv = ({ title, children, onClick, eyeState }) => {
           </span> */}
           <span className="">
             {eyeState && (
-              <VscEye className="cursor-pointer" onClick={onClick} />
+              <VscEye className="cursor-pointer hover:scale-125" onClick={onClick} />
             )}
             {!eyeState && (
-              <VscEyeClosed className="cursor-pointer" onClick={onClick} />
+              <VscEyeClosed className="cursor-pointer hover:scale-125" onClick={onClick} />
             )}
           </span>
         </div>

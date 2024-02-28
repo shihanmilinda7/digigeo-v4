@@ -27,11 +27,11 @@ const AccordionItemWithEye = ({ title, children, onClick, eyeState }) => {
           </span>
           <span className="">
             {eyeState && (
-              <VscEye className="cursor-pointer" onClick={eyeClickHandler} />
+              <VscEye className="cursor-pointer hover:scale-125" onClick={eyeClickHandler} />
             )}
             {!eyeState && (
               <VscEyeClosed
-                className="cursor-pointer"
+                className="cursor-pointer hover:scale-125"
                 onClick={eyeClickHandler}
               />
             )}
