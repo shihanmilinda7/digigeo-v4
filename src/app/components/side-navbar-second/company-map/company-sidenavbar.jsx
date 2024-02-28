@@ -40,6 +40,8 @@ import GeoJSON from "ol/format/GeoJSON";
 import  Image  from 'next/image';
 import CompanyTreeView from "./company-tree-view";
 import CMapFCompanyAddlock from './company-fcompany-popup';
+import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
+
 
 const CompanySideNavbar = () => {
   let pathname = "";
@@ -364,11 +366,11 @@ const CompanySideNavbar = () => {
                     )}
                   </div>
                 </AccordionItemWithEye>
-                <AccordionItemWithEye title="All Properties">
+                <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
                     <CompanyTreeView syncPropFeatures={syncPropertyFeatures} />
                   </div>
-                </AccordionItemWithEye>
+                </AccordionItemWithOutEye>
               </div>
             </Accordion>
           </div>

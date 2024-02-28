@@ -32,6 +32,7 @@ import {
 import TreeView from "../../common-comp/treeview";
 import Accordion from "../../common-comp/accordion";
 import AccordionItemWithEye from "../../common-comp/accordion-eye";
+import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 import AreaTreeView from "./area-tree-view";
 import FeaturedCompanyDetailDiv from "./featured-company-detail-div";
 import GeoJSON from "ol/format/GeoJSON";
@@ -320,11 +321,11 @@ const AreaSideNavbar = () => {
                         ))}
                       </div>
                     </AccordionItemWithEye>
-                    <AccordionItemWithEye title="All Companies">
+                    <AccordionItemWithOutEye title="All Companies">
                       <div className="overflow-y-auto max-h-[25vh]">
                         <AreaTreeView syncPropFeatues={syncPropertyFeatures} />
                       </div>
-                    </AccordionItemWithEye>
+                    </AccordionItemWithOutEye>
                     {/* <AccordionItemWithEye title="All Companies">
                       {JSON.stringify(syncPropertyFeatures)}
                     </AccordionItemWithEye> */}

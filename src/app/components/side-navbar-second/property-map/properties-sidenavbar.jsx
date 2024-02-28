@@ -37,6 +37,7 @@ import PropertyFeaturedCompanyDetailDiv from "./property-featured-company-detail
 import PropertyTreeView from "./property-tree-view";
 import {Breadcrumbs, BreadcrumbItem} from "@nextui-org/react";
 import PropertyFCompanyPopup from "./property-fcompany-popup";
+import AccordionItemWithOutEye from "../../common-comp/accordion-without-eye";
 
 
 
@@ -397,11 +398,11 @@ const PropertiesSideNavbar = () => {
                     ))}
                   </div>
                 </AccordionItemWithEye>
-                <AccordionItemWithEye title="All Properties">
+                <AccordionItemWithOutEye title="All Properties">
                   <div className="overflow-y-auto max-h-[25vh]">
                     <PropertyTreeView syncPropFeatures={syncPropertyFeatures} />
                   </div>
-                </AccordionItemWithEye>
+                </AccordionItemWithOutEye>
               </div>
             </Accordion>
           </div>
