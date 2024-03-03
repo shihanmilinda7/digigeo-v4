@@ -9,7 +9,8 @@ import Image from "next/image";
 //propno, prop_name, prop_alias,area, state_prov, country, region, propertyid 
 const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,searchAction}) => {
      const [currentPage, setCurrentPage] =  useState(1);
-     const [groupedAreaList, setgroupedAreaList] =  useState({});
+   // const [groupedAreaList, setgroupedAreaList] =  useState({});
+     const [groupedAreaList, setgroupedAreaList] =  useState([]);
      const [filteredAreaList, setfilteredAreaList] =  useState([]);
      const [startSearch, setstartSearch] =  useState(false);
 
@@ -32,11 +33,19 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
      },[areaList])
     useEffect(()=>{
          
-      const result = Object.groupBy(filteredAreaList, ({ country }) => country);
+      // const result = Object.groupBy(filteredAreaList, ({ country }) => country);
+      // setgroupedAreaList(result)
+ 
 
-      setgroupedAreaList(result)
-
-
+      const r= filteredAreaList.sort((a,b)=> {
+        
+       
+        return a.area_name.toLowerCase()> b.area_name.toLowerCase() ? 1:-1
+      }
+      )
+      //console.log("ppp",r)
+       setgroupedAreaList(r)
+       
     },[filteredAreaList])
 
 
@@ -49,7 +58,7 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
     
     if (selectedValue){
       const a = areaList.find(a => a.gid == selectedValue)
-      console.log("ppp22",a)
+    
       if(a){
         countryHandler(a.country)
         areaHandler(a.area_name)
@@ -80,18 +89,72 @@ const AreaFilterAreaListItemBrowser = ({areaList, countryHandler, areaHandler ,s
   useEffect(() => {
      
       if(startSearch){
-         console.log("ppp55","search started")
         searchAction();
       }
    
   }, [startSearch])
   
 const flytoHandler = useCallback((id)=>{
-  console.log("ppp1",id)
+   
   setselectedValue(id)
   
 },[])
 
+const getTableBodyV1 =()=>{
+  return (
+    <TableBody>
+      { 
+          groupedAreaList?.map((a) => {
+            return (
+              <TableRow key={a.gid}>
+                <TableCell>{`${a.area_name}`}</TableCell>
+                <TableCell>{`${a.country}`}</TableCell>
+                <TableCell> <Image
+                  src="./navigation.svg"
+                  width={15}
+                  height={15}
+                  alt="prop"
+                  className=" cursor-pointer hover:scale-125 "
+                  onClick={(e) => {
+                    flytoHandler(a.gid);
+                  }}
+                />
+                </TableCell>
+              </TableRow>
+            );
+          })
+      
+      }
+  </TableBody>)
+}
+
+const getTableBodyV0 =()=>{
+  return (
+    <TableBody>
+      {Object.keys(groupedAreaList).map(
+        (c) =>
+          groupedAreaList[c].map((a) => {
+            return (
+              <TableRow key={a.gid}>
+                <TableCell>{`${a.area_name}`}</TableCell>
+                <TableCell>{`${a.country}`}</TableCell>
+                <TableCell> <Image
+                  src="./navigation.svg"
+                  width={15}
+                  height={15}
+                  alt="prop"
+                  className=" cursor-pointer hover:scale-125 "
+                  onClick={(e) => {
+                    flytoHandler(a.gid);
+                  }}
+                />
+                </TableCell>
+              </TableRow>
+            );
+          })
+      )}
+  </TableBody>)
+}
     
     return (
       <div className="flex flex-col overflow-y-scroll min-h-[40vh] max-h-[40vh]">
@@ -100,7 +163,7 @@ const flytoHandler = useCallback((id)=>{
           color={"primary"}
           selectionMode="single"
           // defaultSelectedKeys={["2"]}
-          aria-label="Example static collection table"
+          aria-label=" area table"
           // onSelectionChange={(e)=>{setselectedValue(e.currentKey);}}
         >
           <TableHeader>
@@ -109,41 +172,7 @@ const flytoHandler = useCallback((id)=>{
             {/* <TableColumn>State/Prov</TableColumn> */}
             <TableColumn></TableColumn>
           </TableHeader>
-          <TableBody>
-            {Object.keys(groupedAreaList).map(
-              (c) =>
-                // return (
-                // <div key={c} >
-
-                groupedAreaList[c].map((a) => {
-                  return (
-                    <TableRow key={a.gid}>
-                      <TableCell>{`${a.area_name}`}</TableCell>
-                      <TableCell>{`${a.country}`}</TableCell>
-                      {/* <TableCell>{`${"stp"}`}</TableCell> */}
-                      <TableCell> <Image
-                          src="./navigation.svg"
-                          width={15}
-                          height={15}
-                          alt="prop"
-                          className=" cursor-pointer hover:scale-125 "
-                          onClick={(e) => {
-                            flytoHandler(a.gid);
-                          }}
-                          />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              // </div>
-              // );
-            )}
-            {/* <TableRow key="1">
-              <TableCell>Tony Reichert</TableCell>
-              <TableCell>CEO</TableCell>
-              <TableCell>Active</TableCell>
-            </TableRow> */}
-          </TableBody>
+         {getTableBodyV1()}
         </Table>
 
         {/* <ListboxWrapper>
