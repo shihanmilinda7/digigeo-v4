@@ -107,8 +107,8 @@ const getTableBodyV1 =()=>{
           groupedAreaList?.map((a) => {
             return (
               <TableRow key={a.gid}>
-                <TableCell>{`${a.area_name}`}</TableCell>
                 <TableCell>{`${a.country}`}</TableCell>
+                <TableCell>{`${a.area_name}`}</TableCell>
                 <TableCell> <Image
                   src="./navigation.svg"
                   width={15}
@@ -167,8 +167,8 @@ const getTableBodyV0 =()=>{
           // onSelectionChange={(e)=>{setselectedValue(e.currentKey);}}
         >
           <TableHeader>
-            <TableColumn>Area Name</TableColumn>
             <TableColumn>Country</TableColumn>
+            <TableColumn>Area Name</TableColumn>
             {/* <TableColumn>State/Prov</TableColumn> */}
             <TableColumn></TableColumn>
           </TableHeader>
