@@ -30,7 +30,7 @@ const initialState = {
 };
 
 const areaMapSlice = createSlice({
-  name: "AreaMap",
+  name: "xAreaMap",
   initialState,
   reducers: {
     setIsAreaSideNavOpen: (state, action) => {

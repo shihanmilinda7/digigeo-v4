@@ -27,6 +27,10 @@ import {
 // import { setIsPropertiesSideNavOpen } from "@/store/properties-map/properties-map-slice";
 import { setIsPropertiesSideNavOpen } from "../../../store/properties-map/properties-map-slice";
 import { setIsCompanySideNavOpen } from "../../../store/company-map/company-map-slice";
+import { fetchmapViewScales } from "@/store/map-view-settings/map-view-setting-slice";
+
+
+ 
 
 export const LandingPage = () => {
   let pathname = "";
@@ -52,6 +56,7 @@ export const LandingPage = () => {
   useEffect(() => {
      
     updateRedux();
+     dispatch(fetchmapViewScales());
   }, []);
 
   const updateRedux = async () => {

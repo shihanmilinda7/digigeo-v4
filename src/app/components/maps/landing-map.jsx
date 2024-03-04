@@ -65,6 +65,8 @@ import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from
 import LandingMapSideNavbar from "../side-navbar-second/landing-map/landing-sidenavbar";
 import {Spinner} from "@nextui-org/react";
 import DialogStartup from "@/app/utils/dialog/dialog-startup";
+import MovingBorder from "@/app/utils/moving-border/moving-border";
+ 
 
 
 const fill = new Fill();
@@ -321,6 +323,12 @@ function mapRatioScale({ map, toRound = true }) {
   return toRound ? Math.round(scale) : scale;
 }
 
+const getMapResolution = (scale,unit) => {
+
+
+return scale/(inchesPreUnit(unit) * DOTS_PER_INCH)
+}
+
 export const LandingMap = () => {
   let pathname = "";
   try {
@@ -351,6 +359,9 @@ export const LandingMap = () => {
     (state) => state.landingMapReducer.navigatedFPropId
   );
 
+  const mapViewScaleReducer  = useSelector(
+    (state) => state.mapViewScaleReducer
+  );
   //
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -369,6 +380,10 @@ export const LandingMap = () => {
   const [syncPropertyFeatures, setsyncPropertyFeatures] = useState();
   const [syncPropsLoaded, setsyncPropsLoaded] = useState(false);
 
+  const [mapUnits, setmapUnits] = useState("m");
+
+  const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+
     const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
@@ -386,7 +401,11 @@ export const LandingMap = () => {
   const allSyncPropVectorLayerRef = useRef(null);
   const allSyncPropSourceRef = useRef(null);
 
- 
+ useEffect(()=>{
+
+  console.log("maxResolutionFProp",maxResolutionFProp)
+
+ },[maxResolutionFProp])
   
 
 
@@ -756,6 +775,9 @@ f(10662, 0).catch(console.error);
      if (mapViewRef.current) {
        const scale = mapRatioScale({ map: mapRef.current });
        setmapScale(scale.toFixed(0));
+      //setmapunits
+       const unit = mapRef.current.getView().getProjection().getUnits();
+       setmapUnits(unit)
      }
 
   },[mapViewRef.current])
@@ -912,10 +934,23 @@ f(10662, 0).catch(console.error);
 
   // init useeffect
   useEffect(() => {
-    mouseScrollEvent();
+    // mouseScrollEvent();
     getSyncPropertiesGeometry();
     
   }, []);
+
+    useEffect(() => {
+      mouseScrollEvent();
+    
+    
+  }, [mapViewScaleReducer.mapViewScales]);
+
+  // useEffect(() => {
+    
+  //    console.log("mapViewScales",mapViewScaleReducer.mapViewScales)
+  // }, [mapViewScaleReducer.mapViewScales]);
+
+
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -944,8 +979,34 @@ f(10662, 0).catch(console.error);
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
 
+
+
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
+
+    const setCenteredAreaViewScales =  (center)=>{
+    console.log("popl1", mapViewScaleReducer.mapViewScales ) 
+     let closestArea ={d:9999999999999999}
+     mapViewScaleReducer.mapViewScales.forEach(a=>{
+      const dx = a.centroid_x - center[0]
+      const dy = a.centroid_y - center[1]
+
+      const d = Math.sqrt(dx*dx + dy*dy)
+      
+      if(closestArea.d > d){
+        closestArea = {area:a,d}
+      } 
+
+     })
+      const r =  getMapResolution(closestArea.area.featuredpropscale, mapUnits)
+      console.log("rrr",r,closestArea.area.featuredpropscale,mapUnits)
+      setmaxResolutionFProp(r
+       
+      );
+     
+    //
+
+     } 
 
     // console.log("mapRef", mapRef.current?.getZoom());
     const handleMoveEnd = () => {
@@ -956,6 +1017,9 @@ f(10662, 0).catch(console.error);
       dispatch(setAreaInitialCenter(tmpinitialCenter));
       setZoom(tmpZoomLevel);
       setCenter(tmpinitialCenter);
+
+     
+      setCenteredAreaViewScales(tmpinitialCenter)
       // router.push(
       //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
       // );
@@ -963,13 +1027,15 @@ f(10662, 0).catch(console.error);
       // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
       // window.history.replaceState({}, "", newUrl);
     };
-
-    map?.on("moveend", handleMoveEnd);
+    if (mapViewScaleReducer.mapViewScales.length > 0) {
+        
+        map?.on("moveend", handleMoveEnd);
+    }
 
     return () => {
       map?.un("moveend", handleMoveEnd);
     };
-  }, []);
+  }, [mapViewScaleReducer.mapViewScales]);
 
   // const collapsibleBtnHandler = () => {
   //   const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
@@ -1810,7 +1876,7 @@ f(10662, 0).catch(console.error);
           <olLayerVector
             ref={fPropVectorLayerRef}
             minResolution={0}
-            maxResolution={300}
+            maxResolution={maxResolutionFProp}
           >
             <olSourceVector
               ref={fPropSourceRef}
@@ -1850,14 +1916,20 @@ f(10662, 0).catch(console.error);
           </olLayerVector>
         </Map>
       </div>
-      {!syncPropsLoaded && <DialogStartup
+      {!syncPropsLoaded &&
+       
+      <DialogStartup
         title="Loading...."
         onClose={() => console.log("close")}
         onOk={() => console.log("ok")}
         showDialog={!syncPropsLoaded}
       >
-        <Spinner />
-      </DialogStartup>}
+      
+          <Spinner />
+       
+      </DialogStartup>
+       
+      }
     </div>
   );
 };
