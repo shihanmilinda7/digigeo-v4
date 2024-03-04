@@ -383,6 +383,9 @@ export const LandingMap = () => {
   const [mapUnits, setmapUnits] = useState("m");
 
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
+  const [maxResolutionSyncProps, setmaxResolutionSyncProps] = useState(300);
+  const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] = useState(300);
 
     const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
@@ -1000,10 +1003,12 @@ f(10662, 0).catch(console.error);
      })
       const r =  getMapResolution(closestArea.area.featuredpropscale, mapUnits)
       console.log("rrr",r,closestArea.area.featuredpropscale,mapUnits)
-      setmaxResolutionFProp(r
-       
-      );
+      setmaxResolutionFProp(r );
      
+      const r1 =  getMapResolution(closestArea.area.propoutlinescale, mapUnits)
+       setmaxResolutionSyncOutlines(r1 );
+      const r2 =  getMapResolution(closestArea.area.assetscale, mapUnits)
+       setmaxResolutionSyncOutlines(r2 );
     //
 
      } 
@@ -1846,18 +1851,17 @@ f(10662, 0).catch(console.error);
               loader={areaLoaderFunc}
             ></olSourceVector>
           </olLayerVectorImage>
-          <olLayerVector ref={claimLinkVectorLayerRef}
+          <olLayerVector
+            ref={claimLinkVectorLayerRef}
             minResolution={0}
-            maxResolution={200}
+            maxResolution={maxResolutionSyncOutlines}
           >
-             
-              <olSourceVector
-                ref={claimLinkSourceRef}
-                strategy={bbox}
-                loader={syncClaimLinkLoaderFunc}
-                // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction} 
-              ></olSourceVector>
-            
+            <olSourceVector
+              ref={claimLinkSourceRef}
+              strategy={bbox}
+              loader={syncClaimLinkLoaderFunc}
+              // style={areaMap_tbl_sync_claimlink_VectorLayerStyleFunction}
+            ></olSourceVector>
           </olLayerVector>
           <olLayerVectorImage
             ref={claimVectorImgLayerRef}
@@ -1892,11 +1896,12 @@ f(10662, 0).catch(console.error);
             ref={assetLayerRef}
             style={areaMapAssetVectorLayerStyleFunction}
             minResolution={0}
-            maxResolution={300}
+            maxResolution={maxResolutionAssets}
           >
-            <olSourceVector ref={assetSourceRef}
-            loader={assetLoaderFunc}
-            strategy={bbox}
+            <olSourceVector
+              ref={assetSourceRef}
+              loader={assetLoaderFunc}
+              strategy={bbox}
             ></olSourceVector>
           </olLayerVector>
 
@@ -1916,20 +1921,16 @@ f(10662, 0).catch(console.error);
           </olLayerVector>
         </Map>
       </div>
-      {!syncPropsLoaded &&
-       
-      <DialogStartup
-        title="Loading...."
-        onClose={() => console.log("close")}
-        onOk={() => console.log("ok")}
-        showDialog={!syncPropsLoaded}
-      >
-      
+      {!syncPropsLoaded && (
+        <DialogStartup
+          title="Loading...."
+          onClose={() => console.log("close")}
+          onOk={() => console.log("ok")}
+          showDialog={!syncPropsLoaded}
+        >
           <Spinner />
-       
-      </DialogStartup>
-       
-      }
+        </DialogStartup>
+      )}
     </div>
   );
 };
