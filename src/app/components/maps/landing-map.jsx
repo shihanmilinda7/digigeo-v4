@@ -386,6 +386,8 @@ export const LandingMap = () => {
   const [maxResolutionSyncProps, setmaxResolutionSyncProps] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
   const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] = useState(300);
+  const [curcenteredareaid, setcurcenteredareaid] = useState(0);
+
 
     const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
@@ -988,7 +990,7 @@ f(10662, 0).catch(console.error);
     const map = mapRef.current;
 
     const setCenteredAreaViewScales =  (center)=>{
-    console.log("popl1", mapViewScaleReducer.mapViewScales ) 
+   // console.log("popl1", mapViewScaleReducer.mapViewScales ) 
      let closestArea ={d:9999999999999999}
      mapViewScaleReducer.mapViewScales.forEach(a=>{
       const dx = a.centroid_x - center[0]
@@ -1002,7 +1004,8 @@ f(10662, 0).catch(console.error);
 
      })
       const r =  getMapResolution(closestArea.area.featuredpropscale, mapUnits)
-      console.log("rrr",r,closestArea.area.featuredpropscale,mapUnits)
+      console.log("rrr",r,closestArea.area  )
+      setcurcenteredareaid(closestArea.area.area_id)
       setmaxResolutionFProp(r );
      
       const r1 =  getMapResolution(closestArea.area.propoutlinescale, mapUnits)
@@ -1327,6 +1330,20 @@ f(10662, 0).catch(console.error);
         color: "blue",
         width: 1,
       }),
+      text:new Text({
+      //       // textAlign: align == "" ? undefined : align,
+      //       // textBaseline: baseline,
+      font: "20px serif",
+      text: feature.get("area_name") +"-" + feature.get("area_id"),
+       fill: new Fill({ color: "red" }),
+      // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+      offsetX: 2,
+      offsetY: -13,
+      // placement: placement,
+      // maxAngle: maxAngle,
+      // overflow: overflow,
+      // rotation: rotation,
+    }),
     });
 
     return s;
@@ -1737,6 +1754,16 @@ f(10662, 0).catch(console.error);
             }  w-22`}
           >
             Terrain
+          </Button>
+          <Button
+            
+            className={`${
+              mapLyrs == "p"
+                ? "bg-blue-900 text-white"
+                : "bg-blue-700 text-white"
+            }  w-22`}
+          >
+            {curcenteredareaid}
           </Button>
         </ButtonGroup>
 
