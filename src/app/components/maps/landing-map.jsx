@@ -63,11 +63,9 @@ import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
 import { commodityMap_tbl_syncProperty_commodity_VectorLayerStyleFunction } from "./syn-prop-cluster-styles";
 import LandingMapSideNavbar from "../side-navbar-second/landing-map/landing-sidenavbar";
-import {Spinner} from "@nextui-org/react";
+import { Spinner } from "@nextui-org/react";
 import DialogStartup from "@/app/utils/dialog/dialog-startup";
 import MovingBorder from "@/app/utils/moving-border/moving-border";
- 
-
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -269,7 +267,7 @@ const areaMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   //       width: 3,
   //     }),
   //   });
-  // }  
+  // }
   // else if (feature.values_.asset_type == assetTypesColorMappings[8].type) {
   //   image = new Icon({
   //     src: "data:image/svg+xml;utf8," + encodeURIComponent(svgOpMine),
@@ -323,11 +321,9 @@ function mapRatioScale({ map, toRound = true }) {
   return toRound ? Math.round(scale) : scale;
 }
 
-const getMapResolution = (scale,unit) => {
-
-
-return scale/(inchesPreUnit(unit) * DOTS_PER_INCH)
-}
+const getMapResolution = (scale, unit) => {
+  return scale / (inchesPreUnit(unit) * DOTS_PER_INCH);
+};
 
 export const LandingMap = () => {
   let pathname = "";
@@ -359,9 +355,7 @@ export const LandingMap = () => {
     (state) => state.landingMapReducer.navigatedFPropId
   );
 
-  const mapViewScaleReducer  = useSelector(
-    (state) => state.mapViewScaleReducer
-  );
+  const mapViewScaleReducer = useSelector((state) => state.mapViewScaleReducer);
   //
   const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
@@ -385,11 +379,11 @@ export const LandingMap = () => {
   const [maxResolutionFProp, setmaxResolutionFProp] = useState(300);
   const [maxResolutionSyncProps, setmaxResolutionSyncProps] = useState(300);
   const [maxResolutionAssets, setmaxResolutionAssets] = useState(300);
-  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] = useState(300);
+  const [maxResolutionSyncOutlines, setmaxResolutionSyncOutlines] =
+    useState(300);
   const [curcenteredareaid, setcurcenteredareaid] = useState(0);
 
-
-    const syncPropSourceRef = useRef(null);
+  const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
@@ -406,55 +400,52 @@ export const LandingMap = () => {
   const allSyncPropVectorLayerRef = useRef(null);
   const allSyncPropSourceRef = useRef(null);
 
- useEffect(()=>{
+  useEffect(() => {
+    console.log("maxResolutionFProp", maxResolutionFProp);
+  }, [maxResolutionFProp]);
 
-  console.log("maxResolutionFProp",maxResolutionFProp)
+  const syncClaimLinkLoaderFunc = useCallback(
+    (extent, resolution, projection) => {
+      console.log("outline-loading");
+      const url =
+        `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
+        `/${extent.join("/")}`;
+      // console.log("url", url);
+      fetch(url, {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (json.data) {
+            if (json.data[0].json_build_object.features) {
+              const features = new GeoJSON().readFeatures(
+                json.data[0].json_build_object
+              );
+              //console.log("hit claims3")
+              claimLinkSourceRef.current.clear();
+              claimLinkSourceRef.current.addFeatures(features);
 
- },[maxResolutionFProp])
-  
-
-
-   const syncClaimLinkLoaderFunc = useCallback((extent, resolution, projection) => {
-     const url =
-       `https://atlas.ceyinfo.cloud/matlas/syncclaimlink_byextent` +
-       `/${extent.join("/")}`;
-     // console.log("url", url);
-     fetch(url, {
-       method: "GET", // *GET, POST, PUT, DELETE, etc.
-       mode: "cors", // no-cors, *cors, same-origin
-       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-       credentials: "same-origin", // include, *same-origin, omit
-       headers: {
-         "Content-Type": "application/json",
-       },
-     })
-       .then((response) => response.json())
-       .then((json) => {
-         if (json.data) {
-           if (json.data[0].json_build_object.features) {
-             const features = new GeoJSON().readFeatures(
-               json.data[0].json_build_object
-             );
-             //console.log("hit claims3")
-             claimLinkSourceRef.current.clear();
-             claimLinkSourceRef.current.addFeatures(features);
-             
-
-             //console.log("bbsync uni tbl01_claims   features count", features.count);
-           }
-         }
-       });
-   }, []);
-
+              //console.log("bbsync uni tbl01_claims   features count", features.count);
+            }
+          }
+        });
+    },
+    []
+  );
 
   const getSyncPropertiesGeometry = useCallback(async () => {
     const f = async (limit, offset) => {
       const res = await fetch(
         `https://atlas.ceyinfo.cloud/matlas/all_tbl_sync_property`,
-        { cache: "no-store" }
+        { cache: "force-cache" }
       );
       const d = await res.json();
-     
 
       const gj = {
         type: "FeatureCollection",
@@ -468,14 +459,14 @@ export const LandingMap = () => {
       };
       setsyncPropertyFeatures(gj);
     };
-f(10662, 0).catch(console.error);
+    f(10662, 0).catch(console.error);
     // for (let index = 0; index <= 100; index++) {
     //   f(100, index).catch(console.error);
     // }
   }, []);
 
-   
   const fPropLoaderFunc = useCallback((extent, resolution, projection) => {
+    console.log("fprop-loading");
     const url =
       `https://atlas.ceyinfo.cloud/matlas/fprops_byextent` +
       `/${extent.join("/")}`;
@@ -508,37 +499,36 @@ f(10662, 0).catch(console.error);
       });
   }, []);
 
+  const assetLoaderFunc = useCallback((extent, resolution, projection) => {
+    const url =
+      `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
+      `/${extent.join("/")}`;
+    // console.log("url", url);
+    fetch(url, {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      mode: "cors", // no-cors, *cors, same-origin
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      credentials: "same-origin", // include, *same-origin, omit
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data) {
+          if (json.data[0].json_build_object.features) {
+            const features = new GeoJSON().readFeatures(
+              json.data[0].json_build_object
+            );
+            //console.log("hit claims3")
+            assetSourceRef.current.clear();
+            assetSourceRef.current.addFeatures(features);
 
-    const assetLoaderFunc = useCallback((extent, resolution, projection) => {
-      const url =
-        `https://atlas.ceyinfo.cloud/matlas/assets_byextent` +
-        `/${extent.join("/")}`;
-      // console.log("url", url);
-      fetch(url, {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        mode: "cors", // no-cors, *cors, same-origin
-        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: "same-origin", // include, *same-origin, omit
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          if (json.data) {
-            if (json.data[0].json_build_object.features) {
-              const features = new GeoJSON().readFeatures(
-                json.data[0].json_build_object
-              );
-              //console.log("hit claims3")
-              assetSourceRef.current.clear();
-              assetSourceRef.current.addFeatures(features);
-
-              //console.log("bbsync uni tbl01_claims   features count", features.count);
-            }
+            //console.log("bbsync uni tbl01_claims   features count", features.count);
           }
-        });
-    }, []);
+        }
+      });
+  }, []);
   //  useEffect(()=>{
   //   if(navigatedFPropertyRef.current){
   //   const fp = navigatedFPropertyRef.current.find(f=>f.get("id")==navigatedFPropId)
@@ -761,31 +751,48 @@ f(10662, 0).catch(console.error);
 
   const onViewChange = useCallback((e) => {
     const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
+    // setmapScale(scale.toLocaleString( ));
+    setmapScale(scale.toLocaleString());
 
-    if(fPropVectorLayerRef.current.isVisible()){
-      dispatch(setIsLandingMapSideNavOpen(true));
-      const vf =  fPropSourceRef.current.getFeaturesInExtent(mapRef.current.getView().calculateExtent());
-      const vfObjs= vf?.map(f=> { return {id:f.get("id"),companyid:f.get("companyid"),colour:f.get("colour"),company2:f.get("sponsors")}})
+    if (fPropVectorLayerRef.current.isVisible()) {
+      // if (fPropSourceRef?.current?.getFeatures().length > 0) {
+      //   console.log("setIsLandingMapSideNavOpen(true",)
+      //   dispatch(setIsLandingMapSideNavOpen(true));
+      // }
+      const vf = fPropSourceRef.current.getFeaturesInExtent(
+        mapRef.current.getView().calculateExtent()
+      );
+      const vfObjs = vf?.map((f) => {
+        return {
+          id: f.get("id"),
+          companyid: f.get("companyid"),
+          colour: f.get("colour"),
+          company2: f.get("sponsors"),
+        };
+      });
 
       dispatch(setFPropertyFeatures(vfObjs));
-      
-    }else{
+
+      if (vfObjs?.length > 0) {
+        // console.log("setIsLandingMapSideNavOpen(true",)
+        dispatch(setIsLandingMapSideNavOpen(true));
+      } else {
+        dispatch(setIsLandingMapSideNavOpen(false));
+      }
+    } else {
       dispatch(setIsLandingMapSideNavOpen(false));
     }
-
   });
 
-   useEffect(()=>{
-     if (mapViewRef.current) {
-       const scale = mapRatioScale({ map: mapRef.current });
-       setmapScale(scale.toFixed(0));
+  useEffect(() => {
+    if (mapViewRef.current) {
+      const scale = mapRatioScale({ map: mapRef.current });
+      setmapScale(scale.toLocaleString());
       //setmapunits
-       const unit = mapRef.current.getView().getProjection().getUnits();
-       setmapUnits(unit)
-     }
-
-  },[mapViewRef.current])
+      const unit = mapRef.current.getView().getProjection().getUnits();
+      setmapUnits(unit);
+    }
+  }, [mapViewRef.current]);
 
   useEffect(() => {
     if (areaFlyToLocation?.length > 0)
@@ -809,8 +816,6 @@ f(10662, 0).catch(console.error);
   const isLandingMapSideNavOpen = useSelector(
     (state) => state.landingMapReducer.isLandingMapSideNavOpen
   );
-
-
 
   // const syncPropertyFeatures = useSelector(
   //   (state) => state.landingMapReducer.syncPropertyFeatures
@@ -860,7 +865,7 @@ f(10662, 0).catch(console.error);
 
   // useEffect((()=>{
   //   if (syncPropsLoaded) {
-      
+
   //   }
 
   // }
@@ -871,7 +876,7 @@ f(10662, 0).catch(console.error);
       const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
       allSyncPropSourceRef?.current?.addFeatures(e);
-      setsyncPropsLoaded(true)
+      setsyncPropsLoaded(true);
     }
 
     // if (allSyncPropSourceRef.current) {
@@ -894,7 +899,6 @@ f(10662, 0).catch(console.error);
   //     fPropSourceLabelRef?.current?.addFeatures(e);
   //   }
 
- 
   // }, [featuredPropertyFeatures]);
 
   useEffect(() => {
@@ -936,26 +940,20 @@ f(10662, 0).catch(console.error);
     // }
   }, [assetFeatures]);
 
-
   // init useeffect
   useEffect(() => {
     // mouseScrollEvent();
     getSyncPropertiesGeometry();
-    
   }, []);
 
-    useEffect(() => {
-      mouseScrollEvent();
-    
-    
+  useEffect(() => {
+    mouseScrollEvent();
   }, [mapViewScaleReducer.mapViewScales]);
 
   // useEffect(() => {
-    
+
   //    console.log("mapViewScales",mapViewScaleReducer.mapViewScales)
   // }, [mapViewScaleReducer.mapViewScales]);
-
-
 
   useEffect(() => {
     fPropVectorLayerRef?.current
@@ -984,66 +982,69 @@ f(10662, 0).catch(console.error);
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
 
+  const mouseScrollEvent = useCallback(
+    (event) => {
+      const map = mapRef.current;
 
+      const setCenteredAreaViewScales = (center) => {
+        // console.log("popl1", mapViewScaleReducer.mapViewScales )
+        let closestArea = { d: 9999999999999999 };
+        mapViewScaleReducer.mapViewScales.forEach((a) => {
+          const dx = a.centroid_x - center[0];
+          const dy = a.centroid_y - center[1];
 
-  const mouseScrollEvent = useCallback((event) => {
-    const map = mapRef.current;
+          const d = Math.sqrt(dx * dx + dy * dy);
 
-    const setCenteredAreaViewScales =  (center)=>{
-   // console.log("popl1", mapViewScaleReducer.mapViewScales ) 
-     let closestArea ={d:9999999999999999}
-     mapViewScaleReducer.mapViewScales.forEach(a=>{
-      const dx = a.centroid_x - center[0]
-      const dy = a.centroid_y - center[1]
+          if (closestArea.d > d) {
+            closestArea = { area: a, d };
+          }
+        });
+        const r = getMapResolution(
+          closestArea.area.featuredpropscale,
+          mapUnits
+        );
+        // console.log("rrr",r,closestArea.area  )
+        setcurcenteredareaid(closestArea.area.area_id);
+        setmaxResolutionFProp(r);
 
-      const d = Math.sqrt(dx*dx + dy*dy)
-      
-      if(closestArea.d > d){
-        closestArea = {area:a,d}
-      } 
+        const r1 = getMapResolution(
+          closestArea.area.propoutlinescale,
+          mapUnits
+        );
+        setmaxResolutionSyncOutlines(r1);
+        const r2 = getMapResolution(closestArea.area.assetscale, mapUnits);
+        setmaxResolutionSyncOutlines(r2);
+        //
+      };
 
-     })
-      const r =  getMapResolution(closestArea.area.featuredpropscale, mapUnits)
-      console.log("rrr",r,closestArea.area  )
-      setcurcenteredareaid(closestArea.area.area_id)
-      setmaxResolutionFProp(r );
-     
-      const r1 =  getMapResolution(closestArea.area.propoutlinescale, mapUnits)
-       setmaxResolutionSyncOutlines(r1 );
-      const r2 =  getMapResolution(closestArea.area.assetscale, mapUnits)
-       setmaxResolutionSyncOutlines(r2 );
-    //
+      // console.log("mapRef", mapRef.current?.getZoom());
+      const handleMoveEnd = () => {
+        // console.log("map", map);
+        const tmpZoomLevel = map.getView().getZoom();
+        const tmpinitialCenter = map.getView().getCenter();
+        dispatch(setAreaZoomLevel(tmpZoomLevel));
+        dispatch(setAreaInitialCenter(tmpinitialCenter));
+        setZoom(tmpZoomLevel);
+        setCenter(tmpinitialCenter);
 
-     } 
-
-    // console.log("mapRef", mapRef.current?.getZoom());
-    const handleMoveEnd = () => {
-      // console.log("map", map);
-      const tmpZoomLevel = map.getView().getZoom();
-      const tmpinitialCenter = map.getView().getCenter();
-      dispatch(setAreaZoomLevel(tmpZoomLevel));
-      dispatch(setAreaInitialCenter(tmpinitialCenter));
-      setZoom(tmpZoomLevel);
-      setCenter(tmpinitialCenter);
-
-     
-      setCenteredAreaViewScales(tmpinitialCenter)
-      // router.push(
-      //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
-      // );
-      // console.log("tmpinitialCenter", tmpinitialCenter);
-      // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
-      // window.history.replaceState({}, "", newUrl);
-    };
-    if (mapViewScaleReducer.mapViewScales.length > 0) {
-        
+        setCenteredAreaViewScales(tmpinitialCenter);
+        // router.push(
+        //   `/?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`
+        // );
+        // console.log("tmpinitialCenter", tmpinitialCenter);
+        // const newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&lyrs=${mapLyrs}&z=${tmpZoomLevel}&c=${tmpinitialCenter}`;
+        // window.history.replaceState({}, "", newUrl);
+      };
+      if (mapViewScaleReducer.mapViewScales.length > 0) {
         map?.on("moveend", handleMoveEnd);
-    }
+      }
 
-    return () => {
-      map?.un("moveend", handleMoveEnd);
-    };
-  }, [mapViewScaleReducer.mapViewScales]);
+      return () => {
+        map?.un("moveend", handleMoveEnd);
+      };
+    },
+    [mapViewScaleReducer.mapViewScales]
+  );
 
   // const collapsibleBtnHandler = () => {
   //   const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
@@ -1177,7 +1178,9 @@ f(10662, 0).catch(console.error);
     fPropVectorLayerRef?.current?.setVisible(landingMapFpropLayerVisible);
   }, [landingMapFpropLayerVisible]);
   useEffect(() => {
-    claimLinkVectorLayerRef?.current?.setVisible(landingMapSyncClaimLinkLayerVisible);
+    claimLinkVectorLayerRef?.current?.setVisible(
+      landingMapSyncClaimLinkLayerVisible
+    );
   }, [landingMapSyncClaimLinkLayerVisible]);
   useEffect(() => {
     allSyncPropVectorLayerRef?.current?.setVisible(
@@ -1191,7 +1194,9 @@ f(10662, 0).catch(console.error);
     claimVectorImgLayerRef?.current?.setVisible(landingMapClaimLayerVisible);
   }, [landingMapClaimLayerVisible]);
   useEffect(() => {
-    areaBoundaryImgLayerRef?.current?.setVisible(landingMapAreaBoundaryLayerVisible);
+    areaBoundaryImgLayerRef?.current?.setVisible(
+      landingMapAreaBoundaryLayerVisible
+    );
   }, [landingMapAreaBoundaryLayerVisible]);
 
   //asset type visibility useEffects
@@ -1330,20 +1335,20 @@ f(10662, 0).catch(console.error);
         color: "blue",
         width: 1,
       }),
-      text:new Text({
-      //       // textAlign: align == "" ? undefined : align,
-      //       // textBaseline: baseline,
-      font: "20px serif",
-      text: feature.get("area_name") +"-" + feature.get("area_id"),
-       fill: new Fill({ color: "red" }),
-      // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-      offsetX: 2,
-      offsetY: -13,
-      // placement: placement,
-      // maxAngle: maxAngle,
-      // overflow: overflow,
-      // rotation: rotation,
-    }),
+      text: new Text({
+        //       // textAlign: align == "" ? undefined : align,
+        //       // textBaseline: baseline,
+        font: "20px serif",
+        text: feature.get("area_name") + "-" + feature.get("area_id"),
+        fill: new Fill({ color: "red" }),
+        // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+        offsetX: 2,
+        offsetY: -13,
+        // placement: placement,
+        // maxAngle: maxAngle,
+        // overflow: overflow,
+        // rotation: rotation,
+      }),
     });
 
     return s;
@@ -1464,7 +1469,6 @@ f(10662, 0).catch(console.error);
               json.data[0].json_build_object
             );
             claimVectorImgSourceRef.current.addFeatures(features);
-
           }
         }
       });
@@ -1642,7 +1646,6 @@ f(10662, 0).catch(console.error);
       } else {
         dispatch(setclickclaimObject(undefined));
       }
-
     };
 
     if (coordinates) {
@@ -1658,22 +1661,21 @@ f(10662, 0).catch(console.error);
   const onClickViewPlusZoom = () => {
     const curZoom = mapViewRef.current.getZoom();
     mapViewRef.current.setZoom(curZoom + 1);
-     const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
-    
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
   };
   const onClickViewMinusZoom = () => {
     const curZoom = mapViewRef.current.getZoom();
     mapViewRef.current.setZoom(curZoom - 1);
-     const scale = mapRatioScale({ map: mapRef.current });
-       setmapScale(scale.toFixed(0));
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
   };
 
   const onClickViewInitZoom = () => {
     mapViewRef.current.setZoom(3.25);
-    mapViewRef.current.setCenter( [-10694872.010699773, 7434223.337137634]);
-     const scale = mapRatioScale({ map: mapRef.current });
-       setmapScale(scale.toFixed(0));
+    mapViewRef.current.setCenter([-10694872.010699773, 7434223.337137634]);
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
   };
 
   return (
@@ -1756,7 +1758,6 @@ f(10662, 0).catch(console.error);
             Terrain
           </Button>
           <Button
-            
             className={`${
               mapLyrs == "p"
                 ? "bg-blue-900 text-white"

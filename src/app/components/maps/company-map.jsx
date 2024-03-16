@@ -25,21 +25,40 @@ import { GiEarthAmerica } from "react-icons/gi";
 import { AiFillMinusSquare, AiFillPlusSquare } from "react-icons/ai";
 import GeoJSON from "ol/format/GeoJSON";
 
-import { Circle as CircleStyle, Fill, Stroke, Style, Icon,Text,  Circle, } from "ol/style";
+import {
+  Circle as CircleStyle,
+  Fill,
+  Stroke,
+  Style,
+  Icon,
+  Text,
+  Circle,
+} from "ol/style";
 import { getBottomLeft, getCenter, getWidth } from "ol/extent";
 import { getHeight } from "ol/extent";
 import { toContext } from "ol/render";
 import { areaMapAssetVectorLayerStyleFunction } from "./asset-styles";
 import CompanySideNavbar from "../side-navbar-second/company-map/company-sidenavbar";
-import { flyTo } from "./fly"
-import { setclickassetObject, setclickclaimObject, setclickfPropertyObject, setclicksyncPropertyObject } from "@/store/company-map/company-map-slice";
+import { flyTo } from "./fly";
+import {
+  setclickassetObject,
+  setclickclaimObject,
+  setclickfPropertyObject,
+  setclicksyncPropertyObject,
+} from "@/store/company-map/company-map-slice";
 import CompanyMapClickPopup from "./company-map-popup/company-map-click-popup";
-import { all, bbox,  bbox as bboxStrategy } from "ol/loadingstrategy";
-import { areaMApPropertyVectorRendererFuncV2Highlight, areaMApPropertyVectorRendererFuncV2_labels, areaMapAssetVectorLayerStyleFunctionHighlited, areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited, areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight, styleFunctionClaimHighlight } from "./area-map-styles/area-map-styles";
+import { all, bbox, bbox as bboxStrategy } from "ol/loadingstrategy";
+import {
+  areaMApPropertyVectorRendererFuncV2Highlight,
+  areaMApPropertyVectorRendererFuncV2_labels,
+  areaMapAssetVectorLayerStyleFunctionHighlited,
+  areaMap_tbl_syncProperty_VectorLayerStyleFunctionHighLited,
+  areaMap_tbl_sync_claimlink_VectorLayerStyleFunctionHighLight,
+  styleFunctionClaimHighlight,
+} from "./area-map-styles/area-map-styles";
 
 import { toLonLat } from "ol/proj";
 import { METERS_PER_UNIT } from "ol/proj/Units";
-
 
 const fill = new Fill();
 const stroke = new Stroke({
@@ -47,35 +66,32 @@ const stroke = new Stroke({
   width: 2,
 });
 
-    const companyMApPropertyVectorRendererFuncV2 = (
-  pixelCoordinates,
-  state
-) => {
+const companyMApPropertyVectorRendererFuncV2 = (pixelCoordinates, state) => {
   //  console.log("sssss", state);
   const context = state.context;
   const geometry = state.geometry.clone();
   geometry.setCoordinates(pixelCoordinates);
   const extent = geometry.getExtent();
   const width = getWidth(extent);
-     const height = getHeight(extent);
-     //new code
- const svgtext2 = state.feature.get("hatch");
+  const height = getHeight(extent);
+  //new code
+  const svgtext2 = state.feature.get("hatch");
   //  const img = new Image();
 
-    // img.onload = function () {
-    //   feature.set("flag", img);
-    // };
-    
-   // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+  // img.onload = function () {
+  //   feature.set("flag", img);
+  // };
 
-     //end new code
-      const flag = state.feature.get("flag");
-    // const flag = img
-    //   console.log("flag",flag)
+  // img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+
+  //end new code
+  const flag = state.feature.get("flag");
+  // const flag = img
+  //   console.log("flag",flag)
   if (!flag || height < 1 || width < 1) {
     return;
   }
- 
+
   context.save();
   const renderContext = toContext(context, {
     pixelRatio: 1,
@@ -91,12 +107,12 @@ const stroke = new Stroke({
   const left = bottomLeft[0];
   const bottom = bottomLeft[1];
   const hf = width / (height * 8);
-  context.drawImage(flag,  left, bottom, width *20, height*hf*20);
- 
+  context.drawImage(flag, left, bottom, width * 20, height * hf * 20);
+
   context.restore();
 };
 
- const companyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
+const companyMap_tbl_sync_claimlink_VectorLayerStyleFunction = (
   feature,
   resolution
 ) => {
@@ -179,7 +195,7 @@ const stroke = new Stroke({
   //     stroke: new Stroke({
   //       color: assetTypesColorMappings[0].color,
   //       width: 3,
-  //     }), 
+  //     }),
   //   });
   // }
   // if (feature.values_.asset_type == assetTypesColorMappings[1].type) {
@@ -284,30 +300,19 @@ const stroke = new Stroke({
   return st;
 };
 
-
-
 const DOTS_PER_INCH = 72;
 const INCHES_PER_METRE = 39.37;
 
 function inchesPreUnit(unit) {
   return METERS_PER_UNIT[unit] * INCHES_PER_METRE;
 }
- function mapRatioScale({ map, toRound = true }) {
+function mapRatioScale({ map, toRound = true }) {
   const resolution = map.getView().getResolution();
   const unit = map.getView().getProjection().getUnits();
 
   let scale = resolution * inchesPreUnit(unit) * DOTS_PER_INCH;
   return toRound ? Math.round(scale) : scale;
 }
-
-
-
-
-
-
-
-
-
 
 export const CompanyMap = () => {
   let pathname = "";
@@ -326,10 +331,6 @@ export const CompanyMap = () => {
   const [lat, setlat] = useState(0);
   const [long, setlong] = useState(0);
 
-
-
-
-
   const mapRef = useRef();
   const mapViewRef = useRef();
   const selectedFPropRef = useRef();
@@ -338,10 +339,10 @@ export const CompanyMap = () => {
   const selectedSynOutLineRef = useRef();
   const selectedClaimRef = useRef();
   const navigatedFPropertyRef = useRef();
-  
+
   const dispatch = useDispatch();
 
-    const companyFlyToLocation = useSelector(
+  const companyFlyToLocation = useSelector(
     (state) => state.companyMapReducer.companyFlyToLocation
   );
 
@@ -349,25 +350,21 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.navigatedFPropId
   );
 
-
- const [coordinates, setCoordinates] = useState(undefined);
+  const [coordinates, setCoordinates] = useState(undefined);
   const [popup, setPopup] = useState();
 
-   useEffect(() => {
-     if (navigatedFPropertyRef.current) {
-       const fp = navigatedFPropertyRef.current.find(
-         (f) => f.get("id") == navigatedFPropId
-       );
+  useEffect(() => {
+    if (navigatedFPropertyRef.current) {
+      const fp = navigatedFPropertyRef.current.find(
+        (f) => f.get("id") == navigatedFPropId
+      );
 
-       const selectStyle = new Style({ zIndex: 1 });
-       selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
+      const selectStyle = new Style({ zIndex: 1 });
+      selectStyle.setRenderer(areaMApPropertyVectorRendererFuncV2Highlight);
 
-       fp?.setStyle(selectStyle);
-     }
-   }, [navigatedFPropId]);
-
-
-
+      fp?.setStyle(selectStyle);
+    }
+  }, [navigatedFPropId]);
 
   const onSingleclick = useCallback((evt) => {
     const { coordinate } = evt;
@@ -560,19 +557,16 @@ export const CompanyMap = () => {
 
     // console.log("pmove- end fun",)
   });
-  
-    
-   const onViewChange = useCallback((e) => {
-     const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
- 
+
+  const onViewChange = useCallback((e) => {
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
   });
 
-    useEffect(() => {
-    if(companyFlyToLocation?.length>0)
-    flyTo(mapViewRef?.current,companyFlyToLocation,()=>{})
-    
-  }, [companyFlyToLocation])
+  useEffect(() => {
+    if (companyFlyToLocation?.length > 0)
+      flyTo(mapViewRef?.current, companyFlyToLocation, () => {});
+  }, [companyFlyToLocation]);
 
   const selectedMap = useSelector(
     (state) => state.mapSelectorReducer.selectedMap
@@ -584,7 +578,6 @@ export const CompanyMap = () => {
     (state) => state.mapSelectorReducer.companyLyrs
   );
 
-
   const companyZoomLevel = useSelector(
     (state) => state.mapSelectorReducer.companyZoomLevel
   );
@@ -592,19 +585,18 @@ export const CompanyMap = () => {
     (state) => state.mapSelectorReducer.companyInitialCenter
   );
 
-    const isCompanySideNavOpen = useSelector(
+  const isCompanySideNavOpen = useSelector(
     (state) => state.companyMapReducer.isCompanySideNavOpen
   );
 
-  
   const syncPropSourceRef = useRef(null);
   const syncPropVectorLayerRef = useRef(null);
   const fPropSourceRef = useRef(null);
   const fPropVectorLayerRef = useRef(null);
-  
+
   const fPropSourceLabelRef = useRef(null);
   const fPropVectorLayerLabelRef = useRef(null);
-  
+
   const assetSourceRef = useRef(null);
   const assetLayerRef = useRef(null);
   const claimLinkSourceRef = useRef(null);
@@ -613,7 +605,6 @@ export const CompanyMap = () => {
   const claimVectorImgLayerRef = useRef(null);
   const areaBoundaryImgSourceRef = useRef(null);
   const areaBoundaryImgLayerRef = useRef(null);
-
 
   const syncPropertyFeatures = useSelector(
     (state) => state.companyMapReducer.syncPropertyFeatures
@@ -628,14 +619,13 @@ export const CompanyMap = () => {
     (state) => state.companyMapReducer.assetFeatures
   );
 
-
-  const companyName = useSelector((state) => state.companyMapReducer.companyName);
+  const companyName = useSelector(
+    (state) => state.companyMapReducer.companyName
+  );
   const companyId = useSelector((state) => state.companyMapReducer.companyId);
-  const companyStockcode = useSelector((state) => state.companyMapReducer.companyStockcode);
-
-
-
-
+  const companyStockcode = useSelector(
+    (state) => state.companyMapReducer.companyStockcode
+  );
 
   useEffect(() => {
     // console.log("ue2")
@@ -644,50 +634,41 @@ export const CompanyMap = () => {
     style.setRenderer(companyMApPropertyVectorRendererFuncV2);
 
     fPropVectorLayerRef.current?.setStyle(style);
-  }, [fPropVectorLayerRef.current])
-  
+  }, [fPropVectorLayerRef.current]);
+
   useEffect(() => {
     claimVectorImgLayerRef.current?.setOpacity(0.6);
-  }, [claimVectorImgLayerRef.current])
+  }, [claimVectorImgLayerRef.current]);
 
+  useEffect(() => {
+    syncPropSourceRef?.current?.clear();
+    if (syncPropertyFeatures?.features?.length > 0) {
+      const e = new GeoJSON().readFeatures(syncPropertyFeatures);
 
-    useEffect(() => {
-       syncPropSourceRef?.current?.clear()
-    if (syncPropertyFeatures?.features?.length>0) {
-     
-      const e = new GeoJSON().readFeatures(syncPropertyFeatures)
-       
       syncPropSourceRef?.current?.addFeatures(e);
     }
-        
-     
+
     if (syncPropSourceRef.current) {
-      const p1 = syncPropSourceRef.current?.getExtent()[0]
+      const p1 = syncPropSourceRef.current?.getExtent()[0];
       if (p1 != Infinity) {
         mapRef.current?.getView()?.fit(syncPropSourceRef.current?.getExtent(), {
           padding: [200, 200, 200, 200],
           duration: 3000,
         });
       }
-       
     }
-    }, [syncPropertyFeatures]);
-  
-    useEffect(() => {
-       fPropSourceRef?.current?.clear()
+  }, [syncPropertyFeatures]);
+
+  useEffect(() => {
+    fPropSourceRef?.current?.clear();
     if (featuredPropertyFeatures?.features) {
-      
-     
-      const e = new GeoJSON().readFeatures(featuredPropertyFeatures)
-     
+      const e = new GeoJSON().readFeatures(featuredPropertyFeatures);
+
       navigatedFPropertyRef.current = e;
       fPropSourceRef?.current?.addFeatures(e);
       fPropSourceLabelRef?.current?.addFeatures(e);
-
-
     }
-        
-     
+
     //  if (fPropSourceRef.current) {
     //    const p1= fPropSourceRef.current?.getExtent()[0]
     //    if (p1 != Infinity) {
@@ -696,16 +677,15 @@ export const CompanyMap = () => {
     //        duration: 3000,
     //      });
     //    }
-       
+
     //  }
   }, [featuredPropertyFeatures]);
 
-    useEffect(() => {
-      claimLinkSourceRef?.current?.clear()
+  useEffect(() => {
+    claimLinkSourceRef?.current?.clear();
     if (syncClaimLinkPropertyFeatures?.features) {
-      
-      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures)
-       
+      const e = new GeoJSON().readFeatures(syncClaimLinkPropertyFeatures);
+
       claimLinkSourceRef?.current?.addFeatures(e);
     }
     // if (claimLinkSourceRef.current) {
@@ -716,20 +696,18 @@ export const CompanyMap = () => {
     //       duration: 3000,
     //     });
     //   }
-       
+
     // }
   }, [syncClaimLinkPropertyFeatures]);
-  
-    useEffect(() => {
-    assetSourceRef?.current?.clear()
+
+  useEffect(() => {
+    assetSourceRef?.current?.clear();
     if (assetFeatures?.features) {
-      
-      const e = new GeoJSON().readFeatures(assetFeatures)
-        console.log("assetFeatures added" )
+      const e = new GeoJSON().readFeatures(assetFeatures);
+      console.log("assetFeatures added");
       assetSourceRef?.current?.addFeatures(e);
     }
-        
-     
+
     // if (assetSourceRef.current) {
     //   const p1 = assetSourceRef.current?.getExtent()[0]
     //   if (p1 != Infinity) {
@@ -738,40 +716,35 @@ export const CompanyMap = () => {
     //       duration: 3000,
     //     });
     //   }
-       
+
     // }
   }, [assetFeatures]);
 
-    useEffect(() => {
-     
+  useEffect(() => {
     mouseScrollEvent();
   }, []);
 
-    useEffect(() => {
-     
-    fPropVectorLayerRef?.current?.getSource().on("addfeature", function (event) {
-   
-      const feature = event.feature;
-      const svgtext2 = feature.get("hatch");
-      const img = new Image();
+  useEffect(() => {
+    fPropVectorLayerRef?.current
+      ?.getSource()
+      .on("addfeature", function (event) {
+        const feature = event.feature;
+        const svgtext2 = feature.get("hatch");
+        const img = new Image();
 
-      img.onload = function () {
-        feature.set("flag", img);
-      };
-    
-      img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
-    });
-    
+        img.onload = function () {
+          feature.set("flag", img);
+        };
+
+        img.src = "data:image/svg+xml;utf8," + encodeURIComponent(svgtext2);
+      });
   }, [fPropVectorLayerRef?.current]);
 
-
-    useEffect(() => {
+  useEffect(() => {
     const style = new Style({});
     style.setRenderer(areaMApPropertyVectorRendererFuncV2_labels);
     fPropVectorLayerLabelRef.current?.setStyle(style);
   }, [fPropVectorLayerLabelRef.current]);
-
-
 
   useEffect(() => {
     let newUrl;
@@ -779,9 +752,6 @@ export const CompanyMap = () => {
 
     window.history.replaceState({}, "", newUrl);
   }, [zoom, center]);
-
-
-
 
   const mouseScrollEvent = useCallback((event) => {
     const map = mapRef.current;
@@ -810,16 +780,6 @@ export const CompanyMap = () => {
     };
   }, []);
 
-
-
-
-
-
-
-
-
-
-
   const collapsibleBtnHandler = () => {
     const tmpValue = String(isSideNavOpen).toLowerCase() === "true";
     dispatch(setIsSideNavOpen(!tmpValue));
@@ -831,28 +791,14 @@ export const CompanyMap = () => {
     // dispatch(setUrlUpdate());
   };
 
-
-
-
-
-
-    const setLyrs = (lyrs) => {
+  const setLyrs = (lyrs) => {
     dispatch(setCompanyLyrs(lyrs));
     let newUrl;
     newUrl = `${window.location.pathname}?t=${selectedMap}&sn=${isSideNavOpen}&sn2=${isCompanySideNavOpen}&lyrs=${lyrs}&z=${companyZoomLevel}&c=${companyInitialCenter}`;
     window.history.replaceState({}, "", newUrl);
   };
 
-
-
-
-
-
-
-
-
-
-     const image = new Icon({
+  const image = new Icon({
     src: "./sync-prop.svg",
     scale: 1,
   });
@@ -874,17 +820,20 @@ export const CompanyMap = () => {
   // };
 
   const styleFunctionSyncProperties = (feature, resolution) => {
-      //console.log("resolution",resolution)
-      let t=""
-      if( resolution<300)
-       t = (feature.get("prop_name") +  (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "")) ?? ""
-      const s = new Style({
-      text:new Text({
+    //console.log("resolution",resolution)
+    let t = "";
+    if (resolution < 300)
+      t =
+        feature.get("prop_name") +
+          (feature.get("prop_alias") ? "/" + feature.get("prop_alias") : "") ??
+        "";
+    const s = new Style({
+      text: new Text({
         text: t.toString(),
         // text: feature.get("propertyid") ??"", prop_name, prop_alias
         offsetX: 0,
         offsetY: -10,
-        font :  "14px serif",
+        font: "14px serif",
       }),
       image,
       stroke: new Stroke({
@@ -899,166 +848,166 @@ export const CompanyMap = () => {
     return s;
   };
 
-      useEffect(() => {
-      claimLinkVectorLayerRef.current?.setOpacity(0.2)
-      claimLinkVectorLayerRef.current?.setStyle(companyMap_tbl_sync_claimlink_VectorLayerStyleFunction);
+  useEffect(() => {
+    claimLinkVectorLayerRef.current?.setOpacity(0.2);
+    claimLinkVectorLayerRef.current?.setStyle(
+      companyMap_tbl_sync_claimlink_VectorLayerStyleFunction
+    );
   }, [claimLinkVectorLayerRef.current]);
 
-  
   //layer visibilty redux states
-    const companyFpropLayerVisible = useSelector(
+  const companyFpropLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyFpropLayerVisible
-    );
-    const companyAssetLayerVisible = useSelector(
+  );
+  const companyAssetLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetLayerVisible
-    );
-    const companySyncPropLayerVisible = useSelector(
+  );
+  const companySyncPropLayerVisible = useSelector(
     (state) => state.companyMapReducer.companySyncPropLayerVisible
-    );
-    const companySyncClaimLinkLayerVisible = useSelector(
+  );
+  const companySyncClaimLinkLayerVisible = useSelector(
     (state) => state.companyMapReducer.companySyncClaimLinkLayerVisible
   );
-    const companyClaimLayerVisible = useSelector(
+  const companyClaimLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyClaimLayerVisible
   );
-    const companyAreaBoundaryLayerVisible = useSelector(
+  const companyAreaBoundaryLayerVisible = useSelector(
     (state) => state.companyMapReducer.companyAreaBoundaryLayerVisible
   );
 
-    //asset type visibilty redux states
-    const companyAssetOpMineVisible = useSelector(
+  //asset type visibilty redux states
+  const companyAssetOpMineVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetOpMineVisible
-    );
-    const companyAssetDepositsVisible = useSelector(
+  );
+  const companyAssetDepositsVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetDepositsVisible
-    );
-    const companyAssetZoneVisible = useSelector(
+  );
+  const companyAssetZoneVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetZoneVisible
-    );
-    const companyAssetHistoricalVisible = useSelector(
+  );
+  const companyAssetHistoricalVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetHistoricalVisible
-    );
-    const companyAssetOccurrenceVisible = useSelector(
+  );
+  const companyAssetOccurrenceVisible = useSelector(
     (state) => state.companyMapReducer.companyAssetOccurrenceVisible
-    );
-  
+  );
+
   //layer visibility useEffects
   useEffect(() => {
-    fPropVectorLayerRef?.current?.setVisible(companyFpropLayerVisible)
+    fPropVectorLayerRef?.current?.setVisible(companyFpropLayerVisible);
   }, [companyFpropLayerVisible]);
   useEffect(() => {
-    claimLinkVectorLayerRef?.current?.setVisible(companySyncClaimLinkLayerVisible)
+    claimLinkVectorLayerRef?.current?.setVisible(
+      companySyncClaimLinkLayerVisible
+    );
   }, [companySyncClaimLinkLayerVisible]);
   useEffect(() => {
-    syncPropVectorLayerRef?.current?.setVisible(companySyncPropLayerVisible)
+    syncPropVectorLayerRef?.current?.setVisible(companySyncPropLayerVisible);
   }, [companySyncPropLayerVisible]);
   useEffect(() => {
-    assetLayerRef?.current?.setVisible(companyAssetLayerVisible)
+    assetLayerRef?.current?.setVisible(companyAssetLayerVisible);
   }, [companyAssetLayerVisible]);
   useEffect(() => {
-    claimVectorImgLayerRef?.current?.setVisible(companyClaimLayerVisible)
+    claimVectorImgLayerRef?.current?.setVisible(companyClaimLayerVisible);
   }, [companyClaimLayerVisible]);
   useEffect(() => {
-    areaBoundaryImgLayerRef?.current?.setVisible(companyAreaBoundaryLayerVisible)
+    areaBoundaryImgLayerRef?.current?.setVisible(
+      companyAreaBoundaryLayerVisible
+    );
   }, [companyAreaBoundaryLayerVisible]);
 
-    //asset type visibility useEffects
+  //asset type visibility useEffects
   useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (companyAssetOpMineVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Operating Mine") {
-           f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Operating Mine") {
-           
-              f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [companyAssetOpMineVisible]);
 
-    useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (companyAssetDepositsVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Deposit") {
-           f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Deposit") {
-            
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [companyAssetDepositsVisible]);
 
-      useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (companyAssetZoneVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Zone") {
-             f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Zone") {
-           f.setStyle(new Style({}))
-            
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [companyAssetZoneVisible]);
 
-        useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (companyAssetHistoricalVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Historical Mine") {
-            f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Historical Mine") {
-           
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [companyAssetHistoricalVisible]);
 
-    useEffect(() => {
+  useEffect(() => {
     const fs = assetSourceRef?.current?.getFeatures();
     if (fs) {
       if (companyAssetOccurrenceVisible) {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Occurrence") {
-            f.setStyle(null)
+            f.setStyle(null);
           }
-        })
+        });
       } else {
-        fs.forEach(f => {
+        fs.forEach((f) => {
           if (f.get("asset_type") == "Occurrence") {
-           
-             f.setStyle(new Style({}))
+            f.setStyle(new Style({}));
           }
-        })
+        });
       }
     }
   }, [companyAssetOccurrenceVisible]);
@@ -1097,24 +1046,22 @@ export const CompanyMap = () => {
   //     });
   // }
 
-    const styleFunctionAreaBoundary =   (feature) => {
+  const styleFunctionAreaBoundary = (feature) => {
     const s = new Style({
-       
       stroke: new Stroke({
         color: "blue",
         width: 1,
       }),
-      
     });
 
     return s;
-  }
+  };
 
-  const areaLoaderFunc =  useCallback((extent, resolution, projection) =>{
+  const areaLoaderFunc = useCallback((extent, resolution, projection) => {
     const url = `https://atlas.ceyinfo.cloud/matlas/view_tbl40mapareas`;
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin 
+      mode: "cors", // no-cors, *cors, same-origin
       cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
       credentials: "same-origin", // include, *same-origin, omit
       headers: {
@@ -1127,7 +1074,7 @@ export const CompanyMap = () => {
           const features = new GeoJSON().readFeatures(
             json.data[0].json_build_object
           );
-           
+
           areaBoundaryImgSourceRef.current.addFeatures(features);
 
           // console.log("mapCommodityTbl40Source", features );
@@ -1135,80 +1082,79 @@ export const CompanyMap = () => {
           console.log("else area map area boundry not loading ");
         }
       });
-  },[])
+  }, []);
 
   const styleFunctionClaim = (feature, resolution) => {
-  // console.log("sf claims")
+    // console.log("sf claims")
     const colour = "#D3D3D3"; //feature.values_.colour;
-  //console.log("colour", colour);
-  // const fill = new Fill({
-  //   color: `rgba(${r},${g},${b},1)`,
-  //   opacity:1,
-  // });
-  // const fill = new Fill({
-  //   // color: `rgba(${r},${g},${b},1)`,
+    //console.log("colour", colour);
+    // const fill = new Fill({
+    //   color: `rgba(${r},${g},${b},1)`,
+    //   opacity:1,
+    // });
+    // const fill = new Fill({
+    //   // color: `rgba(${r},${g},${b},1)`,
 
-  //   color:colour,
-  //   opacity: 1,
-  // });
-  let fill = new Fill({
-    // color: `rgba(${r},${g},${b},1)`,
+    //   color:colour,
+    //   opacity: 1,
+    // });
+    let fill = new Fill({
+      // color: `rgba(${r},${g},${b},1)`,
 
-    color: colour,
-    // opacity: 1,
-  });
+      color: colour,
+      // opacity: 1,
+    });
 
-  // const stroke = new Stroke({
-  //   color: "#8B4513",
-  //   width: 1.25,
-  // });
+    // const stroke = new Stroke({
+    //   color: "#8B4513",
+    //   width: 1.25,
+    // });
 
-  // let image;
-  // let text;
+    // let image;
+    // let text;
 
-  // image = new Circle({
-  //   radius: 9,
-  //   fill: new Fill({ color: colour }),
-  //   // stroke: new Stroke({ color: "#8B4513", width: 3 }),
-  // });
+    // image = new Circle({
+    //   radius: 9,
+    //   fill: new Fill({ color: colour }),
+    //   // stroke: new Stroke({ color: "#8B4513", width: 3 }),
+    // });
 
-  let textObj;
+    let textObj;
 
-  const claimno = feature.get("claimno");
-  textObj = new Text({
-    //       // textAlign: align == "" ? undefined : align,
-    //       // textBaseline: baseline,
-    font: "10px serif",
-    text: claimno,
-    // fill: new Fill({ color: fillColor }),
-    // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
-    offsetX: 2,
-    offsetY: -13,
-    // placement: placement,
-    // maxAngle: maxAngle,
-    // overflow: overflow,
-    // rotation: rotation,
-  });
+    const claimno = feature.get("claimno");
+    textObj = new Text({
+      //       // textAlign: align == "" ? undefined : align,
+      //       // textBaseline: baseline,
+      font: "10px serif",
+      text: claimno,
+      // fill: new Fill({ color: fillColor }),
+      // stroke: new Stroke({ color: outlineColor, width: outlineWidth }),
+      offsetX: 2,
+      offsetY: -13,
+      // placement: placement,
+      // maxAngle: maxAngle,
+      // overflow: overflow,
+      // rotation: rotation,
+    });
 
-  const style = new Style({
-    stroke: new Stroke({
-      color: "#707070",
-      width: 1,
-    }),
+    const style = new Style({
+      stroke: new Stroke({
+        color: "#707070",
+        width: 1,
+      }),
 
-    text: textObj,
-    fill,
-  });
+      text: textObj,
+      fill,
+    });
 
-  return style;
-}
+    return style;
+  };
 
-  
-    const claimLoaderFunc = useCallback((extent, resolution, projection) =>  {
+  const claimLoaderFunc = useCallback((extent, resolution, projection) => {
     const url =
       `https://atlas.ceyinfo.cloud/matlas/view_tbl01_claims_bb` +
       `/${extent.join("/")}`;
-   // console.log("url", url);
+    // console.log("url", url);
     fetch(url, {
       method: "GET", // *GET, POST, PUT, DELETE, etc.
       mode: "cors", // no-cors, *cors, same-origin
@@ -1226,113 +1172,115 @@ export const CompanyMap = () => {
               json.data[0].json_build_object
             );
             claimVectorImgSourceRef.current.addFeatures(features);
-
           }
         }
       });
-    }, []);
-  
-  useEffect( () => {
- let clickedOnFeatureTmp = false;
-    const fetchData = async()=>{
-       setclickedOnFeature(false)
-     let assetObject, fPropertyObject,syncPropertyObject,claimObject
-    // console.log("coordinates",coordinates,)
-    
-  let extentDim;
-  const viewResolution = mapViewRef?.current?.getResolution()
-  if (viewResolution < 15) {
-    extentDim = 100;
-  } else if (viewResolution < 50) {
-    extentDim = 500;
-  } else if (viewResolution < 150) {
-    extentDim = 1000;
-  } else if (viewResolution < 250) {
-    extentDim = 1500;
-  } else if (viewResolution < 400) {
-    extentDim = 2500;
-  } else {
-    extentDim = 3000;
-    }
-    
-    const ext = [
-    coordinates[0] - extentDim,
-    coordinates[1] - extentDim,
-    coordinates[0] + extentDim,
-    coordinates[1] + extentDim,
-    ];
-  //first look for asset features
-    const selAssetFeatures = assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
-  
-    if (selAssetFeatures.length > 0) {
-       clickedOnFeatureTmp = true
-      let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
-      let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
-      let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
-      let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
-      let area = selAssetFeatures?.[0]?.get("area") ?? "";
-      let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
-      let country = selAssetFeatures?.[0]?.get("country") ?? "";
-      let region = selAssetFeatures?.[0]?.get("region") ?? "";
-      assetObject = {
-        asset_name,
-        assetalias,
-        asset_type,
-        commodities,
-        area,
-        stateProv,
-        country,
-        region,
+  }, []);
+
+  useEffect(() => {
+    let clickedOnFeatureTmp = false;
+    const fetchData = async () => {
+      setclickedOnFeature(false);
+      let assetObject, fPropertyObject, syncPropertyObject, claimObject;
+      // console.log("coordinates",coordinates,)
+
+      let extentDim;
+      const viewResolution = mapViewRef?.current?.getResolution();
+      if (viewResolution < 15) {
+        extentDim = 100;
+      } else if (viewResolution < 50) {
+        extentDim = 500;
+      } else if (viewResolution < 150) {
+        extentDim = 1000;
+      } else if (viewResolution < 250) {
+        extentDim = 1500;
+      } else if (viewResolution < 400) {
+        extentDim = 2500;
+      } else {
+        extentDim = 3000;
       }
 
-       dispatch(setclickassetObject(assetObject))
-    } else {
-       dispatch(setclickassetObject(undefined))
-    }
-  const selFPropertyFeatures =
-    fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-    if(selFPropertyFeatures.length>0){
-      clickedOnFeatureTmp = true
-  let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
-  
-  let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
-  let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
+      const ext = [
+        coordinates[0] - extentDim,
+        coordinates[1] - extentDim,
+        coordinates[0] + extentDim,
+        coordinates[1] + extentDim,
+      ];
+      //first look for asset features
+      const selAssetFeatures =
+        assetSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-  // const sponsoredowners = await getSponsorListFromRESTAPI(
-  //   features[0].get("id")
-      // );
+      if (selAssetFeatures.length > 0) {
+        clickedOnFeatureTmp = true;
+        let asset_name = selAssetFeatures?.[0]?.get("asset_name") ?? "";
+        let assetalias = selAssetFeatures?.[0]?.get("assetalias") ?? "";
+        let asset_type = selAssetFeatures?.[0]?.get("asset_type") ?? "";
+        let commodities = selAssetFeatures?.[0]?.get("commodities") ?? "";
+        let area = selAssetFeatures?.[0]?.get("area") ?? "";
+        let stateProv = selAssetFeatures?.[0]?.get("state_prov") ?? "";
+        let country = selAssetFeatures?.[0]?.get("country") ?? "";
+        let region = selAssetFeatures?.[0]?.get("region") ?? "";
+        assetObject = {
+          asset_name,
+          assetalias,
+          asset_type,
+          commodities,
+          area,
+          stateProv,
+          country,
+          region,
+        };
 
-      const getData = async (hotplayid) => {
-        const url = "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" + hotplayid;
-        //load data from api - changed to return array
-
-        let sponsors = await fetch(url, {
-          method: "GET", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        })
-          .then((response) => response.json())
-          .then((res) => {
-            // let sponsors = "";
-            // res.data.forEach((element) => {
-            //   sponsors += element.sponsor + "/";
-            // });
-            return res.data;
-          });
-
-        // sponsors = sponsors.slice(0, -1);
-        // console.log("sponsors", sponsors);
-        return sponsors;
+        dispatch(setclickassetObject(assetObject));
+      } else {
+        dispatch(setclickassetObject(undefined));
       }
-      
-        const dd = await getData(hotplayid) 
+      const selFPropertyFeatures =
+        fPropSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
+      if (selFPropertyFeatures.length > 0) {
+        clickedOnFeatureTmp = true;
+        let prop_name = selFPropertyFeatures?.[0]?.get("prop_name") ?? "";
+
+        let propertyid = selFPropertyFeatures?.[0]?.get("propertyid") ?? "";
+        let hotplayid = selFPropertyFeatures?.[0]?.get("id") ?? 0;
+
+        // const sponsoredowners = await getSponsorListFromRESTAPI(
+        //   features[0].get("id")
+        // );
+
+        const getData = async (hotplayid) => {
+          const url =
+            "https://atlas.ceyinfo.cloud/matlas/getownersbyhotplayid/" +
+            hotplayid;
+          //load data from api - changed to return array
+
+          let sponsors = await fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+              "Content-Type": "application/json",
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              // let sponsors = "";
+              // res.data.forEach((element) => {
+              //   sponsors += element.sponsor + "/";
+              // });
+              return res.data;
+            });
+
+          // sponsors = sponsors.slice(0, -1);
+          // console.log("sponsors", sponsors);
+          return sponsors;
+        };
+
+        const dd = await getData(hotplayid);
         //console.log("dd",dd)
-        const d= dd?.[0] 
+        const d = dd?.[0];
 
         const sponsoredowners = d?.sponsor ?? "";
         let commo_ref = d?.commo_ref ?? "";
@@ -1342,107 +1290,110 @@ export const CompanyMap = () => {
         let owners = d?.owners ?? "";
         let prop_exturl = d?.prop_exturl ?? "";
         let sale_name = d?.sale_name ?? "";
-  
-   fPropertyObject =  {
-    sponsoredowners,
-    prop_name,
-    commo_ref,
-    assets,
-    resources,
-    map_area,
-    owners,
-    prop_exturl,
-    sale_name,
-    propertyid,
+
+        fPropertyObject = {
+          sponsoredowners,
+          prop_name,
+          commo_ref,
+          assets,
+          resources,
+          map_area,
+          owners,
+          prop_exturl,
+          sale_name,
+          propertyid,
+        };
+
+        dispatch(setclickfPropertyObject(fPropertyObject));
+      } else {
+        dispatch(setclickfPropertyObject(undefined));
       }
-      
-  dispatch(setclickfPropertyObject(fPropertyObject))
+      // const selBoundaryFeatures =
+      //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
 
-    }else{
-      dispatch(setclickfPropertyObject(undefined))
-    }
-  // const selBoundaryFeatures =
-  //   boundarySource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+      const selSyncPropFeatures =
+        syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
 
-  const selSyncPropFeatures =
-      syncPropSourceRef?.current?.getFeaturesInExtent(ext) ?? [];
+      if (selSyncPropFeatures.length > 0) {
+        clickedOnFeatureTmp = true;
+        const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
+        const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
+        let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
+        const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
+        const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
+        const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
+        // const selSynClaimLinkFeatures =
+        //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
+        syncPropertyObject = {
+          prop_name,
+          owners,
+          name: name1,
+          stateProv,
+          country,
+          area,
+        };
 
-    if(selSyncPropFeatures.length>0){ 
-      clickedOnFeatureTmp = true
-     const prop_name = selSyncPropFeatures?.[0]?.get("prop_name") ?? "";
-    const owners = selSyncPropFeatures?.[0]?.get("owners") ?? "";
-    let name1 = selSyncPropFeatures?.[0]?.get("name") ?? "";
-    const stateProv = selSyncPropFeatures?.[0]?.get("state_prov") ?? "";
-    const country = selSyncPropFeatures?.[0]?.get("country") ?? "";
-    const area = selSyncPropFeatures?.[0]?.get("area") ?? "";
-  // const selSynClaimLinkFeatures =
-  //   sync_claimLinkLayerSource?.getFeaturesAtCoordinate(evt.coordinate) ?? [];
-    syncPropertyObject ={prop_name,owners,name:name1,stateProv,country,area}
-    
-    dispatch(setclicksyncPropertyObject(syncPropertyObject))
-    }else{
-    dispatch(setclicksyncPropertyObject(undefined))
-    }
-  const claimFeatures =
-      claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(coordinates) ?? [];
-     if(claimFeatures.length>0){ 
-      clickedOnFeatureTmp = true
-     let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
-    const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
-    claimObject = {ownerref,claimno}
-   
-    dispatch(setclickclaimObject(claimObject))
-     }else{
-       dispatch(setclickclaimObject(undefined))
-     }
-    
-  //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
-    }
+        dispatch(setclicksyncPropertyObject(syncPropertyObject));
+      } else {
+        dispatch(setclicksyncPropertyObject(undefined));
+      }
+      const claimFeatures =
+        claimVectorImgSourceRef?.current?.getFeaturesAtCoordinate(
+          coordinates
+        ) ?? [];
+      if (claimFeatures.length > 0) {
+        clickedOnFeatureTmp = true;
+        let ownerref = claimFeatures?.[0]?.get("ownerref") ?? "";
+        const claimno = claimFeatures?.[0]?.get("claimno") ?? "";
+        claimObject = { ownerref, claimno };
 
-    if(coordinates){
+        dispatch(setclickclaimObject(claimObject));
+      } else {
+        dispatch(setclickclaimObject(undefined));
+      }
+
+      //  return (<AreaMapClickPopup claimObj={claimObject} fpropObj={fPropertyObject} assetObj={assetObject} syncPropObj={syncPropertyObject } />)
+    };
+
+    if (coordinates) {
       fetchData();
-      setclickedOnFeature(clickedOnFeatureTmp)
-       if( clickedOnFeatureTmp){
-          setclickDataLoaded(true);
-       }
-    //  console.log("222")
+      setclickedOnFeature(clickedOnFeatureTmp);
+      if (clickedOnFeatureTmp) {
+        setclickDataLoaded(true);
+      }
+      //  console.log("222")
     }
-     
-  }, [coordinates])
-  
+  }, [coordinates]);
 
-  const onClickViewPlusZoom = ()=>{
-       const curZoom = mapViewRef.current.getZoom();
-        mapViewRef.current.setZoom(curZoom + 1);
+  const onClickViewPlusZoom = () => {
+    const curZoom = mapViewRef.current.getZoom();
+    mapViewRef.current.setZoom(curZoom + 1);
 
-          const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
-  }
-    const onClickViewMinusZoom = ()=>{
-       const curZoom = mapViewRef.current.getZoom();
-        mapViewRef.current.setZoom(curZoom - 1);
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
+  };
+  const onClickViewMinusZoom = () => {
+    const curZoom = mapViewRef.current.getZoom();
+    mapViewRef.current.setZoom(curZoom - 1);
 
-          const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
-  }
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
+  };
 
-      const onClickViewInitZoom = ()=>{
-        
-        mapViewRef.current.setZoom(3.25);
-        mapViewRef.current.setCenter( [-10694872.010699773, 7434223.337137634]);
+  const onClickViewInitZoom = () => {
+    mapViewRef.current.setZoom(3.25);
+    mapViewRef.current.setCenter([-10694872.010699773, 7434223.337137634]);
 
-          const scale = mapRatioScale({ map: mapRef.current });
-    setmapScale(scale.toFixed(0));
-  }
+    const scale = mapRatioScale({ map: mapRef.current });
+    setmapScale(scale.toLocaleString());
+  };
 
-   useEffect(()=>{
-     if (mapViewRef.current) {
-       const scale = mapRatioScale({ map: mapRef.current });
-       setmapScale(scale.toFixed(0));
-     }
-
-  },[mapViewRef.current])
-
+  useEffect(() => {
+    if (mapViewRef.current) {
+      const scale = mapRatioScale({ map: mapRef.current });
+      setmapScale(scale.toLocaleString());
+    }
+  }, [mapViewRef.current]);
 
   return (
     <div className="flex">
@@ -1664,7 +1615,7 @@ export const CompanyMap = () => {
           <olLayerVector
             ref={syncPropVectorLayerRef}
             style={styleFunctionSyncProperties}
-                minResolution={0}
+            minResolution={0}
             maxResolution={150}
           >
             <olSourceVector ref={syncPropSourceRef}></olSourceVector>
